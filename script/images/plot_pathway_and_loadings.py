@@ -80,6 +80,7 @@ if __name__ == "__main__":
   parser.add_argument("--pathway-mat")
   parser.add_argument("--pathway-obj")
   parser.add_argument("--nodelist")
+  parser.add_argument("--truncate", default=False, type=bool, help="If True, truncate graph down to 50 nodes for visualization")
   parser.add_argument("--mapping-file", help="Node identifier mapping")
   parser.add_argument("--outdir")
   args = parser.parse_args()
@@ -110,6 +111,7 @@ if __name__ == "__main__":
     ax.get_yaxis().set_visible(False)
     ofp = os.path.join(args.outdir, "fig{}.png".format(k))
 
+    # TODO use filter_vec_by_graph instead
     vec = pathway_mat[:,k]
     inds = []
     for node in G.nodes():
@@ -132,32 +134,34 @@ if __name__ == "__main__":
     title_str = None
     bn = os.path.basename(os.path.splitext(fp)[0])
     bn = bn.split('_')[0]
-    if bn == "hsa04010":
-      title_str = "MAPK Signaling Pathway"
-    else:
-      title_str = bn
+    title_str = bn
 
     # DEBUG
     print(title_str)
+    print('-' * len(title_str))
+    print(vec_sub)
+    print('')
     for n1, n2 in G.edges():
       s1 = node_to_score[n1]
       s2 = node_to_score[n2]
       print(n1, n2, s1, s2)
-    print(inds)
-    print(vec_sub)
+    print('')
 
-    print("vec stats:")
-    print(np.min(vec))
-    print(np.max(vec))
-    print(np.median(vec))
+    print("latent factor stats:")
+    print("min: ", np.min(vec))
+    print("max: ", np.max(vec))
+    print("median: ", np.median(vec))
+    print('')
 
-    print("vec_sub stats:")
-    print(np.min(vec_sub))
-    print(np.max(vec_sub))
-    print(np.median(vec_sub))
+    print("latent factor stats on pathway nodes:")
+    print("min: ", np.min(vec_sub))
+    print("max: ", np.max(vec_sub))
+    print("median: ",np.median(vec_sub))
+    print('')
 
-    G, conn_dict, edge_dict = truncate_graph(G)
-    vec_sub, nodelist_sub = fl.filter_vec_by_graph(G, vec_sub, nodelist_sub)
+    if args.truncate:
+      G, conn_dict, edge_dict = truncate_graph(G)
+      vec_sub, nodelist_sub = fl.filter_vec_by_graph(G, vec_sub, nodelist_sub)
 
     plot_latent_and_graph(G, fig, ax, data=vec_sub, nodelist=nodelist_sub, colormap=plt.cm.Reds, title=title_str, vmin=np.min(vec), vmax=np.max(vec))
     plt.savefig(ofp, bbox_inches='tight')
