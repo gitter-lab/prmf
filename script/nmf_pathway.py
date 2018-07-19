@@ -137,27 +137,34 @@ def map_k_to_lapls(k_to_lapl_ind, Ws, Ds, Ls, lapl_to_feat_inds):
     k_to_feat_inds[k] = lapl_to_feat_inds[lapl_ind]
   return k_to_W, k_to_D, k_to_L, k_to_feat_inds
 
-def nmf_manifold_vec_obj(X, U, V, k_to_L, gamma, norm_X=None):
-  if(norm_X is None):
-    norm_X = np.linalg.norm(X)
-  obj_recon = np.linalg.norm(X - U.dot(V.transpose())) / norm_X
+def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
+  obj_recon = np.linalg.norm(X - U.dot(V.transpose()))
+
   obj_manifold = 0.0
   for k, L in k_to_L.items():
     obj_manifold += L.dot(V[:,k]).dot(V[:,k])
-  obj_manifold = obj_manifold / norm_X
-  obj_fro = np.sum(np.multiply(U, U))
-  obj_fro = obj_fro / norm_X
-  obj = obj_recon + gamma * obj_manifold + obj_fro
+  obj_manifold = obj_manifold
 
+  obj_ign = 0.0
+  for k, nz_inds in k_to_feat_inds.items():
+    obj_ign = np.sum(np.power(V[nz_inds,k] + 1, -1))
+
+  obj_fro = np.sum(np.multiply(U, U))
+  obj_fro = obj_fro
+  
+  obj = obj_recon + gamma * obj_manifold + delta * obj_ign + obj_fro
   obj_data = {
     'recon': obj_recon,
     'manifold': obj_manifold,
+    'ignore': obj_ign,
     'fro': obj_fro,
+    'gamma': gamma,
+    'delta': delta,
     'obj': obj
   }
   return obj_data
 
-def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=10.0, i=0, verbose=True, norm_X=None):
+def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=10.0, i=0, verbose=True, norm_X=None, tradeoff=0.5):
   """
   Perform <n_steps> update steps with a fixed Laplacian matrix for each latent factor
 
@@ -198,6 +205,10 @@ def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_s
 
   norm_X : float or None
     stored value of the norm of X
+
+  tradeoff : float
+    value in [0,1] representing relative importance of reconstruction error to manifold regularization penalty.
+    alternative to gamma and delta. 1 means only use reconstruction error.
   """
   obj_data = None
   m, k_latent = U.shape
@@ -223,20 +234,129 @@ def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_s
       nz_inds = k_to_feat_inds[k]
       V_up_num_ign[nz_inds,k] = delta * np.power(V[nz_inds,k] + 1, -2)
 
-    V_up_num = V_up_num_recon + V_up_num_man + V_up_num_ign
+    V_up_num = V_up_num_recon + (V_up_num_man + V_up_num_ign)
     V_up_denom = V_up_denom_recon + V_up_denom_man
     V_up_denom[V_up_denom < EPSILON] = EPSILON
     V = np.multiply(V, np.divide(V_up_num, V_up_denom, out=np.ones_like(V_up_num), where=V_up_denom!=0))
     V[V < EPSILON] = EPSILON
 
-    obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, gamma, norm_X=norm_X)
+    obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=gamma)
     if(verbose):
       print(i+n_step+1, obj_data['obj'])
       print(obj_data)
 
   return U, V, obj_data
 
-def nmf_pathway(X, Gs, gamma=1.0, k_latent=6, tol=1e-4, max_iter=100, nodelist=None, modulus=10):
+def nmf_manifold_vec_update_tradeoff_cur(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, i=0, verbose=True, norm_X=None, tradeoff=0.5):
+  """
+  See nmf_manifold_vec_update; this version tries to update the _current_ gradient descent step size to match the tradeoff parameter
+
+  Parameters
+  ----------
+  tradeoff : float
+    value in [0,1] representing relative importance of reconstruction error to manifold regularization penalty.
+    alternative to gamma and delta. 1 means only use reconstruction error.
+  """
+  obj_data = None
+  m, k_latent = U.shape
+  n, k_latent = V.shape
+  for n_step in range(n_steps):
+    U_up_num = X.dot(V)
+    U_up_denom = U.dot((V.transpose().dot(V))) + U
+    U = np.multiply(U, np.divide(U_up_num, U_up_denom, out=np.ones_like(U_up_num), where=U_up_denom!=0)) # 0 / 0 := 1
+
+    V_up_num_recon = X.transpose().dot(U)
+    V_up_denom_recon = V.dot((U.transpose().dot(U)))
+
+    # update each column vector of V separately to accomodate different Laplacians
+    V_up_num_man = np.zeros((n, k_latent))
+    V_up_denom_man = np.zeros((n, k_latent))
+    V_up_num_ign = np.zeros((n, k_latent))
+    for k in range(k_latent):
+      W = k_to_W[k]
+      D = k_to_D[k]
+      V_up_num_man[:,k] = W.dot(V[:,k])
+      V_up_denom_man[:,k] = D.dot(V[:,k])
+
+      nz_inds = k_to_feat_inds[k]
+      V_up_num_ign[nz_inds,k] = np.power(V[nz_inds,k] + 1, -2)
+
+    # transform each gradient direction to a unit vector
+    # TODO math here doesnt separately nicely, these expressions ignore the correctness to make a separation into recon and man parts
+    V_up_recon = np.divide(V_up_num_recon, V_up_denom_recon, out=np.ones_like(V_up_num_recon), where=V_up_denom_recon!=0)
+    norm_recon = np.linalg.norm(V_up_recon)
+    V_up_recon_unit = V_up_recon / norm_recon
+    V_up_num_man_ign = V_up_num_man + V_up_num_ign
+    V_up_man = np.divide(V_up_num_man_ign, V_up_denom_man, out=np.ones_like(V_up_num_man_ign), where=V_up_denom_man!=0)
+    norm_man = np.linalg.norm(V_up_man)
+    V_up_man_unit = V_up_man / norm_man
+    V_up_dir = tradeoff * V_up_recon_unit + (1 - tradeoff) * V_up_man_unit
+    V_up_mag = np.sqrt(norm_man + norm_recon)
+    #V_up_mag = norm_recon + norm_man
+    V_up = V_up_mag * V_up_dir
+    V = np.multiply(V, V_up)
+    V[V < EPSILON] = EPSILON
+
+    obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds)
+    if(verbose):
+      print(i+n_step+1, obj_data['obj'])
+      print(obj_data)
+
+  return U, V, obj_data
+
+def nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, i=0, verbose=True, norm_X=None, tradeoff=0.5, gamma=1, delta=1):
+  """
+  See nmf_manifold_vec_update; this version tries to update the _next_ gradient descent step size to match the tradeoff parameter
+
+  Parameters
+  ----------
+  tradeoff : float
+    value in [0,1] representing relative importance of reconstruction error to manifold regularization penalty.
+    alternative to gamma and delta. 1 means only use reconstruction error.
+  """
+  obj_data = None
+  m, k_latent = U.shape
+  n, k_latent = V.shape
+  for n_step in range(n_steps):
+    U_up_num = X.dot(V)
+    U_up_denom = U.dot((V.transpose().dot(V))) + U
+    U = np.multiply(U, np.divide(U_up_num, U_up_denom, out=np.ones_like(U_up_num), where=U_up_denom!=0)) # 0 / 0 := 1
+
+    V_up_num_recon = X.transpose().dot(U)
+    V_up_denom_recon = V.dot((U.transpose().dot(U)))
+
+    # update each column vector of V separately to accomodate different Laplacians
+    V_up_num_man = np.zeros((n, k_latent))
+    V_up_denom_man = np.zeros((n, k_latent))
+    V_up_num_ign = np.zeros((n, k_latent))
+    for k in range(k_latent):
+      W = k_to_W[k]
+      D = k_to_D[k]
+      V_up_num_man[:,k] = gamma * W.dot(V[:,k])
+      V_up_denom_man[:,k] = gamma * D.dot(V[:,k])
+
+      nz_inds = k_to_feat_inds[k]
+      V_up_num_ign[nz_inds,k] = delta * np.power(V[nz_inds,k] + 1, -2)
+
+    V_up_num = V_up_num_recon + (V_up_num_man + V_up_num_ign)
+    V_up_denom = V_up_denom_recon + V_up_denom_man
+    V_up_denom[V_up_denom < EPSILON] = EPSILON
+    V = np.multiply(V, np.divide(V_up_num, V_up_denom, out=np.ones_like(V_up_num), where=V_up_denom!=0))
+    V[V < EPSILON] = EPSILON
+
+    obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=gamma, delta=delta)
+    # update gamma and delta such that at the next iteration the reconstruction error and the
+    # manifold regularization penalty contribute approximately equal values to the objective function
+    gamma = obj_data['recon'] / obj_data['manifold']
+    delta = gamma
+
+    if(verbose):
+      print(i+n_step+1, obj_data['obj'])
+      print(obj_data)
+
+  return U, V, obj_data, gamma, delta
+
+def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-4, max_iter=1000, nodelist=None, modulus=10):
   """
   Solve an optimization problem of the form
     min ||X - UV^T|| + gamma * sum_k min_i V[:,k]^T Ls[i] V[:,k] + ||U||_F^2
@@ -255,6 +375,15 @@ def nmf_pathway(X, Gs, gamma=1.0, k_latent=6, tol=1e-4, max_iter=100, nodelist=N
 
   gamma : float
     trade-off between reconstruction error and manifold regularization penalty
+
+  delta : float
+    regularization parameter for penalty for ignoring manifold
+
+  tradeoff : None, float
+    if not None, triggers automatic setting of gamma and delta after each iteration so that 
+    the relative importance of the reconstruction error and the manifold regularization penalties
+    (including penalty for ignoring the manifold) is at a fixed proportion:
+      tradeoff * reconstruction_error + (1 - tradeoff) * manifold_regularization_penalties
 
   k_latent : int
     number of latent factors to decompose X into: for X \approx UV^T, U is shape (m_obs, k_latent)
@@ -313,8 +442,6 @@ def nmf_pathway(X, Gs, gamma=1.0, k_latent=6, tol=1e-4, max_iter=100, nodelist=N
     W = nx.adjacency_matrix(G, nodelist=nodelist)
     data = W.sum(axis=0)
     offsets = np.array([0])
-    # TODO testing effect of zeroing the diagonal -- this is unbounded negative so goes to - infinity quickly
-    #D = sp.dok_matrix(sp.dia_matrix((np.zeros(n), offsets), shape=(n,n)))
     D = sp.dok_matrix(sp.dia_matrix((data, offsets), shape=(n,n)))
     L = D - W
     Ws.append(W)
@@ -330,14 +457,16 @@ def nmf_pathway(X, Gs, gamma=1.0, k_latent=6, tol=1e-4, max_iter=100, nodelist=N
   converged = False
   candidates_remain = True
   obj = math.inf
-  obj_recon = None
-  obj_fro = None
-  obj_manifold = None
+  obj_data = {}
   prev_obj = math.inf
   i = 0
   k_to_lapl_ind = {}
+  gamma = 1.0
+  delta = 1.0
   while (i < max_iter) and (candidates_remain or not converged):
     # update active Laplacian for each latent vector every <modulus> iterations
+    # TODO handle errors either here or restrict step: if ind_to_lapls[k] is empty random.choice will raise IndexError
+    # can become empty if all pathways score the same, for example
     for k in range(k_latent):
       lapl_ind = random.choice(ind_to_lapls[k])
       k_to_lapl_ind[k] = lapl_ind
@@ -348,7 +477,10 @@ def nmf_pathway(X, Gs, gamma=1.0, k_latent=6, tol=1e-4, max_iter=100, nodelist=N
     for k, lapl_ind in k_to_lapl_ind.items():
       print(k, lapl_ind)
     print('----')
-    U, V, obj_data = nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X)
+    if tradeoff is None:
+      U, V, obj_data = nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta)
+    else:
+      U, V, obj_data, gamma, delta = nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, tradeoff=tradeoff, gamma=gamma, delta=delta)
     i += modulus
 
     # after <modulus> updates, restrict candidates
@@ -369,7 +501,7 @@ def nmf_pathway(X, Gs, gamma=1.0, k_latent=6, tol=1e-4, max_iter=100, nodelist=N
 
     prev_obj = obj
     obj = obj_data['obj']
-    converged = (abs(obj - prev_obj)) < tol
+    converged = (abs(obj - prev_obj)) / obj < tol
   # end while
 
   # rescale 
@@ -403,9 +535,15 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   parser.add_argument("--tolerence", type=float, default=1e-4)
   parser.add_argument("--seed", default=None)
   parser.add_argument("--gamma", default=1.0, help="Tradeoff between reconstruction error and manifold regularization term; Default = 1.0", type=float)
+  parser.add_argument("--delta", default=1.0, help="Regularization parameter for penalty for ignoring manifold; Default = 1.0", type=float)
+  parser.add_argument("--tradeoff", default=None, help="If set, use the previous iterations objective function components to automatically update gamma and delta for the next iteration.")
   parser.add_argument("--high-dimensional", default=True, type=bool, help="If True, ensure that <data> is of shape m x n with m < n ; otherwise ensure that X is m x n with m > n")
   args = parser.parse_args()
   OUTDIR = args.outdir
+
+  tradeoff = None
+  if args.tradeoff is not None:
+    tradeoff = float(args.tradeoff)
 
   manifold_fps = []
   if args.manifolds is None and args.manifolds_file is None:
@@ -449,7 +587,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
       X = X.transpose()
 
   # TODO other arguments
-  U, V, obj_data = nmf_pathway(X, Gs, nodelist=nodelist, gamma=args.gamma)
+  U, V, obj_data = nmf_pathway(X, Gs, nodelist=nodelist, gamma=args.gamma, tradeoff=tradeoff)
   np.savetxt(U_fp, U, delimiter=",")
   np.savetxt(V_fp, V, delimiter=",")
   with open(obj_fp, 'w') as obj_fh:
