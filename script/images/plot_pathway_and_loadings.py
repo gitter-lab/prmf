@@ -111,24 +111,26 @@ if __name__ == "__main__":
     ax.get_yaxis().set_visible(False)
     ofp = os.path.join(args.outdir, "fig{}.png".format(k))
 
-    # TODO use filter_vec_by_graph instead
+    # relabel nodes according to mapping and filter pathway nodes and their scores from latent factor
     vec = pathway_mat[:,k]
-    inds = []
-    for node in G.nodes():
-      ind = node_to_ind[node]
-      inds.append(ind)
-    # this may permute items in nodelist but the order of inds and vec_sub is consistent with nodelist_sub
-    vec_sub = vec[inds]
-
-    # relabel
-    # TODO is order of nodes retained after mapping?
-    G = nx.relabel_nodes(G, mapping)
-
     node_to_score = {}
+    vec_sub = []
     nodelist_sub = []
     for node in G.nodes():
+      ind = node_to_ind[node]
+      vec_sub.append(vec[ind])
+      if node in mapping:
+        nodelist_sub.append(mapping[node])
+      else:
+        nodelist_sub.append(node)
       node_to_score[node] = vec[ind]
-      nodelist_sub.append(node)
+    vec_sub = np.array(vec_sub)
+    G = nx.relabel_nodes(G, mapping)
+    for orig, new in mapping.items():
+      if orig in node_to_score:
+        # TODO assumes identifier lists orig and new do not overlap
+        score = node_to_score.pop(orig)
+        node_to_score[new] = score
 
     # TODO map fp to titles
     title_str = None
