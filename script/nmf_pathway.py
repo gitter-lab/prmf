@@ -205,10 +205,6 @@ def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_s
 
   norm_X : float or None
     stored value of the norm of X
-
-  tradeoff : float
-    value in [0,1] representing relative importance of reconstruction error to manifold regularization penalty.
-    alternative to gamma and delta. 1 means only use reconstruction error.
   """
   obj_data = None
   m, k_latent = U.shape
@@ -345,9 +341,15 @@ def nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_
     V[V < EPSILON] = EPSILON
 
     obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=gamma, delta=delta)
-    # update gamma and delta such that at the next iteration the reconstruction error and the
-    # manifold regularization penalty contribute approximately equal values to the objective function
-    gamma = obj_data['recon'] / obj_data['manifold']
+    # update gamma and delta such that at the next iteration the reconstruction error contributes 
+    # <tradeoff> portion of the objective function and the manifold regularization contributes 
+    # 1 - <tradeoff> portion
+    denom = (tradeoff * obj_data['manifold'])
+    if denom == 0:
+      # then unscaled manifold penalty is near 0 anyway, define x / 0 := 1
+      gamma = 1
+    else:
+      gamma = ((1 - tradeoff) * obj_data['recon']) / denom
     delta = gamma
 
     if(verbose):
@@ -356,7 +358,7 @@ def nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_
 
   return U, V, obj_data, gamma, delta
 
-def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-4, max_iter=1000, nodelist=None, modulus=10):
+def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3, max_iter=1000, nodelist=None, modulus=10):
   """
   Solve an optimization problem of the form
     min ||X - UV^T|| + gamma * sum_k min_i V[:,k]^T Ls[i] V[:,k] + ||U||_F^2
@@ -532,7 +534,8 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   parser.add_argument("--manifolds-file", help="A file containing newline-delimited filepaths which are used as graphml files as in <manifolds>")
   parser.add_argument("--outdir", type=str, required=True, help="Directory containing results")
   parser.add_argument("--nodelist", type=argparse.FileType('r'), help="Association of node identifier to matrix indexes", required=True)
-  parser.add_argument("--tolerence", type=float, default=1e-4)
+  parser.add_argument("--k-latent", "-k", default=6, help="Number of latent factors", type=int)
+  parser.add_argument("--tolerence", type=float, default=1e-3)
   parser.add_argument("--seed", default=None)
   parser.add_argument("--gamma", default=1.0, help="Tradeoff between reconstruction error and manifold regularization term; Default = 1.0", type=float)
   parser.add_argument("--delta", default=1.0, help="Regularization parameter for penalty for ignoring manifold; Default = 1.0", type=float)
@@ -587,7 +590,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
       X = X.transpose()
 
   # TODO other arguments
-  U, V, obj_data = nmf_pathway(X, Gs, nodelist=nodelist, gamma=args.gamma, tradeoff=tradeoff)
+  U, V, obj_data = nmf_pathway(X, Gs, nodelist=nodelist, gamma=args.gamma, tradeoff=tradeoff, k_latent=args.k_latent)
   np.savetxt(U_fp, U, delimiter=",")
   np.savetxt(V_fp, V, delimiter=",")
   with open(obj_fp, 'w') as obj_fh:
