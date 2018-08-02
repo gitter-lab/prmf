@@ -86,6 +86,8 @@ if __name__ == "__main__":
   args = parser.parse_args()
 
   pathway_mat = np.genfromtxt(args.pathway_mat, delimiter=",")
+  if(len(pathway_mat.shape) == 1):
+    pathway_mat = pathway_mat.reshape(pathway_mat.shape[0], 1)
   latent_to_fp = fl.parse_pathway_obj(args.pathway_obj)
   latent_to_G = {}
   for k, fp in latent_to_fp.items():
@@ -146,7 +148,8 @@ if __name__ == "__main__":
     for n1, n2 in G.edges():
       s1 = node_to_score[n1]
       s2 = node_to_score[n2]
-      print(n1, n2, s1, s2)
+      diff = s1 - s2
+      print(n1, n2, s1, s2, diff)
     print('')
 
     print("latent factor stats:")
