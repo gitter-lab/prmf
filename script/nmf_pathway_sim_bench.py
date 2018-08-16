@@ -21,17 +21,16 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 
   # diffusion
   parser.add_argument("--network", required=True)
-  #parser.add_argument("--nodelist")
+  # other arguments used in diffusion: nodelist
 
   # factorization
-  #parser.add_argument("--data", required=True)
-  parser.add_argument("--manifolds", required=True, nargs='+')
+  parser.add_argument("--manifolds-file", required=True)
   parser.add_argument("--gamma", default="1.0")
-  #parser.add_argument("--outdir")
-  #parser.add_argument("--nodelist")
+  parser.add_argument("--k-latent", default="6")
+  # other arguments used in factorization: outdir, nodelist, data
 
   # evaluation
-  #
+  # (no additional arguments)
   args = parser.parse_args()
 
   job_graph = nx.DiGraph()
@@ -73,15 +72,16 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   os.mkdir(nmf_outdir)
   attrs = {
     'exe': "nmf.py",
-    'args': ['--data', diffused_fp, '--outdir', nmf_outdir],
+    'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', nmf_outdir],
     'out': os.path.join(nmf_outdir, 'nmf.out'),
     'err': os.path.join(nmf_outdir, 'nmf.err')
   }
   if(args.rng_seed is not None):
     attrs['args'] += ['--seed', args.rng_seed]
   nmf_gene_by_latent_fp = os.path.join(nmf_outdir, "V.csv")
-  job_graph.add_node(job_id, attrs)
-  job_graph.add_edge(diffusion_job_id, job_id)
+  nmf_job_id = job_id
+  job_graph.add_node(nmf_job_id, attrs)
+  job_graph.add_edge(diffusion_job_id, nmf_job_id)
   job_id += 1
 
   attrs = {
@@ -100,14 +100,15 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   os.mkdir(nmf_pathway_outdir)
   attrs = {
     'exe': "nmf_pathway.py",
-    'args': ["--data", diffused_fp, "--manifolds"] + args.manifolds + ["--nodelist", args.nodelist, "--gamma", args.gamma, "--outdir", nmf_pathway_outdir],
+    'args': ["--data", diffused_fp, '--k-latent', args.k_latent, "--manifolds-file", args.manifolds_file, "--nodelist", args.nodelist, "--gamma", args.gamma, "--outdir", nmf_pathway_outdir],
     'out': os.path.join(nmf_pathway_outdir, "nmf_pathway.out"),
     'err': os.path.join(nmf_pathway_outdir, "nmf_pathway.err")
   }
   if(args.rng_seed is not None):
     attrs['args'] += ['--seed', args.rng_seed]
   prmf_gene_by_latent_fp = os.path.join(nmf_pathway_outdir, "V.csv")
-  job_graph.add_node(job_id, attrs)
+  prmf_job_id = job_id
+  job_graph.add_node(prmf_job_id, attrs)
   job_graph.add_edge(diffusion_job_id, job_id)
   job_id += 1
 
@@ -123,19 +124,50 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   job_id += 1
   # }} - nmf_pathway
 
+
+  # 3) PLIER - {{
+  PLIER_outdir = os.path.join(args.outdir, "PLIER")
+  os.mkdir(PLIER_outdir)
+  attrs = {
+    'exe': 'PLIER_wrapper.R',
+    'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--outdir', PLIER_outdir],
+    'out': os.path.join(PLIER_outdir, "PLIER_wrapper.out"),
+    'err': os.path.join(PLIER_outdir, "PLIER_wrapper.err")
+  }
+  if(args.rng_seed is not None):
+    attrs['args'] += ['--seed', args.rng_seed]
+  PLIER_gene_by_latent_fp = os.path.join(PLIER_outdir, "Z.csv")
+  PLIER_job_id = job_id
+  job_graph.add_node(PLIER_job_id, attrs)
+  job_graph.add_edge(diffusion_job_id, PLIER_job_id)
+  job_id += 1
+
+  # evaluation
+  attrs = {
+    'exe': "evaluate_simulation.py",
+    'args': ["--gene-by-latent", PLIER_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
+    'out': os.path.join(PLIER_outdir, "evaluate.out"),
+    'err': os.path.join(PLIER_outdir, "evaluate.err")
+  }
+  job_graph.add_node(job_id, attrs)
+  job_graph.add_edge(job_id-1, job_id)
+  job_id += 1
+  # }} - PLIER
+
   # plot
   plot_outdir = os.path.join(args.outdir, 'pr_curves')
   os.mkdir(plot_outdir)
   attrs = {
     'exe': 'plot_pr_curve.py',
-    'args': ['--nmf-gene-by-latent', nmf_gene_by_latent_fp, '--prmf-gene-by-latent', prmf_gene_by_latent_fp, '--nodelist', args.nodelist, '--true-seeds', chosen_seeds_fp, '--outdir', plot_outdir],
+    'args': ['--nmf-gene-by-latent', nmf_gene_by_latent_fp, '--prmf-gene-by-latent', prmf_gene_by_latent_fp, '--plier-gene-by-latent', PLIER_gene_by_latent_fp, '--nodelist', args.nodelist, '--true-seeds', chosen_seeds_fp, '--outdir', plot_outdir],
     'out': os.path.join(plot_outdir, 'plot.out'),
     'err': os.path.join(plot_outdir, 'plot.err')
   }
   job_graph.add_node(job_id, attrs)
   # run after nmf and nmf_pathway
-  job_graph.add_edge(job_id-4, job_id)
-  job_graph.add_edge(job_id-2, job_id)
+  job_graph.add_edge(nmf_job_id, job_id)
+  job_graph.add_edge(prmf_job_id, job_id)
+  job_graph.add_edge(PLIER_job_id, job_id)
   job_id += 1
 
   condor = False
