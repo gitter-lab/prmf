@@ -15,7 +15,7 @@ where X has shape (n_obs, n_feature)
 """)
   parser.add_argument("--data", type=str, help="Input data matrix in CSV format", required=True)
   parser.add_argument("--outdir", "-o", type=str, help="Directory to write results to", required=True)
-  parser.add_argument("--k-components", type=int, default=6)
+  parser.add_argument("--k-latent", type=int, default=6)
   parser.add_argument("--seed", default=None, help="RNG seed")
   args = parser.parse_args()
 
@@ -32,9 +32,9 @@ where X has shape (n_obs, n_feature)
 
   estimator = None
   if args.seed is None:
-    estimator = decomposition.NMF(n_components=args.k_components)
+    estimator = decomposition.NMF(n_components=args.k_latent)
   else:
-    estimator = decomposition.NMF(n_components=args.k_components, random_state=int(args.seed))
+    estimator = decomposition.NMF(n_components=args.k_latent, random_state=int(args.seed))
 
   U = estimator.fit_transform(X)
   V = estimator.components_.astype(np.double).transpose()
