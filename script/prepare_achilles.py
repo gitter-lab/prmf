@@ -7,7 +7,7 @@ from factorlib import ensembl
 from factorlib.string_db import parse_string_fh
 
 def for_plier(args):
-  hgnc_to_ensps_map = ensembl.map_hgnc_to_ensps(args.mapping_file)
+  hgnc_to_ensps_map = ensembl.map_hgnc_to_ensps(open(args.mapping_file))
   G = parse_string_fh(open(args.network_file))
   hgnc_to_ensp_map, copy_map = ensembl.filter_one_to_many(hgnc_to_ensps_map, G)
 
