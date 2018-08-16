@@ -20,6 +20,8 @@ def map_hgnc_to_ensps(fh):
     mapping of HGNC symbol to a set of ENSPs
   """
   rv = {}
+  if type(fh) == 'str':
+    fh = open(fh, 'r')
   for line in fh:
     line = line.rstrip()
     words = line.split('\t')
