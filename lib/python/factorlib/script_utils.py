@@ -265,7 +265,7 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, **kwa
         stderr_fh = open(job_attrs['err'], 'w')
       else:
         stderr_fh = sys.stderr
-      sys.stdout.write("[STATUS] Launching {} ; stdout = {} ; stderr = {}\n".format(str([digraph.node[job_id]['exe']] + digraph.node[job_id]['args']), job_attrs['out'], job_attrs['err']))
+      sys.stdout.write("[STATUS] Launching {} > {} 2> {}\n".format(" ".join(str([digraph.node[job_id]['exe']] + digraph.node[job_id]['args'])), job_attrs['out'], job_attrs['err']))
 
       #def callback_for_job(exit_status):
       #  digraph.node[job_id]['exit'] = exit_status
