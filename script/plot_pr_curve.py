@@ -75,12 +75,14 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
   for pathway_id in range(pathways_mat.shape[1]):
     plt.clf()
     y_true = pathways_mat[:,pathway_id]
+    true_fraction = np.sum(y_true) / y_true.shape[0]
     for i in range(len(pathway_to_latent_maps)):
       pathway_to_latent_map = pathway_to_latent_maps[i]
       factor_id, auc = pathway_to_latent_map[pathway_id]
       y_score = W_mats[i][:,factor_id]
       precision, recall, thresholds = sklearn.metrics.precision_recall_curve(y_true, y_score)
-      plt.step(recall, precision, color=colors[i], where='pre', label=label_strs[i].format(auc), linewidth=2.0)
+      plt.plot(recall, precision, color=colors[i], label=label_strs[i].format(auc), linewidth=2.0)
+    plt.plot(np.linspace(0,1,num=50), np.repeat(true_fraction, 50), label="Random; AUC={:0.3f}".format(true_fraction), linewidth=2.0)
     plt.xlabel('Recall', fontsize='x-large')
     plt.ylabel('Precision', fontsize='x-large')
     plt.ylim([0.0, 1.05])
