@@ -14,6 +14,7 @@ embed_vec = function(dimen, vec, ind_map) {
 }
 
 # Embed columns of <arr> into <dimen>-dimensional space
+# <ind_map> associates a row in the old vector space to a row in the new one
 embed_array = function(dimen, arr, ind_map) {
   dim_v = dim(arr)
   n_row = dim_v[[1]]
@@ -25,6 +26,29 @@ embed_array = function(dimen, arr, ind_map) {
   rv
 }
 
+embed_array_named = function(arr, row_names) {
+  dim_v = dim(arr)
+  n_col = dim_v[[2]]
+  rv = array(data=0, dim=c(length(row_names), n_col))
+  row.names(rv) = row_names
+  rv[row.names(arr),] = arr
+  rv
+}
+
+# Return a integer vector which associates 
+map_indexes = function(all_names, some_names) {
+  rv = 
+  rv
+}
+
+# Create binary 1-column matrix from a character vector
+to_binary_array = function(vec) {
+  rv = matrix(rep(1, length(vec)), nrow=length(vec))
+  rownames(rv) = vec
+  rv
+}
+
+# Split file extension off filepath or filename
 splitext = function(text) {
   rv = NA
   pattern = "([^.]*)([.][^.]*)$"
@@ -39,12 +63,14 @@ main2 = function(args) {
   # attach row names to data
   # assume data is such that there are more features than observations and that features belong on rows
   data = read.csv(args$data, header=F)
-  dim_data = dim(data)
-  if(dim_data[1] < dim_data[2]) {
+  data_dim = dim(data)
+  if(data_dim[1] < data_dim[2]) {
     data = t(data)
+    data_dim = dim(data)
   }
   # If Z-score normalization, error is thrown:
   # Error in svd(Y, nu = k, nv = k) : infinite or missing values in 'x'
+  # TODO what if nodelist is not the right size
   data = rowNorm(data)
   nodelist = readLines(args$nodelist)
   row.names(data) = nodelist
@@ -53,7 +79,9 @@ main2 = function(args) {
   # subset the data to meet this requirement
   data_rowSums = rowSums(data)
   inds = which(data_rowSums != 0)
+  warning(paste0("Subsetting data matrix to remove rows without measurements: ", data_dim[1], " -> ", length(inds)))
   data = data[inds,]
+  data_dim = dim(data)
   
   pathways = list()
   pathway_names = list()
@@ -80,18 +108,28 @@ main2 = function(args) {
   
   # TODO add colnames to be able to pass computeAUC=T
   prior = do.call(combinePaths, pathways)
-  all_rownames = commonRows(data, prior) # "common genes"
+  rownames_inter = commonRows(data, prior) # "common genes"
+  rownames_missing = setdiff(row.names(data), rownames_inter)
+  if(args$extra_prior) {
+    warning(paste0("Adding extra prior to include ", length(rownames_missing), " rows in data not found in any other prior"))
+    extra_prior = to_binary_array(rownames_missing)
+    prior = combinePaths(prior, extra_prior)
+    pathway_names[[i+1]] = 'extra'
+  } else {
+    warning(paste0("Subsetting data matrix to only include rows shared with a prior: ", data_dim[1], " -> ", length(rownames_inter)))
+  }
   
   # from source, return vaue is:
   # list(residual=(Y-Z%*%B), B=B, Z=Z, U=U, C=C, numActPath=length(ii), L1=L1, L2=L2, L3=L3, heldOutGenes=heldOutGenes)
   # TODO numActPat, heldOutGenes?
   # TODO other things added to namespace if computeAUC
-  plierResult = PLIER(data[all_rownames,], prior[all_rownames,], k=args$k_latent, trace=T, computeAUC=F, seed=args$seed)
+  plierResult = PLIER(data[rownames_inter,], prior[rownames_inter,], k=args$k_latent, trace=T, computeAUC=F, seed=args$seed)
   write.csv(plierResult$residual, file.path(args$outdir, 'residual.csv'))
   write.csv(plierResult$B, file.path(args$outdir, 'B.csv'))
 
   # embed Z in #{nodelist}-dimensional space (use association above)
-  Z_embed = embed_array(length(nodelist), plierResult$Z, inds)
+  message(paste0('Dimension of plierResult$Z: ', dim(plierResult$Z)))
+  Z_embed = embed_array_named(plierResult$Z, nodelist)
   write.table(Z_embed, file.path(args$outdir, 'Z.csv'), col.names=F, row.names=F, sep=",")
 
   # add pathway names to U as well (just as for C := prior)
@@ -122,8 +160,10 @@ main = function() {
   parser$add_argument('--outdir', required=T)
   parser$add_argument('--k-latent', default=6, type='integer')
   parser$add_argument('--seed', default=1, type='integer')
+  parser$add_argument('--extra-prior', action='store_true')
   args = parser$parse_args()
   main2(args)
 }
 
 main()
+traceback()
