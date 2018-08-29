@@ -71,7 +71,7 @@ main2 = function(args) {
   # If Z-score normalization, error is thrown:
   # Error in svd(Y, nu = k, nv = k) : infinite or missing values in 'x'
   # TODO what if nodelist is not the right size
-  data = rowNorm(data)
+  #data = rowNorm(data)
   nodelist = readLines(args$nodelist)
   row.names(data) = nodelist
 
@@ -123,12 +123,12 @@ main2 = function(args) {
   # list(residual=(Y-Z%*%B), B=B, Z=Z, U=U, C=C, numActPath=length(ii), L1=L1, L2=L2, L3=L3, heldOutGenes=heldOutGenes)
   # TODO numActPat, heldOutGenes?
   # TODO other things added to namespace if computeAUC
-  plierResult = PLIER(data[rownames_inter,], prior[rownames_inter,], k=args$k_latent, trace=T, computeAUC=F, seed=args$seed)
+  # TODO remove minGenes
+  plierResult = PLIER(as.matrix(data[rownames_inter,]), prior[rownames_inter,], k=args$k_latent, trace=T, computeAUC=F, seed=args$seed, minGenes=0)
   write.csv(plierResult$residual, file.path(args$outdir, 'residual.csv'))
   write.csv(plierResult$B, file.path(args$outdir, 'B.csv'))
 
   # embed Z in #{nodelist}-dimensional space (use association above)
-  message(paste0('Dimension of plierResult$Z: ', dim(plierResult$Z)))
   Z_embed = embed_array_named(plierResult$Z, nodelist)
   write.table(Z_embed, file.path(args$outdir, 'Z.csv'), col.names=F, row.names=F, sep=",")
 
@@ -165,5 +165,6 @@ main = function() {
   main2(args)
 }
 
+options(error=recover)
 main()
 traceback()
