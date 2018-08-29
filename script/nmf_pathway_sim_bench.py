@@ -85,7 +85,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   job_id += 1
 
   attrs = {
-    'exe': "evaluate_simulation.py",
+    'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", nmf_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(nmf_outdir, "evaluate.out"),
     'err': os.path.join(nmf_outdir, "evaluate.err")
@@ -114,7 +114,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 
   # evaluation
   attrs = {
-    'exe': "evaluate_simulation.py",
+    'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", prmf_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(nmf_pathway_outdir, "evaluate.out"),
     'err': os.path.join(nmf_pathway_outdir, "evaluate.err")
@@ -144,7 +144,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 
   # evaluation
   attrs = {
-    'exe': "evaluate_simulation.py",
+    'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", PLIER_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(PLIER_outdir, "evaluate.out"),
     'err': os.path.join(PLIER_outdir, "evaluate.err")

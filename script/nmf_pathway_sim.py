@@ -80,7 +80,7 @@ Evalute nmf_pathway.py by simulating gene lists
   # evaluation
   # TODO new version
   attrs = {
-    'exe': "evaluate_simulation.py",
+    'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(args.outdir, "evaluate.out"),
     'err': os.path.join(args.outdir, "evaluate.err")
