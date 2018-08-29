@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
   # simluation
   attrs = {
-    'exe': 'simulate_plier.py',
+    'exe': 'simulate_PLIER.py',
     'args': ['-o', args.outdir],
     'out': os.path.join(args.outdir, 'generate.out'),
     'err': os.path.join(args.outdir, 'generate.err')
