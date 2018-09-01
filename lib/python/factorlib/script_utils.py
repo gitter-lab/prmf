@@ -204,7 +204,7 @@ def bfs_nodes(G, source):
     node_list.append(edge[1])
   return node_list
 
-def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, **kwargs):
+def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, exit_on_err=True, **kwargs):
   """
   Run a set of jobs specified by a directed (acyclic) graph
 
@@ -220,6 +220,9 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, **kwa
 
   dry_run : bool
     if True, do not submit the DAG
+
+  exit_on_err : bool
+    if True (and condor False), stop execution of digraph when one of the job nodes fails
 
   Returns : TODO
   -------
@@ -237,8 +240,8 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, **kwa
     # TODO even with the pool it appears only 1 process is running
     pool = mp.Pool(processes=mp.cpu_count()-1)
     digraph = digraph.copy() # add proc node attr pointing to a Popen object
-    job_order = bfs_nodes(digraph, root_node)
-    #job_order = nx.topological_sort(digraph)
+    #job_order = bfs_nodes(digraph, root_node)
+    job_order = nx.topological_sort(digraph)
     for job_id in job_order:
       # wait for any predecessors to finish
       #preds = digraph.predecessors(job_id)
@@ -265,7 +268,7 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, **kwa
         stderr_fh = open(job_attrs['err'], 'w')
       else:
         stderr_fh = sys.stderr
-      sys.stdout.write("[STATUS] Launching {} > {} 2> {}\n".format(" ".join(str([digraph.node[job_id]['exe']] + digraph.node[job_id]['args'])), job_attrs['out'], job_attrs['err']))
+      sys.stdout.write("[STATUS] Launching {} > {} 2> {}\n".format(" ".join([digraph.node[job_id]['exe']] + digraph.node[job_id]['args']), job_attrs['out'], job_attrs['err']))
 
       #def callback_for_job(exit_status):
       #  digraph.node[job_id]['exit'] = exit_status
@@ -277,7 +280,11 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, **kwa
 
       # TODO synchronous only
       #proc = sp.Popen(args, stdout=stdout_fh, stderr=stderr_fh)
-      exit_code = sp.check_call(args, stdout=stdout_fh, stderr=stderr_fh)
+      exit_code = -1
+      if exit_on_err:
+        exit_code = sp.check_call(args, stdout=stdout_fh, stderr=stderr_fh)
+      else: 
+        exit_code = sp.call(args, stdout=stdout_fh, stderr=stderr_fh)
       print(exit_code)
 
   return job_ids
