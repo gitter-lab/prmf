@@ -71,7 +71,7 @@ main2 = function(args) {
   # If Z-score normalization, error is thrown:
   # Error in svd(Y, nu = k, nv = k) : infinite or missing values in 'x'
   # TODO what if nodelist is not the right size
-  #data = rowNorm(data)
+  data = rowNorm(data)
   nodelist = readLines(args$nodelist)
   row.names(data) = nodelist
 
@@ -83,33 +83,43 @@ main2 = function(args) {
   data = data[inds,]
   data_dim = dim(data)
   
-  pathways = list()
+  prior = NULL
   pathway_names = list()
-  con = file(args$pathways_file, "r")
-  i = 0
-  while ( TRUE ) {
-    line = readLines(con, n = 1)
-    if ( length(line) == 0 ) {
-      break
+  if(!is.null(args$pathways_file)) {
+    pathways = list()
+    con = file(args$pathways_file, "r")
+    i = 0
+    while ( TRUE ) {
+      line = readLines(con, n = 1)
+      if ( length(line) == 0 ) {
+        break
+      }
+      i = i + 1
+      pathway_graph = read.graph(line, format='graphml')
+      pathway_matrix = matrix(rep(1, vcount(pathway_graph)), nrow=vcount(pathway_graph))
+      rownames(pathway_matrix) = vertex_attr(pathway_graph, 'id', index = V(pathway_graph))
+      bn_ext = basename(line)
+      splitext_rv = splitext(bn_ext)
+      bn = splitext_rv[1]
+      ext = splitext_rv[2]
+      colnames(pathway_matrix) = bn
+      pathways[[i]] = pathway_matrix
+      pathway_names[[i]] = bn
     }
-    i = i + 1
-    pathway_graph = read.graph(line, format='graphml')
-    pathway_matrix = matrix(rep(1, vcount(pathway_graph)), nrow=vcount(pathway_graph))
-    rownames(pathway_matrix) = vertex_attr(pathway_graph, 'id', index = V(pathway_graph))
-    bn_ext = basename(line)
-    splitext_rv = splitext(bn_ext)
-    bn = splitext_rv[1]
-    ext = splitext_rv[2]
-    colnames(pathway_matrix) = bn
-    pathways[[i]] = pathway_matrix
-    pathway_names[[i]] = bn
+    close(con)
+    prior = do.call(combinePaths, pathways)
+  } else {
+    tbl = read.table(args$pathways_csv, sep=',')
+    row.names = rownames(tbl)
+    prior = as.matrix(tbl)
+    rownames(prior) = row.names
+    pathway_names = colnames(prior)
   }
-  close(con)
   
   # TODO add colnames to be able to pass computeAUC=T
-  prior = do.call(combinePaths, pathways)
   rownames_inter = commonRows(data, prior) # "common genes"
   rownames_missing = setdiff(row.names(data), rownames_inter)
+
   if(args$extra_prior) {
     warning(paste0("Adding extra prior to include ", length(rownames_missing), " rows in data not found in any other prior"))
     extra_prior = to_binary_array(rownames_missing)
@@ -152,19 +162,40 @@ main2 = function(args) {
   close(con)
 }
 
+# R's argparse doesnt implement add_mutually_exclusive_group(required=T)
+is_mutually_exclusive_required_group = function(env, members) {
+  rv = F
+  env = as.environment(env)
+  n_not_null = 0
+  for (i in 1:length(members)) {
+    member_v = get(members[[i]], envir=env)
+    if (!is.null(member_v)) {
+      n_not_null = n_not_null + 1
+    }
+  }
+  if (n_not_null == 1) {
+    rv = T
+  }
+  return(rv)
+}
+
+
 main = function() {
   parser = ArgumentParser(description='Construct binary matrices from pathway files and run PLIER')
   parser$add_argument('--data', required=T)
   parser$add_argument('--nodelist', required=T)
-  parser$add_argument('--pathways-file', required=T)
+  parser$add_argument('--pathways-csv')
+  parser$add_argument('--pathways-file')
   parser$add_argument('--outdir', required=T)
   parser$add_argument('--k-latent', default=6, type='integer')
   parser$add_argument('--seed', default=1, type='integer')
   parser$add_argument('--extra-prior', action='store_true')
   args = parser$parse_args()
+  if (!is_mutually_exclusive_required_group(args, c('pathways_csv', 'pathways_file'))) {
+    writeLines('Exactly one of --pathways-csv or --pathways-file is required', con=stderr())
+    q(status=2)
+  }
   main2(args)
 }
 
-options(error=recover)
 main()
-traceback()
