@@ -7,7 +7,6 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument('--true-z', required=True)
   parser.add_argument('--pred-z', required=True)
-  parser.add_argument('--outdir', required=True)
   args = parser.parse_args()
 
   Z_true = np.genfromtxt(args.true_z, delimiter=",")
@@ -29,7 +28,7 @@ if __name__ == "__main__":
   # normalize mse by column's 2 norm
   mse_best_normal = np.zeros(mse_best.shape)
   for i in range(n_pred):
-    mse_best_normal[i] = mse_best[i] / np.linalg.norm(Z_true[mse_best_ind[i]])
+    mse_best_normal[i] = mse_best[i] / np.linalg.norm(Z_true[:,mse_best_ind[i]])
 
   print('\t'.join(map(str, mse_best_normal)))
   print(np.mean(mse_best_normal))
