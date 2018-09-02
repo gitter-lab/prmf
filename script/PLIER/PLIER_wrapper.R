@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 library(PLIER)
-library(igraph)
 library(argparse)
 
 # Embed vec into <dimen>-dimensional space
@@ -86,6 +85,7 @@ main2 = function(args) {
   prior = NULL
   pathway_names = list()
   if(!is.null(args$pathways_file)) {
+    library(igraph)
     pathways = list()
     con = file(args$pathways_file, "r")
     i = 0
