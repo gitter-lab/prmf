@@ -34,7 +34,7 @@ if __name__ == "__main__":
     script_utils.mkdir_p(PLIER_outdir)
     attrs = {
       'exe': 'PLIER_wrapper.R',
-      'args': ['--data', os.path.join(run_outdir, 'Y.csv'), '--nodelist', os.path.join(run_outdir, 'nodelist.txt'), '--pathways-file', os.path.join(run_outdir, 'pathways_file.txt'), '--outdir', PLIER_outdir, '--k-latent', str(30), '--seed', str(i)],
+      'args': ['--data', os.path.join(run_outdir, 'Y.csv'), '--nodelist', os.path.join(run_outdir, 'nodelist.txt'), '--pathways-csv', os.path.join(run_outdir, 'C.csv'), '--outdir', PLIER_outdir, '--k-latent', str(30), '--seed', str(i)],
       'out': os.path.join(PLIER_outdir, 'PLIER.out'),
       'err': os.path.join(PLIER_outdir, 'PLIER.err')
     }
