@@ -159,12 +159,8 @@ def write_condor_dag(dag_fp, digraph):
     # get generic condor job description filepath
     condor_submit_fp = get_condor_submit_fp()
 
-    roots = []
-    for node in digraph.nodes_iter():
-      if digraph.in_degree(node) == 0:
-        roots.append(node)
-
-    for root in roots:
+    job_order = nx.topological_sort(digraph)
+    for job_int in job_order:
       # write JOB declaration for root
       job_int = root
       job_attrs = digraph.node[job_int]
@@ -174,22 +170,11 @@ def write_condor_dag(dag_fp, digraph):
 
       # write VARS declaration for root
       fh.write(format_vars(job_name, **job_attrs) + "\n")
-      
-      # as we processes edges, we have already written the "source" job of the edge but not the "target"
-      edges = nx.bfs_edges(digraph, root)
-      for edge in edges:
-        # write JOB declaration for target
-        job_int = edge[1]
-        job_attrs = digraph.node[job_int]
-        job_name = job_attrs_to_job_name(**job_attrs)
-        job_int_to_name[job_int] = job_name
-        fh.write(JOB_FMT_STR.format(job_name, condor_submit_fp) + "\n")
 
-        # write VARS declaration for target
-        fh.write(format_vars(job_name, **job_attrs) + "\n")
-
-        # write PARENT .. CHILD declaration
-        fh.write(PARENT_FMT_STR.format(job_int_to_name[edge[0]], job_int_to_name[edge[1]]) + "\n")
+    # write all edges at end
+    for edge in digraph.edges_iter():
+      # write PARENT .. CHILD declaration
+      fh.write(PARENT_FMT_STR.format(job_int_to_name[edge[0]], job_int_to_name[edge[1]]) + "\n")
 
 def submit_condor_dag(dag_fp):
   # TODO output files go in cwd or location of dag file
