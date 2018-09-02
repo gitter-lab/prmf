@@ -130,7 +130,7 @@ def get_exe_path(inpath):
     # this exe may surprise some users because find_executable behaves differently from "which" in
     # this respect: find_executable will also include the current working directory in the search
     # for the executable
-    sys.stderr.write("[warning] found executable {} is in current working directory and may be a different version of {} than found according to the command-line program \"which\"\n".format(outpath, exe))
+    sys.stderr.write("[warning] found executable {} is in current working directory and may be a different version of {} than found according to the command-line program \"which\"\n".format(outpath, cwd_exe_path))
   return outpath
 
 def job_attrs_to_job_name(exe=None, args=None, out=None, err=None, **kwargs):
