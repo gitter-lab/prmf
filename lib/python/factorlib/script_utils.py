@@ -141,8 +141,8 @@ def job_attrs_to_job_name(exe=None, args=None, out=None, err=None, **kwargs):
   ('.', '+') which are reserved for system use.
   """
   hash_obj = hashlib.sha256()
-  hash_obj.update(exe)
-  hash_obj.update(" ".join(args))
+  hash_obj.update(exe.encode())
+  hash_obj.update(" ".join(args).encode())
   job_name = hash_obj.hexdigest()
   return job_name
 
