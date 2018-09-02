@@ -161,17 +161,15 @@ def write_condor_dag(dag_fp, digraph):
 
     job_order = nx.topological_sort(digraph)
     for job_int in job_order:
-      # write JOB declaration for root
-      job_int = root
+      # write JOB declaration
       job_attrs = digraph.node[job_int]
       job_name = job_attrs_to_job_name(**job_attrs)
       job_int_to_name[job_int] = job_name
       fh.write(JOB_FMT_STR.format(job_name, condor_submit_fp) + "\n")
 
-      # write VARS declaration for root
+      # write VARS declaration
       fh.write(format_vars(job_name, **job_attrs) + "\n")
 
-    # write all edges at end
     for edge in digraph.edges_iter():
       # write PARENT .. CHILD declaration
       fh.write(PARENT_FMT_STR.format(job_int_to_name[edge[0]], job_int_to_name[edge[1]]) + "\n")
