@@ -7,6 +7,7 @@ from factorlib import script_utils
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--n-runs", default=1, type=int)
+  parser.add_argument("--condor", action='store_true')
   parser.add_argument("--outdir")
   args = parser.parse_args()
 
@@ -93,4 +94,6 @@ if __name__ == "__main__":
   job_id += 1
 
   condor = False
+  if args.condor:
+    condor = True
   job_ids = script_utils.run_digraph(args.outdir, job_graph, exit_on_err=False, condor=condor)
