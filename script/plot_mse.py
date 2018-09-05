@@ -42,8 +42,10 @@ def plot(indir, outdir, eval_fname, title_part, plot_fname):
   xs = np.array(xs)
   ys = np.array(ys)
 
-  x_max = np.percentile(xs, 95)
-  y_max = np.percentile(ys, 95)
+  #x_max = np.percentile(xs, 95)
+  #y_max = np.percentile(ys, 95)
+  x_max = np.max(xs)
+  y_max = np.max(ys)
   both_max = np.max([x_max, y_max])
 
   plt.scatter(xs, ys, linewidths=2.0)
