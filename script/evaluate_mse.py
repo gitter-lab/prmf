@@ -70,4 +70,9 @@ between pairs of column vectors. Otherwise, compute mean squared error.""")
     perf_best = perf_best_normal
 
   print('\t'.join(map(str, perf_best)))
-  print(np.mean(perf_best))
+  if args.correlation:
+    # then summary metric is maximum
+    print(np.max(perf_best))
+  else:
+    # then summary metric is mean
+    print(np.mean(perf_best))
