@@ -55,6 +55,42 @@ if __name__ == "__main__":
     job_graph.add_edge(PLIER_job_id, PLIER_eval_job_id)
     job_id += 1
 
+    attrs = {
+      'exe': 'evaluate_mse.py',
+      'args': ['--true-z', os.path.join(run_outdir, "Z.csv"), '--pred-z', os.path.join(PLIER_outdir, 'Z.csv'), '-m'],
+      'out': os.path.join(PLIER_outdir, 'evaluate_mse_match.out'),
+      'err': os.path.join(PLIER_outdir, 'evaluate_mse_match.err')
+    }
+    PLIER_eval_job_id = job_id
+    eval_job_ids.append(PLIER_eval_job_id)
+    job_graph.add_node(PLIER_eval_job_id, attrs)
+    job_graph.add_edge(PLIER_job_id, PLIER_eval_job_id)
+    job_id += 1
+
+    attrs = {
+      'exe': 'evaluate_mse.py',
+      'args': ['--true-z', os.path.join(run_outdir, "Z.csv"), '--pred-z', os.path.join(PLIER_outdir, 'Z.csv'), '-c'],
+      'out': os.path.join(PLIER_outdir, 'evaluate_corr.out'),
+      'err': os.path.join(PLIER_outdir, 'evaluate_corr.err')
+    }
+    PLIER_eval_job_id = job_id
+    eval_job_ids.append(PLIER_eval_job_id)
+    job_graph.add_node(PLIER_eval_job_id, attrs)
+    job_graph.add_edge(PLIER_job_id, PLIER_eval_job_id)
+    job_id += 1
+
+    attrs = {
+      'exe': 'evaluate_mse.py',
+      'args': ['--true-z', os.path.join(run_outdir, "Z.csv"), '--pred-z', os.path.join(PLIER_outdir, 'Z.csv'), '-c', '-m'],
+      'out': os.path.join(PLIER_outdir, 'evaluate_corr_match.out'),
+      'err': os.path.join(PLIER_outdir, 'evaluate_corr_match.err')
+    }
+    PLIER_eval_job_id = job_id
+    eval_job_ids.append(PLIER_eval_job_id)
+    job_graph.add_node(PLIER_eval_job_id, attrs)
+    job_graph.add_edge(PLIER_job_id, PLIER_eval_job_id)
+    job_id += 1
+
     # NMF
     NMF_outdir = os.path.join(run_outdir, 'NMF')
     script_utils.mkdir_p(NMF_outdir)
@@ -74,6 +110,42 @@ if __name__ == "__main__":
       'args': ['--true-z', os.path.join(run_outdir, 'Z.csv'), '--pred-z', os.path.join(NMF_outdir, 'V.csv')],
       'out': os.path.join(NMF_outdir, 'evaluate_mse.out'),
       'err': os.path.join(NMF_outdir, 'evaluate_mse.err')
+    }
+    NMF_eval_job_id = job_id
+    eval_job_ids.append(NMF_eval_job_id)
+    job_graph.add_node(NMF_eval_job_id, attrs)
+    job_graph.add_edge(NMF_job_id, NMF_eval_job_id)
+    job_id += 1
+
+    attrs = {
+      'exe': 'evaluate_mse.py',
+      'args': ['--true-z', os.path.join(run_outdir, 'Z.csv'), '--pred-z', os.path.join(NMF_outdir, 'V.csv'), '-m'],
+      'out': os.path.join(NMF_outdir, 'evaluate_mse_match.out'),
+      'err': os.path.join(NMF_outdir, 'evaluate_mse_match.err')
+    }
+    NMF_eval_job_id = job_id
+    eval_job_ids.append(NMF_eval_job_id)
+    job_graph.add_node(NMF_eval_job_id, attrs)
+    job_graph.add_edge(NMF_job_id, NMF_eval_job_id)
+    job_id += 1
+
+    attrs = {
+      'exe': 'evaluate_mse.py',
+      'args': ['--true-z', os.path.join(run_outdir, 'Z.csv'), '--pred-z', os.path.join(NMF_outdir, 'V.csv'), '-c'],
+      'out': os.path.join(NMF_outdir, 'evaluate_corr.out'),
+      'err': os.path.join(NMF_outdir, 'evaluate_corr.err')
+    }
+    NMF_eval_job_id = job_id
+    eval_job_ids.append(NMF_eval_job_id)
+    job_graph.add_node(NMF_eval_job_id, attrs)
+    job_graph.add_edge(NMF_job_id, NMF_eval_job_id)
+    job_id += 1
+
+    attrs = {
+      'exe': 'evaluate_mse.py',
+      'args': ['--true-z', os.path.join(run_outdir, 'Z.csv'), '--pred-z', os.path.join(NMF_outdir, 'V.csv'), '-c', '-m'],
+      'out': os.path.join(NMF_outdir, 'evaluate_corr_match.out'),
+      'err': os.path.join(NMF_outdir, 'evaluate_corr_match.err')
     }
     NMF_eval_job_id = job_id
     eval_job_ids.append(NMF_eval_job_id)
