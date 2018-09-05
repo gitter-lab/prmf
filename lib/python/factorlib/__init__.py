@@ -530,6 +530,13 @@ def match_dist(W_mat, pathways_mat):
   return rv
 
 def transform_matching(G, matching, factor_node_ids):
+  """
+  Transform the return value of a matching from NetworkX into a different data structure
+
+  Returns
+  -------
+  rv : list of (factor_id, pathway_id, weight)
+  """
   rv = []
   for factor_id in factor_node_ids:
     # not all nodes used in matching necessarily
