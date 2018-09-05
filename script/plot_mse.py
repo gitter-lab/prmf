@@ -7,6 +7,9 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
+# run/method/evaluate_mse.out
+run_regexp = re.compile(r'run\d+')
+
 def parse_eval(fp):
   rv = None
   with open(fp, 'r') as fh:
@@ -18,16 +21,9 @@ def parse_eval(fp):
         rv = float(line)
   return rv
 
-if __name__ == "__main__":
-  parser = argparse.ArgumentParser()
-  parser.add_argument('--indir', '-i', help='Directory of results to plot')
-  parser.add_argument('--outdir', '-o', help='Directory to place plots')
-  args = parser.parse_args()
-
-  # run/method/evaluate_mse.out
-  run_regexp = re.compile(r'run\d+')
-  nmf_rel_path = os.path.join("NMF", "evaluate_mse.out")
-  plier_rel_path = os.path.join("PLIER", "evaluate_mse.out")
+def plot(indir, outdir, eval_fname, title_part, plot_fname):
+  nmf_rel_path = os.path.join("NMF", eval_fname)
+  plier_rel_path = os.path.join("PLIER", eval_fname)
 
   xs = []
   ys = []
@@ -56,7 +52,23 @@ if __name__ == "__main__":
   plt.ylim([0, both_max])
   plt.xlabel('NMF')
   plt.ylabel('PLIER')
-  plt.title('Average MSE from PLIER-based Simulation')
+  plt.title('{} from PLIER-based Simulation'.format(title_part))
 
-  ofp = os.path.join(args.outdir, 'mse_plot.png')
+  ofp = os.path.join(args.outdir, plot_fname)
   plt.savefig(ofp)
+
+if __name__ == "__main__":
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--indir', '-i', help='Directory of results to plot')
+  parser.add_argument('--outdir', '-o', help='Directory to place plots')
+  args = parser.parse_args()
+
+  plots = [
+    ('evaluate_mse.out', 'Average MSE', 'mse_plot.png'),
+    ('evaluate_mse_match.out', 'Average Matched MSE', 'mse_match_plot.png'),
+    ('evaluate_corr.out', 'Maximum Correlation', 'corr_plot.png'),
+    ('evaluate_corr_match.out', 'Maximum Matched Correlation', 'corr_match_plot.png')
+  ]
+
+  for plot_args in plots:
+    plot(args.indir, args.outdir, plot_args[0], plot_args[1], plot_args[2])
