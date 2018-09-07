@@ -2,6 +2,7 @@
 import sys, argparse
 import numpy as np
 import factorlib as fl
+import networkx as nx
 from sklearn.metrics import mean_squared_error as mse
 
 def compute_mse(Z_true, Z_pred):
@@ -52,10 +53,10 @@ between pairs of column vectors. Otherwise, compute mean squared error.""")
     # do not allow columns of Z_true to be reused
     G, factor_node_ids, pathway_node_ids = fl.mat_to_bipartite(perf_arr)
     matching = nx.max_weight_matching(G)
-    match_tpls = transform_matching(G, matching, factor_node_ids)
+    match_tpls = fl.transform_matching(G, matching, factor_node_ids)
     for id1, id2, weight in match_tpls:
-      true_ind = id1[1:]
-      pred_ind = id2[1:]
+      true_ind = int(id1[1:])
+      pred_ind = int(id2[1:])
       perf_best[pred_ind] = weight
       perf_best_ind[pred_ind] = true_ind
   else:
