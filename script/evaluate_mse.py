@@ -36,6 +36,7 @@ between pairs of column vectors. Otherwise, compute mean squared error.""")
 
   Z_true = np.genfromtxt(args.true_z, delimiter=",")
   Z_pred = np.genfromtxt(args.pred_z, delimiter=",")
+  nr, n_pred = Z_pred.shape
 
   # true x pred
   perf_arr = None
