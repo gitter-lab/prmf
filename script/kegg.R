@@ -22,17 +22,27 @@ REFSEQ = "NCBI-ProteinID"
 PATHWAY_DELIM = ":"
 LINK_DELIM = ":"
 
-#' Return a graph object associated with a kegg pathway identifier
+#' Return a graph object associated with a kegg pathway identifier.
+#' Parse existing KGML file if it exists. Otherwise download, save, then parse.
 #'
 #' @param pathway_id e.g. "hsa:05164"
 #' @return graph object (see help(graphNEL))
-pathway_to_graph <- function(pathway_id) {
+get_pathway <- function(pathway_id, outdir=NULL) {
   # remove ":" if present
   pathway_id = sub(':', '', pathway_id)
-  pathway_org = substr(pathway_id, 1, 3)
-  pathway_num = substr(pathway_id, 4, nchar(pathway_id))
-  pathway_file = tempfile()
-  kgml = retrieveKGML(pathwayid=pathway_num, organism=pathway_org, destfile=pathway_file)
+  pathway_file = NULL
+  if (is.null(outdir)) {
+    pathway_file = tempfile()
+  } else {
+    pathway_bn = paste(pathway_id, '.xml', sep='')
+    pathway_file = file.path(outdir, pathway_bn)
+  }
+  kegg.pathway = NULL
+  if (!file.exists(pathway_file)) {
+    pathway_org = substr(pathway_id, 1, 3)
+    pathway_num = substr(pathway_id, 4, nchar(pathway_id))
+    kgml = retrieveKGML(pathwayid=pathway_num, organism=pathway_org, destfile=pathway_file)
+  }
   kegg.pathway = parseKGML(pathway_file)
   graphnel = KEGGpathway2Graph(kegg.pathway, expandGenes = TRUE)
   graph = graph_from_graphnel(graphnel)
@@ -142,8 +152,8 @@ write_abc <- function(graph, outfile, id_map = NA) {
   close(fh)
 }
 
-# TODO number of genes off by 1 when compared to pathway_to_graph
-genes_in_pathway <- function(pathway_id) {
+# TODO number of genes off by 1 when compared to get_pathway
+genes_in_pathway_http <- function(pathway_id) {
   pathway_id = gsub(PATHWAY_DELIM, '', pathway_id)
   pathway_data = keggGet(c(pathway_id))
 
@@ -159,6 +169,10 @@ genes_in_pathway <- function(pathway_id) {
   }
 
   return(gene_ids)
+}
+
+genes_in_pathway <- function(graph) {
+  return(vertex_attr(graph, 'name', V(graph)))
 }
 
 #' Link KEGG gene identifiers e.g. "hsa:5291" to the identifier named in <type>, default ENSEMBL
@@ -284,20 +298,23 @@ main = function() {
   args = parser$parse_args()
   id_type = check_id_type(args$id_type)
 
-  #unique_paths = c("hsa00010")
+  #unique_paths = c("hsa01524")
   unique_paths = list_pathways()
   for (pathway_id in unique_paths) {
     outfile = file.path(args$outdir, paste(pathway_id, '.graphml', sep=''))
     write(paste('Downloading', pathway_id), stdout())
     if (!file.exists(outfile)) {
-      tryCatch({
-        gene_ids = genes_in_pathway(pathway_id)
+      tryCatch(withCallingHandlers({
+        graph = get_pathway(pathway_id, args$outdir)
+        gene_ids = genes_in_pathway(graph)
         id_map = link_genes_hash(gene_ids, type=id_type)
-        graph = pathway_to_graph(pathway_id)
         graph = rename_nodes(graph, id_map)
         write_graph(graph, outfile, format="graphml")
-      }, error=function(cond) {
-        write(paste('Failed downloading', pathway_id, message(cond)), stdout())
+      }, error=function(e) {
+        print(sys.calls())
+        print(message(e))
+      }), error=function(e) {
+        # do nothing
       })
     }
   }
