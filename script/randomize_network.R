@@ -1,7 +1,12 @@
 #!/usr/bin/env Rscript
-library(BiRewire)
-library(igraph)
-library(argparse)
+load_success = TRUE
+load_success = load_success && library(BiRewire, quietly=TRUE, logical.return=TRUE)
+load_success = load_success && library(igraph, quietly=TRUE, logical.return=TRUE)
+load_success = load_success && library(argparse, quietly=TRUE, logical.return=TRUE)
+if(!load_success) {
+  write("Unable to load dependencies", stderr())
+  quit(status=2)
+}
 
 # Split file extension off filepath or filename
 # TODO copied from PLIER_wrapper.R
