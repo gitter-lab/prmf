@@ -91,11 +91,14 @@ def map_ensp_to_hgnc(fh):
       rv[ensp_id] = hgnc_symbol
   return rv
 
-def apply_map(hgnc_to_ensp_map, gene_list_fh):
+def apply_map(word_map, gene_list_fh):
   """
+  Read words (one per line) from gene_list_fh and apply word_map.
+  Return mapped words as a set.
+
   Parameters
   ----------
-  hgnc_to_ensp_map : dict
+  word_map : dict
     mapping of HGNC symbol to set of ENSPs
 
   gene_list_fh : file-like
@@ -109,10 +112,35 @@ def apply_map(hgnc_to_ensp_map, gene_list_fh):
   rv = set()
   for line in gene_list_fh:
     hgnc_symbol = line.rstrip()
-    ensp_ids = hgnc_to_ensp_map.get(hgnc_symbol)
+    ensp_ids = word_map.get(hgnc_symbol)
     if ensp_ids is None:
       sys.stderr.write("Unrecognized HGNC symbol: {}\n".format(hgnc_symbol))
     else:
       rv = rv.union(ensp_ids)
   rv = sorted(rv)
   return rv
+
+def apply_mapping(word_map, io_pairs):
+  """
+  For infile, outfile pairs in <io_pairs>, read words separated by PCRE non-word-character 
+  regexp '\W', apply <word_map>, and write mapped words to outfile. Note many words in infile
+  do not need to appear in the <word_map> and will be left unmapped.
+  """
+  sep_re = re.compile('\W')
+  word = ""
+  for infile, outfile in io_pairs:
+    with open(infile, "r") as ifh:
+      with open(outfile, "w") as ofh:
+        for line in ifh:
+          for char in line:
+            match_data = sep_re.match(char)
+            if(match_data is not None):
+              # then process word
+              ensp = hgnc_to_ensp_map.get(word)
+              if ensp is None:
+                ofh.write(word + match_data.group(0))
+              else:
+                ofh.write(ensp + match_data.group(0))
+              word = ""
+            else:
+              word += char
