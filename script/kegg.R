@@ -4,6 +4,7 @@ load_success = load_success && library(KEGGREST, quietly=TRUE, logical.return=TR
 load_success = load_success && library(KEGGgraph, quietly=TRUE, logical.return=TRUE)
 load_success = load_success && library(graph, quietly=TRUE, logical.return=TRUE)
 load_success = load_success && library(igraph, quietly=TRUE, logical.return=TRUE)
+load_success = load_success && library(argparse, quietly=TRUE, logical.return=TRUE)
 if(!load_success) {
   write("Unable to load dependencies", stderr())
   quit(status=2)
@@ -26,12 +27,10 @@ LINK_DELIM = ":"
 #' @param pathway_id e.g. "hsa:05164"
 #' @return graph object (see help(graphNEL))
 pathway_to_graph <- function(pathway_id) {
-  pathway_id_split = strsplit(pathway_id, PATHWAY_DELIM)
-  if (pathway_id_split == pathway_id) {
-    stop("cannot split %s on %s", pathway_id, PATHWAY_DELIM)
-  } 
-  pathway_org = pathway_id_split[[1]][1]
-  pathway_num = pathway_id_split[[1]][2]
+  # remove ":" if present
+  pathway_id = sub(':', '', pathway_id)
+  pathway_org = substr(pathway_id, 1, 3)
+  pathway_num = substr(pathway_id, 4, nchar(pathway_id))
   pathway_file = tempfile()
   kgml = retrieveKGML(pathwayid=pathway_num, organism=pathway_org, destfile=pathway_file)
   kegg.pathway = parseKGML(pathway_file)
@@ -40,16 +39,58 @@ pathway_to_graph <- function(pathway_id) {
   return(graph)
 }
 
-#' Translate KEGG node identifiers using id_map
+#' Translate KEGG node identifiers using id_map. id_map is a one-to-many mapping. Create extra nodes
+#' as required.
 #'
+#' TODO figure out name of 'weight' edge attribute from G rather than hard code
 rename_nodes <- function(G, id_map) {
   nodes = V(G)
+  # first, create new nodes for those mapped to >= 2 ids where rename mapping
+  # is done implicitly through node creation
   for(node_ind in nodes) {
     node = nodes[node_ind]
     old_name = node$name
-    new_name = id_map[[old_name]]
-    if(!is.null(new_name)) {
-      G = set_vertex_attr(G, 'name', index=old_name, value=new_name)
+    new_names = id_map[[old_name]]
+    if (length(new_names) >= 2) {
+      # new nodes
+      for (i in 2:length(new_names)) {
+        new_name = new_names[i]
+        G = add_vertices(G, 1, name=new_name)
+      }
+
+      # "from" edges
+      edge_sequence = E(G)[from(old_name)]
+      ends_rv = ends(G, edge_sequence)
+      for (i in 2:length(new_names)) {
+        new_name = new_names[i]
+        for (j in 1:length(edge_sequence)) {
+          # j indexes which edge in edge sequence, 2 indexes the target of the edge
+          target = ends_rv[j,2]
+          G = add_edges(G, c(new_name, target), weight=1)
+        }
+      }
+
+      # "to" edges
+      edge_sequence = E(G)[to(old_name)]
+      ends_rv = ends(G, edge_sequence)
+      for (i in 2:length(new_names)) {
+        new_name = new_names[i]
+        for (j in 1:length(edge_sequence)) {
+          # j indexes which edge in edge sequence, 1 indexes the source of the edge
+          source_node = ends_rv[j,1]
+          G = add_edges(G, c(source_node, new_name), weight=1)
+        }
+      }
+    }
+  }
+
+  # then, rename nodes
+  for(node_ind in nodes) {
+    node = nodes[node_ind]
+    old_name = node$name
+    new_names = id_map[[old_name]]
+    if (length(new_names) >= 1) {
+      G = set_vertex_attr(G, 'name', index=old_name, value=new_names[1])
     }
   }
   return(G)
@@ -123,7 +164,7 @@ genes_in_pathway <- function(pathway_id) {
 #' Link KEGG gene identifiers e.g. "hsa:5291" to the identifier named in <type>, default ENSEMBL
 #'
 #' @return ids_map an "environment" used as a hash mapping KEGG gene ids to their ENSEMBL counterparts
-#'   or NA if there is no linked identifier
+#'   (one-to-many) or an empty array if there is no linked identifier
 link_genes_hash <- function(kegg_gene_ids, type=ENSEMBL) {
   linked_genes = link_genes_array(kegg_gene_ids, type)
   ids_map = new.env(parent=emptyenv())
@@ -135,22 +176,23 @@ link_genes_hash <- function(kegg_gene_ids, type=ENSEMBL) {
 
 #' Link KEGG gene identifiers e.g. "hsa:5291" to the identifier named in <type>, default ENSEMBL
 #'
-#' @return link_ids an array of the same length as kegg_gene_ids with the mapped identifier 
-#'   or NA if there is no linked identifier
+#' @return link_ids an array of the same length as kegg_gene_ids with the mapped identifiers 
+#'   (note one-to-many mapping) or an empty array if there is no linked identifier
 link_genes_array <- function(kegg_gene_ids, type=ENSEMBL) {
   link_ids = array(dim = length(kegg_gene_ids))
 
   # return character vector of length 2: <id_type>, <id_value>
   # or an empty vector if link cannot be parsed
   parse_link = function(dblink) {
-    rv = c(NULL)
+    rv = c()
     split_rv = strsplit(dblink, ':', fixed = TRUE)
     if(split_rv == dblink) {
       # then split failed, return NULL
     } else {
       id_type = trimws(split_rv[[1]][1])
-      id_value = trimws(split_rv[[1]][2])
-      rv = c(id_type, id_value)
+      id_value_str = trimws(split_rv[[1]][2])
+      id_values = strsplit(id_value_str, " ")[[1]]
+      rv = c(id_type, id_values)
     }
     return(rv)
   }
@@ -165,17 +207,17 @@ link_genes_array <- function(kegg_gene_ids, type=ENSEMBL) {
     return(rv) 
   }
 
-  # reduce dblinks to a singleton -- an identifier of type <type> or NA
-  dblinks_to_id = function(dblinks) {
-    id = NA
+  # reduce dblinks to a (possibly empty) vector of identifiers
+  dblinks_to_ids = function(dblinks) {
+    ids = NA
     found_link = Find(find_link, dblinks)
     if(length(found_link) == 0) {
-      id = NA
+      ids = c()
     } else {
       parsed_link = parse_link(found_link)
-      id = parsed_link[2]
+      ids = parsed_link[2:length(parsed_link)]
     }
-    return(id)
+    return(ids)
   }
 
   # keggGet only accepts 10 entries at a time on the server side
@@ -192,7 +234,7 @@ link_genes_array <- function(kegg_gene_ids, type=ENSEMBL) {
 
     gene_data = keggGet(c(batch))
     gene_ids = mapply(function(gene_datum) {
-      return(dblinks_to_id(gene_datum$DBLINKS))
+      return(dblinks_to_ids(gene_datum$DBLINKS))
     }, gene_data)
 
     link_ids[start:end] = as.array(gene_ids)
@@ -219,51 +261,45 @@ list_pathways <- function() {
   return(unique_paths)
 }
 
-main = function() {
-  usage = "
-Download KEGG pathway graphs in the graphml format.
-
-kegg.R [-h] [-l] [<pathway_id>] [<outfile>]
-"
-  args <- commandArgs(trailingOnly = TRUE)
-  list_flag = FALSE
-  help_flag = FALSE
-
-  match_rv = match("-h", args)
-  if(!is.na(match_rv)) {
-    help_flag = TRUE
-  }
-  if(help_flag) {
-    # then display usage on stdout
-    cat(usage, sep="\n")
-    quit(status = 0)
-  }
-
-  # TODO transform output to e.g. hsa:00010 instead of hsa00010
-  match_rv = match("-l", args)
-  if(!is.na(match_rv)) {
-    list_flag = TRUE
-  }
-  if(list_flag) {
-    # then list the names of all pathways
-    unique_paths = list_pathways()
-    cat(unique_paths, sep="\n")
-    quit(status = 0)
-  }
-
-  if(length(args) == 2) {
-    # then list all the genes for the given pathway
-    pathway_id = args[1] # e.g. "hsa:00010"
-    outfile = args[2]
-    gene_ids = genes_in_pathway(pathway_id)
-    id_map = link_genes_hash(gene_ids, type=HGNC)
-    graph = pathway_to_graph(pathway_id)
-    graph = rename_nodes(graph, id_map)
-    write_graph(graph, outfile, format="graphml")
-    #write_abc(graph, outfile, id_map = id_map)
+# TODO upcase
+check_id_type = function(id_type) {
+  rv = NULL
+  if (id_type == 'HGNC') {
+    rv = HGNC
+  } else if (id_type == 'ENSEMBL') {
+    rv = ENSEMBL
+  } else if (id_type == 'REFSEQ') {
+    rv = REFSEQ
   } else {
-    write(usage, stderr()) 
-    quit(status = 1)
+    write(paste('--id-type=', id_type, ' is not valid', sep=''), stderr())
+    quit(status=3)
+  }
+  return(rv)
+}
+
+main = function() {
+  parser = ArgumentParser(description='Download KEGG pathway graphs in the graphml format.')
+  parser$add_argument('--id-type', help='Attempt to convert KEGG gene identifiers of form \'hsa:XXXXX\' to this identifier type. Unmapped identifiers will remain as KEGG gene identifiers. Available types: "HGNC", "ENSEMBL", "REFSEQ". Default="ENSEMBL".', default='ENSEMBL')
+  parser$add_argument('--outdir', help='Directory to write graphml files to.', required=T)
+  args = parser$parse_args()
+  id_type = check_id_type(args$id_type)
+
+  #unique_paths = c("hsa00010")
+  unique_paths = list_pathways()
+  for (pathway_id in unique_paths) {
+    outfile = file.path(args$outdir, paste(pathway_id, '.graphml', sep=''))
+    write(paste('Downloading', pathway_id), stdout())
+    if (!file.exists(outfile)) {
+      tryCatch({
+        gene_ids = genes_in_pathway(pathway_id)
+        id_map = link_genes_hash(gene_ids, type=id_type)
+        graph = pathway_to_graph(pathway_id)
+        graph = rename_nodes(graph, id_map)
+        write_graph(graph, outfile, format="graphml")
+      }, error=function(cond) {
+        write(paste('Failed downloading', pathway_id, message(cond)), stdout())
+      })
+    }
   }
 }
 
