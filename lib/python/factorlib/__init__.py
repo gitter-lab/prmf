@@ -186,6 +186,37 @@ def prepare_nodelist(lists):
   rv = sorted(set_all)
   return rv
 
+def parse_gene_lists(nodelist, gene_list_fps):
+  """
+  Parse gene lists into a sparse scipy array
+  
+  Parameters
+  ----------
+  nodelist : list of str
+    gene identifiers that define the assignment of array indexes to genes
+
+  gene_lists : list of 
+
+  Returns
+  -------
+  mat : sparse csc matrix
+  """
+  # parse gene lists
+  gene_lists = []
+  for gene_path in gene_list_fps:
+    with open(gene_path) as fh:
+      gene_lists.append(parse_ws_delim(fh))
+
+  # verify gene lists present in ppi_db
+  def get_row_vec_for_gene_list(gene_list):
+    row_vec, missing = embed_ids(nodelist, gene_list)
+    sys.stderr.write("missing {}/{} node identifiers: {}\n".format(len(missing), len(gene_list), ", ".join(missing)))
+    return row_vec
+  row_vecs = map(get_row_vec_for_gene_list, gene_lists)
+
+  mat = sp.vstack(row_vecs)
+  return mat
+
 def parse_nodelist(fh):
   """
   Return a list of node identifiers which maps the list index to the identifier
