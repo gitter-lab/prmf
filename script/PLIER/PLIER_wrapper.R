@@ -52,7 +52,7 @@ splitext = function(text) {
   rv = NA
   pattern = "([^.]*)([.][^.]*)$"
   match_data = regmatches(text, regexec(pattern, text))
-  if(length(match_data) != 1) {
+  if(length(match_data[[1]]) != 1) {
     rv = list(match_data[[1]][2], match_data[[1]][3])
   }
   rv
