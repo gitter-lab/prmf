@@ -16,25 +16,34 @@ def check_file_and_dir_args(args):
   # require file mode or directory mode
   do_file = False
   do_dir = False
+  do_infiles_outdir = False
   if args.infiles is not None and args.outfiles is not None:
     do_file = True
     if len(args.infiles) != len(args.outfiles):
       sys.stderr.write("Must provide the same number of infiles and outfiles\n")
       sys.exit(23)
-  if not do_file and (args.indir is not None and args.outdir is not None):
-    do_dir = True
+  if not do_file:
+    if args.indir is not None and args.outdir is not None:
+      do_dir = True
   if not do_file and not do_dir:
+    if args.infiles is not None and args.outdir is not None:
+      do_infiles_outdir = True
+  if not do_file and not do_dir and not do_infiles_outdir:
     sys.stderr.write("Must provide --infiles and --outfiles or provide --indir and --outdir\n")
     sys.exit(22)
   io_pairs = []
-  if do_dir:
+  if do_file:
+    io_pairs = list(zip(args.infiles, args.outfiles))
+  elif do_dir:
     for ifn in os.listdir(args.indir):
       ifp = os.path.join(args.indir, ifn)
       ofp = os.path.join(args.outdir, ifn)
       io_pairs.append((ifp, ofp))
   else:
-    # then do_file
-    io_pairs = list(zip(args.infiles, args.outfiles))
+    # then do_infiles_outdir
+    for ifp in args.infiles:
+      ofp = os.path.join(args.outdir, os.path.basename(ifp))
+      io_pairs.append((ifp, ofp))
   return io_pairs
 
 def run_command(outdir, cmd, *args, **kwargs):
@@ -329,7 +338,7 @@ def get_revision_number():
   ValueError
     if environment variable CS799_REPO_DIR is not set
   """
-  env_var = 'CS799_REPO_DIR'
+  env_var = 'PRMF_REPO_DIR'
   repo_dir = os.environ.get(env_var)
   if repo_dir is None:
     raise ValueError("Missing environment variable {}".format(env_var))
