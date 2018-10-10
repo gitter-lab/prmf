@@ -5,6 +5,31 @@ TODO add biomart python API functions here
 """
 import sys
 
+def parse_mapping_tsv(fh, key_index=0, value_index=1, delim='\t'):
+  """
+  Parse a TSV file like the file at 
+    ftp://ftp.ensembl.org/pub/release-94/tsv/homo_sapiens/Homo_sapiens.GRCh38.94.refseq.tsv.gz
+  into a mapping 
+  """
+  rv = {}
+  if type(fh) == 'str':
+    fh = open(fh, 'r')
+  for line in fh:
+    line = line.rstrip()
+    words = line.split(delim)
+    key = words[key_index]
+    value = None
+    if(len(words) > value_index):
+      value = words[value_index]
+    else:
+      # TODO warn?
+      pass
+    if value is not None:
+      if key not in rv:
+        rv[key] = set()
+      rv[key].add(value)
+  return rv
+
 def map_hgnc_to_ensps(fh):
   """
   Return map from HGNC symbol to many ENSPs
@@ -19,21 +44,7 @@ def map_hgnc_to_ensps(fh):
   rv : dict
     mapping of HGNC symbol to a set of ENSPs
   """
-  rv = {}
-  if type(fh) == 'str':
-    fh = open(fh, 'r')
-  for line in fh:
-    line = line.rstrip()
-    words = line.split('\t')
-    hgnc_symbol = words[0]
-    ensp_id = None
-    if(len(words) >= 4):
-      ensp_id = words[3]
-    if ensp_id is not None:
-      if hgnc_symbol not in rv:
-        rv[hgnc_symbol] = set()
-      rv[hgnc_symbol].add(ensp_id)
-  return rv
+  return parse_mapping_tsv(fh, key_index=0, value_index=3)
 
 def filter_one_to_many(hgnc_to_ensps_map, G):
   """
