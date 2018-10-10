@@ -4,6 +4,7 @@ Currently these are implemented in the R script dl_ensembl_map
 TODO add biomart python API functions here
 """
 import sys
+import re
 
 def parse_mapping_tsv(fh, key_index=0, value_index=1, delim='\t'):
   """
@@ -56,6 +57,9 @@ def filter_one_to_many(hgnc_to_ensps_map, G):
   hgnc_to_ensps_map : dict
     return value of map_hgnc_to_ensps
 
+  copy_map : dict
+    map hgnc to the number of ENSP in the map that also appear in G
+
   G : nx.Graph
     protein-protein interaction network such as STRING
   """
@@ -63,8 +67,10 @@ def filter_one_to_many(hgnc_to_ensps_map, G):
   copy_map = {}
   for hgnc, ensps in hgnc_to_ensps_map.items():
     ensps = sorted(ensps)
+    any_ensp_in_G = False
     for ensp in ensps:
       if ensp in G:
+        any_ensp_in_G = True
         if hgnc in rv:
           # then this is the second ENSP in G
           if hgnc in copy_map:
@@ -73,6 +79,10 @@ def filter_one_to_many(hgnc_to_ensps_map, G):
             copy_map[hgnc] = 2
         else:
           rv[hgnc] = ensp
+    if not any_ensp_in_G:
+      # then use the first ensp in sorted order
+      if len(ensps) > 0:
+        rv[hgnc] = ensps[0]
 
   return rv, copy_map
 
@@ -136,7 +146,7 @@ def apply_mapping(word_map, io_pairs):
             match_data = sep_re.match(char)
             if(match_data is not None):
               # then process word
-              ensp = hgnc_to_ensp_map.get(word)
+              ensp = word_map.get(word)
               if ensp is None:
                 ofh.write(word + match_data.group(0))
               else:
