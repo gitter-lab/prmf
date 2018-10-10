@@ -21,7 +21,7 @@ Translate HGNC words in <infile> to ENSP. If HGNC cannot be mapped, leave it.
   hgnc_to_ensps_map = ensembl.map_hgnc_to_ensps(args.mapping_file)
   G = parse_string_fh(args.network_file)
   hgnc_to_ensp_map, copy_map = ensembl.filter_one_to_many(hgnc_to_ensps_map, G)
-  for k, v in copy_map.iteritems():
+  for k, v in copy_map.items():
     sys.stderr.write("[warning] {} ENSPs associated to HGNC:{} found in <network-file>\n".format(v, k))
 
   ensembl.apply_mapping(hgnc_to_ensp_map, io_pairs)
