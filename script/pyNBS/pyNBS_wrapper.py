@@ -88,10 +88,12 @@ if __name__ == "__main__":
   nodelist = parse_nodelist(open(args.nodelist))
   arr_sp = parse_gene_lists(nodelist, args.gene_lists)
   arr_df = pd.DataFrame(arr_sp.todense())
+  arr_df.columns = nodelist
 
   # graph regularizer
   network = nx.read_graphml(args.network)
-  G_inf = core.network_inf_KNN_glap(network)
+  print(type(network))
+  knnGlap = core.network_inf_KNN_glap(network)
 
   # diffusion
   alpha = 0.7
@@ -105,14 +107,14 @@ if __name__ == "__main__":
   for i in range(niter):
     netNMF_time = time.time()
     # Run pyNBS core steps and save resulting H matrix to Hlist
-    Hlist.append(pyNBS_single.NBS_single(sm_mat, knnGlap, propNet=network, propNet_kernel=kernel, k=clusters))
+    Hlist.append(pyNBS_single.NBS_single(arr_df, knnGlap, propNet=network, propNet_kernel=kernel, k=clusters))
     ##########################################################################################################
     # Optional: If the user is saving intermediate outputs (propagation results or H matrices), 
     # a different 'iteration_label' should be used for each call of pyNBS_single().
     # Otherwise, the user will overwrite each H matrix at each call of pyNBS_single()
     # Uncomment and run the two lines below to save intermediate steps instead of the previous line
     # save_args['iteration_label']=str(i+1)
-    # Hlist.append(pyNBS_single.NBS_single(sm_mat, propNet=network, propNet_kernel=kernel, regNet_glap=knnGlap, 
+    # Hlist.append(pyNBS_single.NBS_single(arr_df, propNet=network, propNet_kernel=kernel, regNet_glap=knnGlap, 
     #                                      k=clusters, **save_args))
     ##########################################################################################################
     # Report run time of each pyNBS iteration
