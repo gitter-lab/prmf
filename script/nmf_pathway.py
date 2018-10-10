@@ -530,8 +530,9 @@ References
 Cai 2008. Non-negative Matrix Factorization on Manifold
 """)
   parser.add_argument("--data", type=argparse.FileType('rb'), required=True, help="n_obs x n_features matrix")
-  parser.add_argument("--manifolds", nargs='+', help="graphml files to use as manifold")
+  parser.add_argument("--manifolds", nargs='+', help="graphml files to use as manifold. Node identifiers must appear in nodelist.")
   parser.add_argument("--manifolds-file", help="A file containing newline-delimited filepaths which are used as graphml files as in <manifolds>")
+  parser.add_argument("--node-attribute", help="Relabel nodes in manifolds/graphs so that their node identifiers come from this node attribute. If None, node identifiers are left as is", default=None)
   parser.add_argument("--outdir", type=str, required=True, help="Directory containing results")
   parser.add_argument("--nodelist", type=argparse.FileType('r'), help="Association of node identifier to matrix indexes", required=True)
   parser.add_argument("--k-latent", "-k", default=6, help="Number of latent factors", type=int)
@@ -565,9 +566,19 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   G_fp_pairs = []
   for fp in manifold_fps:
     G = nx.read_graphml(fp).to_undirected()
+    if args.node_attribute is not None:
+      mapping = {}
+      for node in G.nodes():
+        node_attrs = G.node[node]
+        if args.node_attribute in node_attrs:
+          mapping[node] = node_attrs[args.node_attribute]
+      G = nx.relabel_nodes(G, mapping)
     G_fp_pairs.append((G,fp))
   G_fp_pairs = sorted(G_fp_pairs, key=lambda x: x[0].order())
   Gs = map(lambda x: x[0], G_fp_pairs)
+
+  # TODO warn if --node-attribute is not found
+  # TODO warn if node identifiers do not match up with nodelist
 
   if args.seed is not None:
     seed = int(args.seed)
