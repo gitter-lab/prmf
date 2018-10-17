@@ -40,6 +40,7 @@ def for_prmf(args):
   nodelist_fp = os.path.join(args.outdir, "avana_nodelist.csv")
 
   Gs = fl.parse_pathways(args.pathways_dir)
+  Gs = list(map(lambda G: fl.relabel_nodes(G, args.node_attribute), Gs))
   data, row_names, col_names = fl.parse_achilles(args.gene_dependency)
 
   # map column names
@@ -74,6 +75,7 @@ for input to nmf_pathway:
   parser.add_argument("--mapping-file", help="Mapping file from biomaRt")
   parser.add_argument("--network-file")
   parser.add_argument("--pathways-dir")
+  parser.add_argument("--node-attribute", help="The node attribute where gene symbols can be found. If not provided, the node identifiers are used")
   parser.add_argument("--outdir")
   parser.add_argument("--out-format", default="PRMF")
   args = parser.parse_args()

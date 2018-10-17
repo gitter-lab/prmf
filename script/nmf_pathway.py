@@ -566,13 +566,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   G_fp_pairs = []
   for fp in manifold_fps:
     G = nx.read_graphml(fp).to_undirected()
-    if args.node_attribute is not None:
-      mapping = {}
-      for node in G.nodes():
-        node_attrs = G.node[node]
-        if args.node_attribute in node_attrs:
-          mapping[node] = node_attrs[args.node_attribute]
-      G = nx.relabel_nodes(G, mapping)
+    G = fl.relabel_nodes(G, args.node_attribute)
     G_fp_pairs.append((G,fp))
   G_fp_pairs = sorted(G_fp_pairs, key=lambda x: x[0].order())
   Gs = map(lambda x: x[0], G_fp_pairs)

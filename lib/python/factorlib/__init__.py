@@ -61,6 +61,19 @@ def transform_nearest_neighbors(G, k=10, attr='weight', attr_type='similarity'):
       H.add_edge(edge[0], edge[1], {'weight': weight})
   return H
 
+def relabel_nodes(G, node_attribute):
+  """
+  Wrapper around nx.relabel_nodes for scripts
+  """
+  if node_attribute is not None:
+    mapping = {}
+    for node in G.nodes():
+      node_attrs = G.node[node]
+      if node_attribute in node_attrs:
+        mapping[node] = node_attrs[node_attribute]
+    G = nx.relabel_nodes(G, mapping)
+  return G
+
 def rbf_similarity(stdev, x, y):
   return math.exp(-(np.abs(x - y) / stdev) ** 2)
 
