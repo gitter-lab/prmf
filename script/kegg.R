@@ -71,24 +71,28 @@ rename_nodes <- function(G, id_map) {
       # "from" edges
       edge_sequence = E(G)[from(old_name)]
       ends_rv = ends(G, edge_sequence)
-      for (i in 2:length(new_names)) {
-        new_name = new_names[i]
-        for (j in 1:length(edge_sequence)) {
-          # j indexes which edge in edge sequence, 2 indexes the target of the edge
-          target = ends_rv[j,2]
-          G = add_edges(G, c(new_name, target), weight=1)
+      if (length(edge_sequence) > 0) {
+        for (i in 2:length(new_names)) {
+          new_name = new_names[i]
+          for (j in 1:length(edge_sequence)) {
+            # j indexes which edge in edge sequence, 2 indexes the target of the edge
+            target = ends_rv[j,2]
+            G = add_edges(G, c(new_name, target), weight=1)
+          }
         }
       }
 
       # "to" edges
       edge_sequence = E(G)[to(old_name)]
       ends_rv = ends(G, edge_sequence)
-      for (i in 2:length(new_names)) {
-        new_name = new_names[i]
-        for (j in 1:length(edge_sequence)) {
-          # j indexes which edge in edge sequence, 1 indexes the source of the edge
-          source_node = ends_rv[j,1]
-          G = add_edges(G, c(source_node, new_name), weight=1)
+      if (length(edge_sequence) > 0) {
+        for (i in 2:length(new_names)) {
+          new_name = new_names[i]
+          for (j in 1:length(edge_sequence)) {
+            # j indexes which edge in edge sequence, 1 indexes the source of the edge
+            source_node = ends_rv[j,1]
+            G = add_edges(G, c(source_node, new_name), weight=1)
+          }
         }
       }
     }
@@ -298,11 +302,11 @@ main = function() {
   args = parser$parse_args()
   id_type = check_id_type(args$id_type)
 
-  #unique_paths = c("hsa01524")
+  any_error = F
   unique_paths = list_pathways()
   for (pathway_id in unique_paths) {
     outfile = file.path(args$outdir, paste(pathway_id, '.graphml', sep=''))
-    write(paste('Downloading', pathway_id), stdout())
+    cat(paste0('Downloading ', pathway_id, '...'), file=stdout())
     if (!file.exists(outfile)) {
       tryCatch(withCallingHandlers({
         graph = get_pathway(pathway_id, args$outdir)
@@ -310,13 +314,22 @@ main = function() {
         id_map = link_genes_hash(gene_ids, type=id_type)
         graph = rename_nodes(graph, id_map)
         write_graph(graph, outfile, format="graphml")
+        write(' done', file=stdout())
       }, error=function(e) {
-        print(sys.calls())
-        print(message(e))
+        write(' failed', file=stdout())
+        write(sys.calls(), file=stderr())
+        write(message(e), file=stderr())
       }), error=function(e) {
-        # do nothing
+        any_error = T
       })
+    } else {
+      write(' done', file=stdout())
     }
+  }
+  if(any_error) {
+    quit(status=1)
+  } else {
+    quit(status=0)
   }
 }
 
