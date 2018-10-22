@@ -39,7 +39,7 @@ def for_prmf(args):
   csv_fp = os.path.join(args.outdir, "avana_data.csv")
   nodelist_fp = os.path.join(args.outdir, "avana_nodelist.csv")
 
-  Gs = fl.parse_pathways(args.pathways_dir)
+  Gs = fl.parse_pathways_dir(args.pathways_dir)
   Gs = list(map(lambda G: fl.relabel_nodes(G, args.node_attribute), Gs))
   data, row_names, col_names = fl.parse_achilles(args.gene_dependency)
 

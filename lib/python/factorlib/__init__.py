@@ -242,7 +242,11 @@ def parse_nodelist(fh):
       rv.append(word)
   return rv
 
-def parse_pathways(pathways_dir):
+def parse_pathways(graphml_fps):
+  Gs = list(map(lambda x: nx.read_graphml(x), graphmls))
+  return Gs
+
+def parse_pathways_dir(pathways_dir):
   """
   Parse .graphml files in <pathways_dir>
 
@@ -256,8 +260,7 @@ def parse_pathways(pathways_dir):
     basename, ext = os.path.splitext(fname)
     if ext == ".graphml":
       graphmls.append(os.path.join(pathways_dir, fname))
-  Gs = list(map(lambda x: nx.read_graphml(x), graphmls))
-  return Gs
+  return parse_pathways(graphmls)
 
 def embed_ids(all_ids, ids):
   """
