@@ -15,10 +15,8 @@ def sample_pathways(args, nodelist):
   seed_lists_sample = []
   chosen_seed_fps = []
   for subset_ind in subset_inds:
-    seed_list = None
     seed_list_fp = args.seed_lists[subset_ind]
-    with open(seed_list_fp, 'r') as fh:
-      seed_list = fl.parse_nodelist(fh)
+    seed_list = fl.parse_seedlist(seed_list_fp)
     seed_lists_sample.append(seed_list)
     chosen_seed_fps.append(seed_list_fp)
   seed_lists_sample.append(nodelist) # final seed list is background <nodelist>

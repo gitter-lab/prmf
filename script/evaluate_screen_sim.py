@@ -28,9 +28,8 @@ Evaluate nmf_pathway.py results using simulated ground truth
 
   true_seed_lists = []
   for true_seed_fp in true_seed_fps:
-    with open(true_seed_fp, 'r') as fh:
-      seed_list = fl.parse_nodelist(fh)
-      true_seed_lists.append(seed_list)
+    seed_list = fl.parse_seedlist(true_seed_fp)
+    true_seed_lists.append(seed_list)
 
   pathways_mat = fl.nodelists_to_mat(true_seed_lists, nodelist)
   
