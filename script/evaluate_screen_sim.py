@@ -4,7 +4,6 @@ import os, os.path
 import numpy as np
 import sklearn.metrics
 import factorlib as fl
-import matplotlib.pyplot as plt # TODO remove
 
 def matching_id_to_ind(factor_id):
   return int(factor_id[1:])
