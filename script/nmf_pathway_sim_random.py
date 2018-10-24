@@ -171,7 +171,7 @@ Evalute nmf_pathway.py against true pathways and randomized pathways
   job_id += 1
 
   condor = False
-  if args.condor
+  if args.condor:
     condor = True
   job_ids = script_utils.run_digraph(args.outdir, job_graph, condor=condor)
 
