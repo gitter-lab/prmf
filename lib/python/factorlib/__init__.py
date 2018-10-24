@@ -243,7 +243,7 @@ def parse_nodelist(fh):
   return rv
 
 def parse_pathways(graphml_fps):
-  Gs = list(map(lambda x: nx.read_graphml(x), graphmls))
+  Gs = list(map(lambda x: nx.read_graphml(x), graphml_fps))
   return Gs
 
 def parse_pathways_dir(pathways_dir):
@@ -261,6 +261,41 @@ def parse_pathways_dir(pathways_dir):
     if ext == ".graphml":
       graphmls.append(os.path.join(pathways_dir, fname))
   return parse_pathways(graphmls)
+
+def parse_seedlist(fp, filetype=None, node_attr='name'):
+  """
+  Parse the file with filepath <fp> as a seed list: a list of node identifier strings.
+
+  Parameters
+  ----------
+  fp : str
+    a file containing gene identifiers
+
+  filetype : str, None
+    the file type, informs parsing
+    if None, determined by the extension of fp
+  """
+  if filetype is None:
+    fp_no_ext, ext = os.path.splitext(fp)
+    if ext == '.graphml':
+      filetype = 'graphml'
+    elif ext == '.txt':
+      filetype = 'txt'
+  if filetype is None:
+    raise FactorLibException("Cannot determine filetype")
+
+  seedlist = None
+  if filetype == 'graphml':
+    G = nx.read_graphml(fp)
+    G = relabel_nodes(G, node_attr)
+    seedlist = G.nodes()
+  elif filetype == 'txt':
+    seedlist = []
+    with open(fp, 'r') as fh:
+      for line in fh:
+        line = line.rstrip()
+        seedlist.append(line)
+  return seedlist
 
 def embed_ids(all_ids, ids):
   """
