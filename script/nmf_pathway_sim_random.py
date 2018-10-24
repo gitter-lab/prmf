@@ -10,6 +10,7 @@ def main():
 Evalute nmf_pathway.py against true pathways and randomized pathways
 """)
   parser.add_argument("--rng-seed", help="Seed for random number generators", default=None)
+  parser.add_argument("--condor", action='store_true', help="Flag which indicates we should submit jobs to Condor")
 
   # prepare networks
   parser.add_argument('--stringdb', help="STRINGdb database file e.g. 9606.protein.links.detailed.v10.txt", required=True)
@@ -170,6 +171,8 @@ Evalute nmf_pathway.py against true pathways and randomized pathways
   job_id += 1
 
   condor = False
+  if args.condor
+    condor = True
   job_ids = script_utils.run_digraph(args.outdir, job_graph, condor=condor)
 
 if __name__ == "__main__":
