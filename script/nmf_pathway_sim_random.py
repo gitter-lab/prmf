@@ -126,7 +126,7 @@ Evalute nmf_pathway.py against true pathways and randomized pathways
 
 
   # 2) nmf_pathway on random - {{
-  nmf_pathway_random_outdir = os.path.join(args.outdir, "nmf_pathway")
+  nmf_pathway_random_outdir = os.path.join(args.outdir, "nmf_pathway_random")
   os.mkdir(nmf_pathway_random_outdir)
   attrs = {
     'exe': "nmf_pathway.py",
