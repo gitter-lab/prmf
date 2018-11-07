@@ -6,6 +6,17 @@ import networkx as nx
 import distutils.spawn
 import hashlib
 
+def args_to_list(args_dict):
+  rv = []
+  keys = sorted(args_dict.keys())
+  for k in keys:
+    k_cli = "--" + k.replace('_', '-')
+    v = args_dict[k]
+    if v is not None:
+      rv.append(k_cli)
+      rv.append(str(v))
+  return rv
+
 def add_file_and_dir_args(parser):
   parser.add_argument("--infiles", nargs='+', type=str)
   parser.add_argument("--outfiles", nargs='+', type=str)
