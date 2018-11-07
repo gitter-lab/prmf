@@ -372,7 +372,7 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   G_k is the manifold associated with latent factor k
   X has shape (n_obs, n_features),
   U has shape (n_obs, n_latent),
-  V has shape (n_feature, n_latent),
+  V has shape (n_feature, n_latent)
   
   Parameters
   ----------
@@ -541,6 +541,18 @@ def main():
   parser = argparse.ArgumentParser(description="""
 Python implementation of Pathway-Regularized NMF.
 
+Solve an optimization problem of the form
+  min ||X - UV^T|| + 
+    gamma * sum_k min_i V[:,k]^T Ls[i] V[:,k] + 
+    delta * sum_k sum_{i | i in G_k} 1 / V[i,k] + 
+    ||U||_F^2
+
+where Ls[i] is the Laplacian matrix associated with Gs[i],
+G_k is the manifold associated with latent factor k
+X has shape (n_obs, n_features),
+U has shape (n_obs, n_latent),
+V has shape (n_feature, n_latent)
+
 References
 ----------
 Cai 2008. Non-negative Matrix Factorization on Manifold
@@ -557,14 +569,14 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   parser.add_argument("--seed", default=None)
   parser.add_argument("--gamma", default=1.0, help="Tradeoff between reconstruction error and manifold regularization term; Default = 1.0", type=float)
   parser.add_argument("--delta", default=1.0, help="Regularization parameter for penalty for ignoring manifold; Default = 1.0", type=float)
-  parser.add_argument("--tradeoff", default=0.8, help="If set, use the previous iterations objective function components to automatically update gamma and delta for the next iteration. Must be in [0,1]. Higher values place higher importance on the manifold regularization term over the reconstruction term. Default = 0.8.")
+  parser.add_argument("--tradeoff", default=0.8, type=float, help="If set, use the previous iterations objective function components to automatically update gamma and delta for the next iteration. Must be in [0,1]. Higher values place higher importance on the manifold regularization term over the reconstruction term. To disable automatic updating of gamma and delta, set tradeoff to -1. Default = 0.8.")
   parser.add_argument("--high-dimensional", default=True, type=bool, help="If True, ensure that <data> is of shape m x n with m < n ; otherwise ensure that X is m x n with m > n. Default = True.")
   args = parser.parse_args()
   OUTDIR = args.outdir
 
-  tradeoff = None
-  if args.tradeoff is not None:
-    tradeoff = float(args.tradeoff)
+  # tradeoff, gamma, and delta
+  if args.tradeoff == -1:
+    tradeoff = None
 
   manifold_fps = []
   if args.manifolds is None and args.manifolds_file is None:
