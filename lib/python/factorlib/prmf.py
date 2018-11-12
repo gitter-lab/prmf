@@ -7,7 +7,7 @@ def add_prmf_arguments(parser):
   parser.add_argument("--data", type=str, required=True, help="n_obs x n_features matrix")
   parser.add_argument("--manifolds", nargs='+', help="graphml files to use as manifold. Node identifiers must appear in nodelist.")
   parser.add_argument("--manifolds-file", help="A file containing newline-delimited filepaths which are used as graphml files as in <manifolds>")
-  parser.add_argument("--manifolds-init", nargs='*', help='If provided, use this list of manifolds to initialize PRMF. If given as a flag or the number of arguments is less than --k-latent, add randomly chosen manifolds to the initialization until we have --k-latent manifolds.')
+  parser.add_argument("--manifolds-init", nargs='*', help='If provided, use this list of manifolds to initialize PRMF. If given as a flag or the number of arguments is less than --k-latent, add randomly chosen manifolds to the initialization until we have --k-latent manifolds. If exactly --k-latent files are given, use those to initialize PRMF. If greater than --k-latent files are given, select a sample of size --k-latent from them.')
   parser.add_argument("--node-attribute", help="Relabel nodes in manifolds/graphs so that their node identifiers come from this node attribute. If None, node identifiers are left as is", default=None)
   parser.add_argument("--outdir", type=str, required=True, help="Directory containing results")
   parser.add_argument("--nodelist", type=str, help="Association of node identifier to matrix indexes", required=True)
