@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse, sys
+from argparse import RawTextHelpFormatter
 import numpy as np
 import scipy.optimize
 import scipy.sparse as sp
@@ -100,12 +101,16 @@ def count_distinct_lapls(ind_to_lapls):
   return rv
 
 # TODO rename ind_to_lapls to make clear that it is mapping to Laplacian indexes and not the Laplacian matrices
-def force_distinct_lapls(V, Ls, ind_to_lapls):
+def force_distinct_lapls(V, Ls, ind_to_lapls, k_to_feat_inds, gamma, delta):
   G = nx.Graph()
   for k, lapls in ind_to_lapls.items():
     for lapl in lapls:
       L = Ls[lapl]
-      denom = L.dot(V[:,k]).dot(V[:,k])
+      manifold_penalty = L.dot(V[:,k]).dot(V[:,k])
+      ignore_penalty = 0
+      for k2, nz_inds in k_to_feat_inds.items():
+        ignore_penalty = np.sum(np.power(V[nz_inds,k2] + 1, -1))
+      denom = manifold_penalty + ignore_penalty
       weight = None
       if denom == 0:
         # set to 0 because this situation only occurs when the latent vector has 0s on
@@ -206,7 +211,7 @@ def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
 
   obj_ign = 0.0
   for k, nz_inds in k_to_feat_inds.items():
-    obj_ign = np.sum(np.power(V[nz_inds,k] + 1, -1))
+    obj_ign += np.sum(np.power(V[nz_inds,k] + 1, -1))
 
   obj_fro = np.sum(np.multiply(U, U))
   obj_fro = obj_fro
@@ -510,19 +515,20 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
 
     # after <modulus> updates, restrict candidates
     # dont restrict any further if the number of distinct Laplacians remaining is equal to <k_latent>
-    if(count_distinct_lapls(ind_to_lapls) <= k_latent):
-      # if this condition is met, force each latent factor to target different Laplacians
-      ind_to_lapls = force_distinct_lapls(V, Ls, ind_to_lapls)
-      for k,v in ind_to_lapls.items():
-        print(k,v)
-      candidates_remain = False
-    else:
-      ind_to_lapls = restrict(V, Ls, ind_to_lapls, lapl_to_feat_inds)
-      candidates_remain = False
-      for k,v in ind_to_lapls.items():
-        if(len(v) > 1):
-          candidates_remain = True
-        print(k, v)
+    if candidates_remain:
+      if (count_distinct_lapls(ind_to_lapls) <= k_latent):
+        # if this condition is met, force each latent factor to target different Laplacians
+        ind_to_lapls = force_distinct_lapls(V, Ls, ind_to_lapls, k_to_feat_inds, gamma, delta)
+        for k,v in ind_to_lapls.items():
+          print(k,v)
+        candidates_remain = False
+      else:
+        ind_to_lapls = restrict(V, Ls, ind_to_lapls, lapl_to_feat_inds)
+        candidates_remain = False
+        for k,v in ind_to_lapls.items():
+          if(len(v) > 1):
+            candidates_remain = True
+          print(k, v)
 
     prev_obj = obj
     obj = obj_data['obj']
@@ -557,7 +563,7 @@ V has shape (n_feature, n_latent)
 References
 ----------
 Cai 2008. Non-negative Matrix Factorization on Manifold
-""")
+""", formatter_class=RawTextHelpFormatter)
   prmf.add_prmf_arguments(parser)
   args = parser.parse_args()
   OUTDIR = args.outdir
