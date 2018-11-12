@@ -13,8 +13,12 @@ def args_to_list(args_dict):
     k_cli = "--" + k.replace('_', '-')
     v = args_dict[k]
     if v is not None:
-      rv.append(k_cli)
-      rv.append(str(v))
+      if type(v) is list:
+        rv.append(k_cli)
+        rv = rv + v
+      else:
+        rv.append(k_cli)
+        rv.append(str(v))
   return rv
 
 def add_file_and_dir_args(parser):
