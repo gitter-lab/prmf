@@ -12,7 +12,7 @@ Run nmf_pathway.py with different _r_andom _r_estarts.
 Pass through arguments to nmf_pathway.py except for --condor, --manifolds-init, --n-runs, and --outdir
 """)
   parser.add_argument("--n-runs", type=int, default=2, help="Number of random restarts")
-  parser.add_argument("--condor", type=bool, default=False)
+  parser.add_argument("--condor", action='store_true', help='If flag is provided, submit jobs to Condor rather than running them on this machine')
   prmf.add_prmf_arguments(parser)
   args = parser.parse_args()
 
