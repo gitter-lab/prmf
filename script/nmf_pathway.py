@@ -194,6 +194,13 @@ def nmf_init_u(X, v):
 def nmf_init_v(X, u):
   """
   Solve X = U V^T where U is given and k_latent = 1
+
+  TODO
+  ----
+  would like to impose equality constraint on variables corresponding to pathway members:
+      min       || X v / ||v||_2^2  - u ||
+     v >= 0
+    subject to  v_i = v_j forall i,j in V(G)
   """
   m_obs, n_genes = X.shape
   v_prime, residual = scipy.optimize.nnls(X, u.flatten())
@@ -622,6 +629,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
       X = X.transpose()
 
   # --manifolds-init - {{
+  pathway_init_fp = os.path.join(args.outdir, 'init_pathways.txt')
   U_init = None
   V_init = None
   init_fps = []
@@ -659,6 +667,9 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
     V_init = np.concatenate(vs, axis=1)
     U_init = np.concatenate(us, axis=1)
     sys.stdout.write("Using the following manifolds for initialization:\n{}\n".format("\n".join(init_fps)))
+    # also write these to their own file
+    with open(pathway_init_fp, 'w') as pathway_init_fh:
+      pathway_init_fh.write("\n".join(init_fps))
   # }} - --manifolds-init
 
   # TODO other arguments
