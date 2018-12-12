@@ -44,7 +44,7 @@ def check_file_and_dir_args(args):
     if args.infiles is not None and args.outdir is not None:
       do_infiles_outdir = True
   if not do_file and not do_dir and not do_infiles_outdir:
-    sys.stderr.write("Must provide --infiles and --outfiles or provide --indir and --outdir\n")
+    sys.stderr.write("Must provide --infiles and --outfiles or provide --indir and --outdir or provide --infiles and --outdir\n")
     sys.exit(22)
   io_pairs = []
   if do_file:
