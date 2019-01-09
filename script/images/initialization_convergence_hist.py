@@ -120,6 +120,20 @@ def main():
 
   N = len(run_dirs)
 
+  # count number of converged pathways
+  # TODO cli
+  all_dict = {}
+  for run_dir in run_dirs:
+    pathways_dict = fl.parse_pathway_obj(os.path.join(run_dir, 'obj.txt'))
+    pathways = pathways_dict.items()
+    if pathway in all_dict:
+      all_dict[pathway] += 1 
+    else:
+      all_dict[pathway] = 1
+  pathway_count_pairs = sorted(all_dict.items(), key=lambda x: x[1], reverse=True)
+  for pathway, count in pathway_count_pairs:
+    print('{}\t{}'.format(pathway, count))
+
   # histogram for initialization/convergence - {{
   # make a histogram of counts
   counts, k = count_initialization_and_convergence_overlap(run_dirs)
