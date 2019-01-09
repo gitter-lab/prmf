@@ -211,10 +211,26 @@ def nmf_init_v(X, u):
 def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
   obj_recon = np.linalg.norm(X - U.dot(V.transpose()))
 
+  # TODO normal
+  normal = True
   obj_manifold = 0.0
-  for k, L in k_to_L.items():
-    obj_manifold += L.dot(V[:,k]).dot(V[:,k])
-  obj_manifold = obj_manifold
+  if normal:
+    for k, L in k_to_L.items():
+      # TODO could reorganize here to save compute
+      D_to_minus_half = sp.dia_matrix(L.shape)
+      values = np.zeros(L.shape[0])
+      nz_inds = k_to_feat_inds[k]
+      for ind in nz_inds:
+        v = L[ind, ind]
+        if v != 0:
+          values[ind] = v ** (-1/2)
+      D_to_minus_half.setdiag(values)
+      L_normal = D_to_minus_half.dot(L.dot(D_to_minus_half))
+      v_unit = V[:,k] / np.linalg.norm(V[:,k])
+      obj_manifold += L_normal.dot(v_unit).dot(v_unit)
+  else:
+    for k, L in k_to_L.items():
+      obj_manifold += L.dot(V[:,k]).dot(V[:,k])
 
   obj_ign = 0.0
   for k, nz_inds in k_to_feat_inds.items():
@@ -297,6 +313,50 @@ def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_s
       D = k_to_D[k]
       V_up_num_man[:,k] = gamma * W.dot(V[:,k])
       V_up_denom_man[:,k] = gamma * D.dot(V[:,k])
+
+      nz_inds = k_to_feat_inds[k]
+      V_up_num_ign[nz_inds,k] = delta * np.power(V[nz_inds,k] + 1, -2)
+
+    V_up_num = V_up_num_recon + (V_up_num_man + V_up_num_ign)
+    V_up_denom = V_up_denom_recon + V_up_denom_man
+    V_up_denom[V_up_denom < EPSILON] = EPSILON
+    V = np.multiply(V, np.divide(V_up_num, V_up_denom, out=np.ones_like(V_up_num), where=V_up_denom!=0))
+    V[V < EPSILON] = EPSILON
+
+    obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=gamma, delta=delta)
+    if(verbose):
+      print(i+n_step+1, obj_data['obj'])
+      print(obj_data)
+
+  return U, V, obj_data
+
+def nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=True, norm_X=None, tradeoff=0.5):
+  """
+  See nmf_manifold_vec_update ; this uses the normalized Laplacian instead
+  """
+  obj_data = None
+  m, k_latent = U.shape
+  n, k_latent = V.shape
+  for n_step in range(n_steps):
+    U_up_num = X.dot(V)
+    U_up_denom = U.dot((V.transpose().dot(V))) + U
+    U = np.multiply(U, np.divide(U_up_num, U_up_denom, out=np.ones_like(U_up_num), where=U_up_denom!=0)) # 0 / 0 := 1
+
+    V_up_num_recon = X.transpose().dot(U)
+    V_up_denom_recon = V.dot((U.transpose().dot(U)))
+
+    # update each column vector of V separately to accomodate different Laplacians
+    # TODO need to use v_unit in manifold term
+    V_up_num_man = np.zeros((n, k_latent))
+    V_up_denom_man = np.zeros((n, k_latent))
+    V_up_num_ign = np.zeros((n, k_latent))
+    for k in range(k_latent):
+      W = k_to_W[k]
+      D = k_to_D[k]
+      D_to_minus_half = D.power(-1/2)
+      v_norm_sq_inv = 1/(np.linalg.norm(V[:,k])**2)
+      V_up_num_man[:,k] = gamma * v_norm_sq_inv * D_to_minus_half.dot(W.dot(D_to_minus_half)).dot(V[:,k])
+      V_up_denom_man[:,k] = gamma * v_norm_sq_inv * V[:,k]
 
       nz_inds = k_to_feat_inds[k]
       V_up_num_ign[nz_inds,k] = delta * np.power(V[nz_inds,k] + 1, -2)
@@ -452,6 +512,10 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   alpha = 1
   X = alpha * X
   norm_X = np.linalg.norm(X)
+
+  # TODO update default gamma
+  gamma = 5 * norm_X / k_latent
+
   print('norm(X) = {}'.format(norm_X))
   m,n = X.shape
   # 1 - [0,1) \in (0,1] ; need strictly positive
@@ -515,7 +579,8 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
       print(k, lapl_ind)
     print('----')
     if tradeoff is None:
-      U, V, obj_data = nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta)
+      # TODO _normal
+      U, V, obj_data = nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta)
     else:
       U, V, obj_data, gamma, delta = nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, tradeoff=tradeoff, gamma=gamma, delta=delta)
     i += modulus
@@ -579,6 +644,9 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   tradeoff = args.tradeoff
   if tradeoff == -1:
     tradeoff = None
+
+  # TODO update gamma default
+
 
   manifold_fps = []
   if args.manifolds is None and args.manifolds_file is None:
