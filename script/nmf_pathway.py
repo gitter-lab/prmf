@@ -568,6 +568,11 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   prev_obj = math.inf
   i = 0
   k_to_lapl_ind = {}
+  # we make jumps in the search space when considering different pathways so some local optima 
+  # may not be the best we have seen so far, track the best we have seen
+  best_dict = {} 
+  best_dict['obj_data'] = {}
+  best_dict['obj_data']['obj'] = np.Inf
   while (i < max_iter) and (candidates_remain or not converged):
     # update active Laplacian for each latent vector every <modulus> iterations
     # TODO handle errors either here or restrict step: if ind_to_lapls[k] is empty random.choice will raise IndexError
@@ -588,6 +593,12 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     else:
       U, V, obj_data, gamma, delta = nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, tradeoff=tradeoff, gamma=gamma, delta=delta)
     i += modulus
+    
+    # track best
+    if obj_data['obj'] < best_dict['obj_data']['obj']:
+      best_dict['U'] = U
+      best_dict['V'] = V
+      best_dict['obj_data'] = obj_data
 
     # after <modulus> updates, restrict candidates
     # dont restrict any further if the number of distinct Laplacians remaining is equal to <k_latent>
@@ -611,6 +622,14 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     converged = (abs(obj - prev_obj)) / obj < tol
   # end while
 
+  # replace converged result with the best observed
+  if best_dict['obj_data']['obj'] < obj_data['obj']:
+    print('Local optima at convergence (or after max iterations) is not the best among all iterates; returning best instead')
+    U = best_dict['U']
+    V = best_dict['V']
+    obj_data = best_dict['obj_data']
+
+  # TODO this preserves reconstruction error part of obj but not the other parts, report obj after rescale
   # rescale 
   # alpha X = U * V^T
   # X = U * (1/alpha * V^T)
