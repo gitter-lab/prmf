@@ -30,16 +30,17 @@ Create a histogram of converged pathways
   for run_dir in run_dirs:
     pathways_dict = fl.parse_pathway_obj(os.path.join(run_dir, 'obj.txt'))
     pathways = pathways_dict.values()
-    for pathway in pathways:
+    pathway_basenames = list(map(os.path.basename, pathways))
+    for pathway in pathway_basenames:
       if pathway in pathway_to_count:
         pathway_to_count[pathway] += 1 
       else:
         pathway_to_count[pathway] = 1
   pathway_count_pairs = sorted(pathway_to_count.items(), key=lambda x: x[1], reverse=True)
   hist_csv_fp = os.path.join(args.outdir, 'convergence_hist.csv')
-  with open(hist_csv_fp) as hist_csv_fh:
+  with open(hist_csv_fp, 'w') as hist_csv_fh:
     for pathway, count in pathway_count_pairs:
-      hist_csv_fh.write(','.join((pathway, count)) + '\n')
+      hist_csv_fh.write("{},{}\n".format(pathway, count))
 
   pathway_to_freq = {}
   for pathway in pathway_to_count.keys():
