@@ -214,8 +214,11 @@ def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
   # TODO normal
   normal = True
   obj_manifold = 0.0
+  obj_ign = 0.0
   if normal:
     for k, L in k_to_L.items():
+      v_unit = V[:,k] / np.linalg.norm(V[:,k])
+
       # TODO could reorganize here to save compute
       D_to_minus_half = sp.dia_matrix(L.shape)
       values = np.zeros(L.shape[0])
@@ -226,15 +229,15 @@ def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
           values[ind] = v ** (-1/2)
       D_to_minus_half.setdiag(values)
       L_normal = D_to_minus_half.dot(L.dot(D_to_minus_half))
-      v_unit = V[:,k] / np.linalg.norm(V[:,k])
       obj_manifold += L_normal.dot(v_unit).dot(v_unit)
+
+      nz_inds = k_to_feat_inds[k]
+      obj_ign += np.sum(np.power(v_unit[nz_inds] + 1, -1))
   else:
     for k, L in k_to_L.items():
       obj_manifold += L.dot(V[:,k]).dot(V[:,k])
-
-  obj_ign = 0.0
-  for k, nz_inds in k_to_feat_inds.items():
-    obj_ign += np.sum(np.power(V[nz_inds,k] + 1, -1))
+    for k, nz_inds in k_to_feat_inds.items():
+      obj_ign += np.sum(np.power(V[nz_inds,k] + 1, -1))
 
   obj_fro = np.sum(np.multiply(U, U))
   obj_fro = obj_fro
@@ -359,7 +362,7 @@ def nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_in
       V_up_denom_man[:,k] = gamma * v_norm_sq_inv * V[:,k]
 
       nz_inds = k_to_feat_inds[k]
-      V_up_num_ign[nz_inds,k] = delta * np.power(V[nz_inds,k] + 1, -2)
+      V_up_num_ign[nz_inds,k] = delta * v_norm_sq_inv * np.power(V[nz_inds,k] + 1, -2)
 
     V_up_num = V_up_num_recon + (V_up_num_man + V_up_num_ign)
     V_up_denom = V_up_denom_recon + V_up_denom_man
@@ -513,8 +516,9 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   X = alpha * X
   norm_X = np.linalg.norm(X)
 
-  # TODO update default gamma
+  # TODO update default gamma, delta
   gamma = 5 * norm_X / k_latent
+  delta = 1
 
   print('norm(X) = {}'.format(norm_X))
   m,n = X.shape
