@@ -66,6 +66,7 @@ def restrict(V, Ls, ind_to_lapls, lapl_to_feat_inds):
   rv : dict<int, int>
   """
   n_feature, k_latent = V.shape
+  percentile = 19.9
   rv = {}
   for k in range(k_latent):
     L_inds = ind_to_lapls[k]
@@ -75,12 +76,21 @@ def restrict(V, Ls, ind_to_lapls, lapl_to_feat_inds):
       for i, L_ind in enumerate(L_inds):
         nz_inds = lapl_to_feat_inds[L_ind]
         scores[i] = (np.sum(v[nz_inds]) / len(nz_inds)) / np.sum(v)
-      score_inds = np.where(scores > np.percentile(scores,19.9))[0]
+      score_inds = np.where(scores > np.percentile(scores,percentile))[0]
 
       lapl_inds = []
-      for score_ind in score_inds:
-        lapl_ind = L_inds[score_ind]
-        lapl_inds.append(lapl_ind)
+      if len(score_inds) == 0:
+        # then the scores are probably uniform so that the top 80 (= 100 - 19.9) percent cannot be identified
+        # randomly select 80 percent of the candidates instead
+        n_candidates = len(L_inds)
+        L_inds_arr = np.array(L_inds)
+        sample_size = math.ceil(n_candidates * (1 - percentile) / 100)
+        lapl_inds = np.random.choice(L_inds_arr, size=sample_size, replace=False)
+      else:
+        for score_ind in score_inds:
+          lapl_ind = L_inds[score_ind]
+          lapl_inds.append(lapl_ind)
+
       rv[k] = lapl_inds
     else:
       # otherwise converged to final Laplacian
@@ -515,12 +525,12 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   alpha = 1
   X = alpha * X
   norm_X = np.linalg.norm(X)
-
-  # TODO update default gamma, delta
-  gamma = 5 * norm_X / k_latent
-  delta = 1
-
   print('norm(X) = {}'.format(norm_X))
+
+  # TODO note gamma and delta rescaling
+  gamma = gamma * norm_X / k_latent
+  delta = delta * 10 / norm_X
+
   m,n = X.shape
   # 1 - [0,1) \in (0,1] ; need strictly positive
   # TODO other initialization strategies
@@ -575,8 +585,6 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   best_dict['obj_data']['obj'] = np.Inf
   while (i < max_iter) and (candidates_remain or not converged):
     # update active Laplacian for each latent vector every <modulus> iterations
-    # TODO handle errors either here or restrict step: if ind_to_lapls[k] is empty random.choice will raise IndexError
-    # can become empty if all pathways score the same, for example
     for k in range(k_latent):
       lapl_ind = random.choice(ind_to_lapls[k])
       k_to_lapl_ind[k] = lapl_ind
