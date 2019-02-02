@@ -590,7 +590,6 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
       k_to_lapl_ind[k] = lapl_ind
     k_to_W, k_to_D, k_to_L, k_to_feat_inds = map_k_to_lapls(k_to_lapl_ind, Ws, Ds, Ls, lapl_to_feat_inds)
 
-    # DEBUG print choice of lapls
     print('----')
     for k, lapl_ind in k_to_lapl_ind.items():
       print(k, lapl_ind)
@@ -603,6 +602,7 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     i += modulus
     
     # track best
+    # TODO need to track latent factor mapping too
     if obj_data['obj'] < best_dict['obj_data']['obj']:
       best_dict['U'] = U
       best_dict['V'] = V
