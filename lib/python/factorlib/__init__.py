@@ -802,7 +802,7 @@ def measure_smoothness(V, Gs, nodelist, node_attr='name'):
       u_index = node_to_index[u]
       v_index = node_to_index[v]
       edge_diff = abs(V[u_index,k] - V[v_index,k])
-    edge_diffs.append(edge_diff)
+      edge_diffs.append(edge_diff)
 
     all_edge_diffs.append(edge_diffs)
   return all_edge_diffs
