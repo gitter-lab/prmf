@@ -101,13 +101,15 @@ if __name__ == "__main__":
   network_I = pd.DataFrame(np.identity(len(network_nodes)), index=network_nodes, columns=network_nodes)
   kernel = prop.network_propagation(network, network_I, alpha=alpha, symmetric_norm=True)
 
+  # NOTE for benchmarking we are not interested in the consensus clustering result
   clusters = args.k_latent
-  niter = 2
+  niter = 1
   Hlist = []
   for i in range(niter):
     netNMF_time = time.time()
     # Run pyNBS core steps and save resulting H matrix to Hlist
-    Hlist.append(pyNBS_single.NBS_single(arr_df, knnGlap, propNet=network, propNet_kernel=kernel, k=clusters))
+    H_df = pyNBS_single.NBS_single(arr_df, knnGlap, propNet=network, propNet_kernel=kernel, k=clusters, **save_args)
+    Hlist.append(H_df)
     ##########################################################################################################
     # Optional: If the user is saving intermediate outputs (propagation results or H matrices), 
     # a different 'iteration_label' should be used for each call of pyNBS_single().
@@ -120,4 +122,4 @@ if __name__ == "__main__":
     # Report run time of each pyNBS iteration
     t = time.time()-netNMF_time
     print 'NBS iteration:', i+1, 'complete:', t, 'seconds'
-  NBS_cc_table, NBS_cc_linkage, NBS_cluster_assign = cc.consensus_hclust_hard(Hlist, k=clusters, **save_args)
+  #NBS_cc_table, NBS_cc_linkage, NBS_cluster_assign = cc.consensus_hclust_hard(Hlist, k=clusters, **save_args)
