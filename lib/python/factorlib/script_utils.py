@@ -181,7 +181,7 @@ def get_exe_path(inpath):
   """
   outpath = os.path.abspath(distutils.spawn.find_executable(inpath))
   cwd_exe_path = os.path.abspath(os.path.join(os.curdir, inpath))
-  if(outpath == cwd_exe_path):
+  if(outpath != cwd_exe_path):
     # this exe may surprise some users because find_executable behaves differently from "which" in
     # this respect: find_executable will also include the current working directory in the search
     # for the executable
