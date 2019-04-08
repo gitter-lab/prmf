@@ -46,6 +46,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   if(args.rng_seed is not None):
     attrs['args'] += ['--rng-seed', args.rng_seed]
   job_graph.add_node(job_id, attrs)
+  simulation_job_id = job_id
   job_id += 1
   sim_list_fps = []
   for i in range(args.n_gene_lists):
@@ -154,6 +155,62 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   job_id += 1
   # }} - PLIER
 
+  # 4) NBS - {{
+  # NOTE NBS does its own diffusion based on binary somatic mutation profiles so we pass the simulated hits rather than our diffused data
+  NBS_outdir = os.path.join(args.outdir, 'NBS')
+  os.mkdir(NBS_outdir)
+  attrs = {
+    'exe': 'pyNBS_wrapper.py',
+    'args': ['--nodelist', args.nodelist, '--gene-lists', sim_list_fps, '--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
+    'out': os.path.join(NBS_outdir, 'pyNBS_wrapper.out'),
+    'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err')
+  }
+  NBS_job_id = job_id
+  NBS_gene_by_latent_fp = os.path.join(NBS_outdir, "W.csv")
+  job_graph.add_node(NBS_job_id, attrs)
+  job_graph.add_edge(simulation_job_id, NBS_job_id)
+  job_id += 1
+
+  # evaluation
+  attrs = {
+    'exe': "evaluate_screen_sim.py",
+    'args': ["--gene-by-latent", NBS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
+    'out': os.path.join(NBS_outdir, "evaluate.out"),
+    'err': os.path.join(NBS_outdir, "evaluate.err")
+  }
+  job_graph.add_node(job_id, attrs)
+  job_graph.add_edge(NBS_job_id, job_id)
+  job_id += 1
+  # }} - NBS
+
+  # 5) CoGAPS - {{
+  CoGAPS_outdir = os.path.join(args.outdir, 'CoGAPS')
+  os.mkdir(CoGAPS_outdir)
+  attrs = {
+    'exe': 'CoGAPS_wrapper.R',
+    'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', args.outdir],
+    'out': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.out'),
+    'err': os.path.join(CoGAPS_outdir, 'COGAPS_wrapper.err')
+  }
+  CoGAPS_job_id = job_id
+  CoGAPS_gene_by_latent_fp = os.path.join(CoGAPS_outdir, "P.csv")
+  job_graph.add_node(CoGAPS_job_id, attrs)
+  job_graph.add_edge(diffusion_job_id, CoGAPS_job_id)
+  job_id += 1
+  # }} - CoGAPS
+
+  # evaluation
+  attrs = {
+    'exe': "evaluate_screen_sim.py",
+    'args': ["--gene-by-latent", CoGAPS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
+    'out': os.path.join(NBS_outdir, "evaluate.out"),
+    'err': os.path.join(NBS_outdir, "evaluate.err")
+  }
+  job_graph.add_node(job_id, attrs)
+  job_graph.add_edge(NBS_job_id, job_id)
+  job_id += 1
+
+  # TODO update plot_pr_curve to accept arbitrary gene x latent inputs and a parallel list of labels
   # plot
   plot_outdir = os.path.join(args.outdir, 'pr_curves')
   os.mkdir(plot_outdir)
