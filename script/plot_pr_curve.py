@@ -15,35 +15,20 @@ def main():
   parser = argparse.ArgumentParser(description="""
 Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curves on one figure.
 """)
-  parser.add_argument("--nmf-gene-by-latent", type=str, help=".csv file")
-  parser.add_argument("--prmf-gene-by-latent", type=str, help=".csv file")
-  parser.add_argument("--plier-gene-by-latent", type=str, help=".csv file")
+  parser.add_argument("--gene-by-latent-csvs", nargs="+", help=".csv files", required=True)
+  parser.add_argument("--labels", nargs="+", help="parallel to --gene-by-latent-csvs", required=True)
   parser.add_argument("--nodelist", type=argparse.FileType('r'), required=True)
   parser.add_argument("--true-seeds", type=argparse.FileType('r'), required=True)
   parser.add_argument("--outdir", type=str, required=True)
   args = parser.parse_args()
 
-  if args.nmf_gene_by_latent is None and args.prmf_gene_by_latent is None and args.plier_gene_by_latent is None:
-    sys.stderr.write("At least one of --nmf-gene-by-latent, --prmf-gene-by-latent, or --plier-gene-by-latent must be set\n")
-    sys.exit(20)
-
   # parse inputs - {{
   W_mats = []
   label_strs = []
-  colors = []
-  if args.nmf_gene_by_latent is not None:
-    W_mats.append(np.genfromtxt(args.nmf_gene_by_latent, delimiter=","))
-    label_strs.append("NMF; AUC={:0.3f}")
-    colors.append('grey')
-  if args.prmf_gene_by_latent is not None:
-    W_mats.append(np.genfromtxt(args.prmf_gene_by_latent, delimiter=","))
-    label_strs.append("PRMF; AUC={:0.3f}")
-    colors.append('red')
-  if args.plier_gene_by_latent is not None:
-    W_mats.append(np.genfromtxt(args.plier_gene_by_latent, delimiter=","))
-    label_strs.append("PLIER; AUC={:0.3f}")
-    colors.append('blue')
+  colors = [] # TODO
 
+  W_mats = list(map(lambda x: np.genfromtxt(x, delimiter=","), args.gene_by_latent_csvs))
+  labels = list(map(lambda x: x + "; AUC={:0.3f}", args.labels))
   nodelist = fl.parse_nodelist(args.nodelist)
 
   true_seed_fps = []

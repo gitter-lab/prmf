@@ -216,7 +216,10 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   os.mkdir(plot_outdir)
   attrs = {
     'exe': 'plot_pr_curve.py',
-    'args': ['--nmf-gene-by-latent', nmf_gene_by_latent_fp, '--prmf-gene-by-latent', prmf_gene_by_latent_fp, '--plier-gene-by-latent', PLIER_gene_by_latent_fp, '--nodelist', args.nodelist, '--true-seeds', chosen_seeds_fp, '--outdir', plot_outdir],
+    'args': [
+      '--gene-by-latent-csvs', nmf_gene_by_latent_fp, prmf_gene_by_latent_fp, PLIER_gene_by_latent_fp, NBS_gene_by_latent_fp, CoGAPS_gene_by_latent_fp, 
+      '--labels', 'NMF', 'PRMF', 'PLIER', 'NBS', 'CoGAPS',
+      '--nodelist', args.nodelist, '--true-seeds', chosen_seeds_fp, '--outdir', plot_outdir],
     'out': os.path.join(plot_outdir, 'plot.out'),
     'err': os.path.join(plot_outdir, 'plot.err')
   }
