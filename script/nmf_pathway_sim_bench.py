@@ -9,7 +9,9 @@ def main():
 """
 Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 """)
+  # run environment
   parser.add_argument("--rng-seed", help="Seed for random number generators", default=None)
+  parser.add_argument("--condor", action='store_true')
 
   # simulation
   parser.add_argument("--n-gene-lists", help="Number of gene lists to simulate", type=int, default=6)
@@ -70,7 +72,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   # two branches: nmf and nmf_pathway
   # 1) nmf - {{
   nmf_outdir = os.path.join(args.outdir, "nmf")
-  os.mkdir(nmf_outdir)
+  script_utils.mkdir_p(nmf_outdir)
   attrs = {
     'exe': "nmf.py",
     'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', nmf_outdir],
@@ -98,7 +100,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 
   # 2) nmf_pathway - {{
   nmf_pathway_outdir = os.path.join(args.outdir, "nmf_pathway")
-  os.mkdir(nmf_pathway_outdir)
+  script_utils.mkdir_p(nmf_pathway_outdir)
   attrs = {
     'exe': "nmf_pathway.py",
     'args': ["--data", diffused_fp, '--k-latent', args.k_latent, "--manifolds-file", args.manifolds_file, "--nodelist", args.nodelist, "--gamma", args.gamma, "--outdir", nmf_pathway_outdir],
@@ -128,7 +130,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 
   # 3) PLIER - {{
   PLIER_outdir = os.path.join(args.outdir, "PLIER")
-  os.mkdir(PLIER_outdir)
+  script_utils.mkdir_p(PLIER_outdir)
   attrs = {
     'exe': 'PLIER_wrapper.R',
     'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--outdir', PLIER_outdir],
@@ -158,7 +160,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   # 4) NBS - {{
   # NOTE NBS does its own diffusion based on binary somatic mutation profiles so we pass the simulated hits rather than our diffused data
   NBS_outdir = os.path.join(args.outdir, 'NBS')
-  os.mkdir(NBS_outdir)
+  script_utils.mkdir_p(NBS_outdir)
   attrs = {
     'exe': 'pyNBS_wrapper.py',
     'args': ['--nodelist', args.nodelist, '--gene-lists', sim_list_fps, '--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
@@ -185,7 +187,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 
   # 5) CoGAPS - {{
   CoGAPS_outdir = os.path.join(args.outdir, 'CoGAPS')
-  os.mkdir(CoGAPS_outdir)
+  script_utils.mkdir_p(CoGAPS_outdir)
   attrs = {
     'exe': 'CoGAPS_wrapper.R',
     'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', args.outdir],
@@ -213,7 +215,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   # TODO update plot_pr_curve to accept arbitrary gene x latent inputs and a parallel list of labels
   # plot
   plot_outdir = os.path.join(args.outdir, 'pr_curves')
-  os.mkdir(plot_outdir)
+  script_utils.mkdir_p(plot_outdir)
   attrs = {
     'exe': 'plot_pr_curve.py',
     'args': [
@@ -231,6 +233,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   job_id += 1
 
   condor = False
+  if args.condor:
+    condor = True
   job_ids = script_utils.run_digraph(args.outdir, job_graph, condor=condor)
 
 if __name__ == "__main__":
