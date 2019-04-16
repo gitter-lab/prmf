@@ -1,4 +1,5 @@
 #!/usr/bin/env Rscript
+library(argparse)
 library(CoGAPS)
 
 main = function() {
@@ -18,7 +19,7 @@ main = function() {
   S = as.matrix(do.call(cbind, replicate(n_features, row_stdev, simplify=FALSE)))
 
   # D = AP
-  results = gapsRun(D, S, nFactor = args$k_latent)
+  results = CoGAPS(D, S, nFactor = as.numeric(args$k_latent))
   write.csv(results$Amean, file.path(args$outdir, 'A.csv'), row.names=FALSE, col.names=FALSE)
   write.csv(results$Pmean, file.path(args$outdir, 'P.csv'), row.names=FALSE, col.names=FALSE)
 }
