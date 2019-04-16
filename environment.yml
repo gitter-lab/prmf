@@ -1,0 +1,10 @@
+name: factor
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy==1.13.1
+  - scipy==1.0.0
+  - matplotlib==2.1.2
+  - sklearn==0.0
+  - networkx==1.11
