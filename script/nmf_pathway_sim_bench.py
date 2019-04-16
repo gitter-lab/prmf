@@ -12,6 +12,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   # run environment
   parser.add_argument("--rng-seed", help="Seed for random number generators", default=None)
   parser.add_argument("--condor", action='store_true')
+  parser.add_argument("--dry-run", action='store_true')
 
   # simulation
   parser.add_argument("--n-gene-lists", help="Number of gene lists to simulate", type=int, default=6)
@@ -163,7 +164,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   script_utils.mkdir_p(NBS_outdir)
   attrs = {
     'exe': 'pyNBS_wrapper.py',
-    'args': ['--nodelist', args.nodelist, '--gene-lists', sim_list_fps, '--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
+    'args': ['--nodelist', args.nodelist, '--gene-lists'] + sim_list_fps + ['--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
     'out': os.path.join(NBS_outdir, 'pyNBS_wrapper.out'),
     'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err')
   }
@@ -235,7 +236,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   condor = False
   if args.condor:
     condor = True
-  job_ids = script_utils.run_digraph(args.outdir, job_graph, condor=condor)
+  job_ids = script_utils.run_digraph(args.outdir, job_graph, condor=condor, dry_run=args.dry_run)
 
 if __name__ == "__main__":
   main()
