@@ -163,7 +163,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   NBS_outdir = os.path.join(args.outdir, 'NBS')
   script_utils.mkdir_p(NBS_outdir)
   attrs = {
-    'exe': 'pyNBS_wrapper.py',
+    'exe': 'pyNBS_wrapper.sh',
     'args': ['--nodelist', args.nodelist, '--gene-lists'] + sim_list_fps + ['--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
     'out': os.path.join(NBS_outdir, 'pyNBS_wrapper.out'),
     'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err')
@@ -231,6 +231,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   job_graph.add_edge(nmf_job_id, job_id)
   job_graph.add_edge(prmf_job_id, job_id)
   job_graph.add_edge(PLIER_job_id, job_id)
+  job_graph.add_edge(NBS_job_id, job_id)
+  job_graph.add_edge(CoGAPS_job_id, job_id)
   job_id += 1
 
   condor = False
