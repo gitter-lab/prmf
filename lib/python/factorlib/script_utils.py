@@ -161,10 +161,10 @@ def format_vars(job_id, exe=None, args=[], out=None, err=None, requirements=None
   vars_stmt : str
   """
   VARS_FMT_STR = "VARS {} executable=\"{}\""
-  exe_path = get_exe_path(exe)
-  vars_stmt = VARS_FMT_STR.format(job_id, exe_path, " ".join(args))
   if(exe is None):
     raise ValueError("keyword argument \"exe\" is required")
+  exe_path = get_exe_path(exe)
+  vars_stmt = VARS_FMT_STR.format(job_id, exe_path, " ".join(args))
   if(len(args) > 0):
     vars_stmt += " arguments=\"{}\"".format(" ".join(args))
   if(out is not None):
@@ -179,9 +179,12 @@ def get_exe_path(inpath):
   """
   Wrapper around distutils.spawn.find_executable to provide warning if found executable is in cwd
   """
-  outpath = os.path.abspath(distutils.spawn.find_executable(inpath))
+  exe_path = distutils.spawn.find_executable(inpath)
+  if exe_path is None:
+    raise ValueError("desired executable {} is not on the PATH nor is it in the current working directory".format(inpath))
+  outpath = os.path.abspath(exe_path)
   cwd_exe_path = os.path.abspath(os.path.join(os.curdir, inpath))
-  if(outpath != cwd_exe_path):
+  if(outpath == cwd_exe_path):
     # this exe may surprise some users because find_executable behaves differently from "which" in
     # this respect: find_executable will also include the current working directory in the search
     # for the executable
