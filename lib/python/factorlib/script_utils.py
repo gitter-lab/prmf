@@ -200,7 +200,10 @@ def job_attrs_to_job_name(exe=None, args=None, out=None, err=None, **kwargs):
   """
   hash_obj = hashlib.sha256()
   hash_obj.update(exe.encode())
-  hash_obj.update(" ".join(args).encode())
+  try:
+    hash_obj.update(" ".join(args).encode())
+  except TypeError as err:
+    raise ValueError("Invalid args specification for exe {}:".format(exe, str(err)))
   job_name = hash_obj.hexdigest()
   return job_name
 
@@ -321,12 +324,14 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, exit_
 
       # TODO synchronous only
       #proc = sp.Popen(args, stdout=stdout_fh, stderr=stderr_fh)
-      exit_code = -1
-      if exit_on_err:
-        exit_code = sp.check_call(args, stdout=stdout_fh, stderr=stderr_fh)
-      else: 
-        exit_code = sp.call(args, stdout=stdout_fh, stderr=stderr_fh)
-      print(exit_code)
+
+      if(not dry_run):
+        exit_code = -1
+        if exit_on_err:
+          exit_code = sp.check_call(args, stdout=stdout_fh, stderr=stderr_fh)
+        else: 
+          exit_code = sp.call(args, stdout=stdout_fh, stderr=stderr_fh)
+        print(exit_code)
 
   return job_ids
 
