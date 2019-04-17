@@ -1,3 +1,3 @@
 #!/bin/sh
-source activate pyNBS
+conda activate pyNBS
 pyNBS_wrapper.py "$@"
