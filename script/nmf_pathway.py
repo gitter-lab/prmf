@@ -705,7 +705,6 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   Gs = map(lambda x: x[0], G_fp_pairs)
 
   # TODO warn if --node-attribute is not found
-  # TODO warn if node identifiers do not match up with nodelist
 
   if args.seed is not None:
     seed = int(args.seed)
@@ -713,6 +712,26 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
     random.seed(seed)
 
   nodelist = fl.parse_nodelist(open(args.nodelist))
+
+  # check node identifiers in G against nodelist
+  nodelist_set = set(nodelist)
+  G_index_to_frac = {}
+  all_zero = True
+  for i,G in enumerate(Gs):
+    count = 0
+    for node in G.nodes_iter():
+      if node in nodelist_set:
+        count += 1
+    frac = count / G.order()
+    G_index_to_frac[i] = frac
+    if count != 0:
+      all_zero = False
+  if all_zero:
+    sys.stderr.write("Invalid manifolds. Check that the node identifiers of the manifolds are present in the nodelist. Try setting --node-attribute if the node identifier is in a graphml attribute rather than the XML node attribute 'id'\n")
+    sys.exit(24)
+  sys.stdout.write("Printing manifold node representation in nodelist:\n")
+  for i, G_fp_pair in enumerate(G_fp_pairs):
+    sys.stdout.write("{}: {:2.1f}%\n".format(G_fp_pair[1], G_index_to_frac[i]*100))
 
   U_fp = os.path.join(args.outdir, "U.csv")
   V_fp = os.path.join(args.outdir, "V.csv")
