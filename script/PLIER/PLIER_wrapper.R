@@ -97,7 +97,7 @@ main2 = function(args) {
       i = i + 1
       pathway_graph = read.graph(line, format='graphml')
       pathway_matrix = matrix(rep(1, vcount(pathway_graph)), nrow=vcount(pathway_graph))
-      rownames(pathway_matrix) = vertex_attr(pathway_graph, 'id', index = V(pathway_graph))
+      rownames(pathway_matrix) = vertex_attr(pathway_graph, args$node_attribute, index = V(pathway_graph))
       bn_ext = basename(line)
       splitext_rv = splitext(bn_ext)
       bn = splitext_rv[1]
@@ -189,6 +189,7 @@ main = function() {
   parser$add_argument('--outdir', required=T)
   parser$add_argument('--k-latent', default=6, type='integer')
   parser$add_argument('--seed', default=1, type='integer')
+  parser$add_argument('--node-attribute', default='id', help="graphml node attribute to use for gene identifiers")
   parser$add_argument('--extra-prior', action='store_true')
   args = parser$parse_args()
   if (!is_mutually_exclusive_required_group(args, c('pathways_csv', 'pathways_file'))) {

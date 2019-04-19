@@ -104,7 +104,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   script_utils.mkdir_p(nmf_pathway_outdir)
   attrs = {
     'exe': "nmf_pathway.py",
-    'args': ["--data", diffused_fp, '--k-latent', args.k_latent, "--manifolds-file", args.manifolds_file, "--nodelist", args.nodelist, "--gamma", args.gamma, "--outdir", nmf_pathway_outdir],
+    'args': ["--data", diffused_fp, '--k-latent', args.k_latent, "--manifolds-file", args.manifolds_file, "--node-attribute", "name", "--nodelist", args.nodelist, "--gamma", args.gamma, "--outdir", nmf_pathway_outdir],
     'out': os.path.join(nmf_pathway_outdir, "nmf_pathway.out"),
     'err': os.path.join(nmf_pathway_outdir, "nmf_pathway.err")
   }
@@ -134,7 +134,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   script_utils.mkdir_p(PLIER_outdir)
   attrs = {
     'exe': 'PLIER_wrapper.R',
-    'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--outdir', PLIER_outdir],
+    'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--node-attribute', 'name', '--outdir', PLIER_outdir],
     'out': os.path.join(PLIER_outdir, "PLIER_wrapper.out"),
     'err': os.path.join(PLIER_outdir, "PLIER_wrapper.err")
   }
@@ -193,7 +193,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': 'CoGAPS_wrapper.R',
     'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', args.outdir],
     'out': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.out'),
-    'err': os.path.join(CoGAPS_outdir, 'COGAPS_wrapper.err')
+    'err': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.err')
   }
   CoGAPS_job_id = job_id
   CoGAPS_gene_by_latent_fp = os.path.join(CoGAPS_outdir, "P.csv")
