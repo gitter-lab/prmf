@@ -1,0 +1,6 @@
+name: CoGAPS
+channels:
+  - defaults
+dependencies:
+  - r-essentials
+  - r-base
