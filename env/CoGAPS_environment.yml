@@ -7,3 +7,4 @@ dependencies:
   - r-base
   - r-biocmanager
   - r-remotes
+  - r-gtools
