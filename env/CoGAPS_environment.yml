@@ -6,3 +6,4 @@ dependencies:
   - r-essentials
   - r-base
   - r-biocmanager
+  - r-remotes
