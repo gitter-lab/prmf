@@ -5,6 +5,5 @@ channels:
 dependencies:
   - r-essentials
   - r-base
-  - r-biocmanager
+  - r-devtools
   - r-remotes
-  - r-gtools
