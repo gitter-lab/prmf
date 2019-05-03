@@ -1,4 +1,4 @@
-name: factor
+name: prmf
 channels:
   - defaults
 dependencies:
@@ -119,7 +119,6 @@ dependencies:
     - pandas==0.23.1
     - pillow==5.4.1
     - prody==1.8.2
-    - psutil==5.4.3
     - pystan==2.14.0.0
     - pywavelets==1.0.2
     - scikit-image==0.14.2
