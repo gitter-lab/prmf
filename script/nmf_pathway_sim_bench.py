@@ -139,7 +139,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   PLIER_outdir = os.path.join(args.outdir, "PLIER")
   script_utils.mkdir_p(PLIER_outdir)
   attrs = {
-    'exe': 'PLIER_wrapper.sh',
+    'exe': 'PLIER_wrapper.R',
     'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--node-attribute', 'name', '--outdir', PLIER_outdir],
     'out': os.path.join(PLIER_outdir, "PLIER_wrapper.out"),
     'err': os.path.join(PLIER_outdir, "PLIER_wrapper.err"),
@@ -171,7 +171,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   NBS_outdir = os.path.join(args.outdir, 'NBS')
   script_utils.mkdir_p(NBS_outdir)
   attrs = {
-    'exe': 'pyNBS_wrapper.sh',
+    'exe': 'pyNBS_wrapper.py',
     'args': ['--nodelist', args.nodelist, '--gene-lists'] + sim_list_fps + ['--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
     'out': os.path.join(NBS_outdir, 'pyNBS_wrapper.out'),
     'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err'),
@@ -200,7 +200,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   CoGAPS_outdir = os.path.join(args.outdir, 'CoGAPS')
   script_utils.mkdir_p(CoGAPS_outdir)
   attrs = {
-    'exe': 'CoGAPS_wrapper.sh',
+    'exe': 'CoGAPS_wrapper.R',
     'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', args.outdir],
     'out': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.out'),
     'err': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.err'),
