@@ -134,7 +134,7 @@ def get_condor_submit_fp():
     raise ValueError("Required environment variable: HOME")
   return os.path.join(home_dir, ".condor", "submitter.sub")
 
-def format_vars(job_id, exe=None, args=[], out=None, err=None, requirements=None, **kwargs):
+def format_vars(job_id, exe=None, args=[], out=None, err=None, requirements=None, env=None, **kwargs):
   """
   Parameters
   -------
@@ -156,6 +156,9 @@ def format_vars(job_id, exe=None, args=[], out=None, err=None, requirements=None
   requirements : str
     Condor-style requirements statement e.g. 'OpSysMajorVer == 7'
 
+  env : str
+    conda environment to execute job in
+
   Returns
   -------
   vars_stmt : str
@@ -164,7 +167,14 @@ def format_vars(job_id, exe=None, args=[], out=None, err=None, requirements=None
   if(exe is None):
     raise ValueError("keyword argument \"exe\" is required")
   exe_path = get_exe_path(exe)
-  vars_stmt = VARS_FMT_STR.format(job_id, exe_path, " ".join(args))
+
+  exe_condor = exe_path # command condor will run
+  if(env is not None):
+    runner_exe = 'prmf_runner.sh'
+    args = [env,  exe_path] + args
+    exe_condor = get_exe_path(runner_exe)
+
+  vars_stmt = VARS_FMT_STR.format(job_id, exe_condor, " ".join(args))
   if(len(args) > 0):
     vars_stmt += " arguments=\"{}\"".format(" ".join(args))
   if(out is not None):
@@ -286,7 +296,12 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, exit_
     digraph = digraph.copy() # add proc node attr pointing to a Popen object
     #job_order = bfs_nodes(digraph, root_node)
     job_order = nx.topological_sort(digraph)
+    env_warned = False
     for job_id in job_order:
+      if 'env' in job_attrs and not env_warned:
+        sys.stderr.write("[WARNING] one or more jobs have an environment specified, but this functionality has only been implemented for condor")
+        env_warned = True
+
       # wait for any predecessors to finish
       #preds = digraph.predecessors(job_id)
       #for pred in preds:

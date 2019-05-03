@@ -2,6 +2,9 @@
 # generic script to prepare the prmf conda environment for a program and then run the 
 # program in that environment
 
+# TODO implement getoptlong style interface
+usage="prmf_runner.sh <env> <cmd> <args>"
+
 # non-login bash shells such as the one expected to be created when invoking this script
 # do not source conda's bash configuration files, source them if needed
 type -a conda | grep -q 'conda is a function'

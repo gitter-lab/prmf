@@ -44,7 +44,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "simulate_screens.py",
     'args': ["--seed-lists"] + args.seed_lists + ["--n-gene-lists", str(args.n_gene_lists), "--nodelist", args.nodelist, "--outdir", args.outdir, '--simulator', args.simulator, '--noise-pr', args.noise_pr],
     'out': os.path.join(args.outdir, "simulate_screens.out"),
-    'err': os.path.join(args.outdir, "simulate_screens.err")
+    'err': os.path.join(args.outdir, "simulate_screens.err"),
+    'env': 'prmf'
   }
   if(args.rng_seed is not None):
     attrs['args'] += ['--rng-seed', args.rng_seed]
@@ -62,7 +63,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "diffusion.py",
     'args': ["--network", args.network, "--nodelist", args.nodelist, "--gene-lists"] + sim_list_fps +  ["--diffused", diffused_fp],
     'out': os.path.join(args.outdir, "diffusion.out"),
-    'err': os.path.join(args.outdir, "diffusion.err")
+    'err': os.path.join(args.outdir, "diffusion.err"),
+    'env': 'prmf'
   }
   diffusion_job_id = job_id
   job_graph.add_node(job_id, attrs)
@@ -78,7 +80,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "nmf.py",
     'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', nmf_outdir],
     'out': os.path.join(nmf_outdir, 'nmf.out'),
-    'err': os.path.join(nmf_outdir, 'nmf.err')
+    'err': os.path.join(nmf_outdir, 'nmf.err'),
+    'env': 'prmf'
   }
   if(args.rng_seed is not None):
     attrs['args'] += ['--seed', args.rng_seed]
@@ -92,7 +95,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", nmf_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(nmf_outdir, "evaluate.out"),
-    'err': os.path.join(nmf_outdir, "evaluate.err")
+    'err': os.path.join(nmf_outdir, "evaluate.err"),
+    'env': 'prmf'
   }
   job_graph.add_node(job_id, attrs)
   job_graph.add_edge(job_id-1, job_id)
@@ -106,7 +110,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "nmf_pathway.py",
     'args': ["--data", diffused_fp, '--k-latent', args.k_latent, "--manifolds-file", args.manifolds_file, "--node-attribute", "name", "--nodelist", args.nodelist, "--gamma", args.gamma, "--outdir", nmf_pathway_outdir],
     'out': os.path.join(nmf_pathway_outdir, "nmf_pathway.out"),
-    'err': os.path.join(nmf_pathway_outdir, "nmf_pathway.err")
+    'err': os.path.join(nmf_pathway_outdir, "nmf_pathway.err"),
+    'env': 'prmf'
   }
   if(args.rng_seed is not None):
     attrs['args'] += ['--seed', args.rng_seed]
@@ -121,7 +126,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", prmf_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(nmf_pathway_outdir, "evaluate.out"),
-    'err': os.path.join(nmf_pathway_outdir, "evaluate.err")
+    'err': os.path.join(nmf_pathway_outdir, "evaluate.err"),
+    'env': 'prmf'
   }
   job_graph.add_node(job_id, attrs)
   job_graph.add_edge(job_id-1, job_id)
@@ -136,7 +142,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': 'PLIER_wrapper.sh',
     'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--node-attribute', 'name', '--outdir', PLIER_outdir],
     'out': os.path.join(PLIER_outdir, "PLIER_wrapper.out"),
-    'err': os.path.join(PLIER_outdir, "PLIER_wrapper.err")
+    'err': os.path.join(PLIER_outdir, "PLIER_wrapper.err"),
+    'env': 'PLIER'
   }
   if(args.rng_seed is not None):
     attrs['args'] += ['--seed', args.rng_seed]
@@ -151,7 +158,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", PLIER_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(PLIER_outdir, "evaluate.out"),
-    'err': os.path.join(PLIER_outdir, "evaluate.err")
+    'err': os.path.join(PLIER_outdir, "evaluate.err"),
+    'env': 'prmf'
   }
   job_graph.add_node(job_id, attrs)
   job_graph.add_edge(job_id-1, job_id)
@@ -166,7 +174,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': 'pyNBS_wrapper.sh',
     'args': ['--nodelist', args.nodelist, '--gene-lists'] + sim_list_fps + ['--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
     'out': os.path.join(NBS_outdir, 'pyNBS_wrapper.out'),
-    'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err')
+    'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err'),
+    'env': 'pyNBS'
   }
   NBS_job_id = job_id
   NBS_gene_by_latent_fp = os.path.join(NBS_outdir, "W.csv")
@@ -179,7 +188,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", NBS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(NBS_outdir, "evaluate.out"),
-    'err': os.path.join(NBS_outdir, "evaluate.err")
+    'err': os.path.join(NBS_outdir, "evaluate.err"),
+    'env': 'prmf'
   }
   job_graph.add_node(job_id, attrs)
   job_graph.add_edge(NBS_job_id, job_id)
@@ -193,7 +203,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': 'CoGAPS_wrapper.sh',
     'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', args.outdir],
     'out': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.out'),
-    'err': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.err')
+    'err': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.err'),
+    'env': 'CoGAPS'
   }
   CoGAPS_job_id = job_id
   CoGAPS_gene_by_latent_fp = os.path.join(CoGAPS_outdir, "P.csv")
@@ -207,13 +218,13 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     'exe': "evaluate_screen_sim.py",
     'args': ["--gene-by-latent", CoGAPS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
     'out': os.path.join(NBS_outdir, "evaluate.out"),
-    'err': os.path.join(NBS_outdir, "evaluate.err")
+    'err': os.path.join(NBS_outdir, "evaluate.err"),
+    'env': 'prmf'
   }
   job_graph.add_node(job_id, attrs)
   job_graph.add_edge(NBS_job_id, job_id)
   job_id += 1
 
-  # TODO update plot_pr_curve to accept arbitrary gene x latent inputs and a parallel list of labels
   # plot
   plot_outdir = os.path.join(args.outdir, 'pr_curves')
   script_utils.mkdir_p(plot_outdir)
@@ -224,10 +235,11 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
       '--labels', 'NMF', 'PRMF', 'PLIER', 'NBS', 'CoGAPS',
       '--nodelist', args.nodelist, '--true-seeds', chosen_seeds_fp, '--outdir', plot_outdir],
     'out': os.path.join(plot_outdir, 'plot.out'),
-    'err': os.path.join(plot_outdir, 'plot.err')
+    'err': os.path.join(plot_outdir, 'plot.err'),
+    'env': 'prmf'
   }
   job_graph.add_node(job_id, attrs)
-  # run after nmf and nmf_pathway
+  # run after all methods
   job_graph.add_edge(nmf_job_id, job_id)
   job_graph.add_edge(prmf_job_id, job_id)
   job_graph.add_edge(PLIER_job_id, job_id)
