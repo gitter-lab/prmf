@@ -126,10 +126,11 @@ def main():
   for run_dir in run_dirs:
     pathways_dict = fl.parse_pathway_obj(os.path.join(run_dir, 'obj.txt'))
     pathways = pathways_dict.items()
-    if pathway in all_dict:
-      all_dict[pathway] += 1 
-    else:
-      all_dict[pathway] = 1
+    for pathway in pathways:
+      if pathway in all_dict:
+        all_dict[pathway] += 1 
+      else:
+        all_dict[pathway] = 1
   pathway_count_pairs = sorted(all_dict.items(), key=lambda x: x[1], reverse=True)
   for pathway, count in pathway_count_pairs:
     print('{}\t{}'.format(pathway, count))
@@ -140,7 +141,7 @@ def main():
 
   plt.clf()
   n_bins = k+1
-  n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5)
+  n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5, color='red')
   initial_converged_fp = os.path.join(args.outdir, 'initialization_convergence_hist.png')
   plt.xlabel('Number persisting')
   plt.ylabel('Frequency')
@@ -154,7 +155,7 @@ def main():
 
     plt.clf()
     n_bins = k+1
-    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5)
+    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5, color='red')
     initial_converged_fp = os.path.join(args.outdir, 'initialization_truth_hist.png')
     plt.xlabel('Number existing')
     plt.ylabel('Frequency')
@@ -168,7 +169,7 @@ def main():
 
     plt.clf()
     n_bins = k+1
-    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5)
+    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5, color='red')
     initial_converged_fp = os.path.join(args.outdir, 'convergence_truth_hist.png')
     plt.xlabel('Number existing')
     plt.ylabel('Frequency')
