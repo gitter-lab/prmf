@@ -5,8 +5,13 @@
 # TODO implement getoptlong style interface
 usage="prmf_runner.sh <env> <cmd> <args>"
 
+# act like a login shell, load conda (and other) environment
+# TODO what if the conda setup is not in ~/.bash_profile (but is in ~/.bashrc for example)
+source ~/.bash_profile
+
 # non-login bash shells such as the one expected to be created when invoking this script
 # do not source conda's bash configuration files, source them if needed
+# TODO sourcing ~/.bash_profile renders this unnecessary 
 type -a conda | grep -q 'conda is a function'
 if [ "$?" != "0" ]; then
   if [ -f $_CONDA_ROOT/etc/profile.d/conda.sh ]; then
@@ -32,3 +37,5 @@ for arg in "$@"; do
     args="${args} ${arg}"
   fi
 done
+
+$cmd $args
