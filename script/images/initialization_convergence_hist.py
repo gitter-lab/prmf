@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+plt.style.use('prmf')
 import factorlib as fl
 
 # TODO basename is used for ground truth in case file path changes (in case where programs 
