@@ -1,0 +1,4 @@
+lines.linewidth : 2.0
+patch.facecolor : red
+axes.titlesize : x-large
+figure.titlesize : xx-large
