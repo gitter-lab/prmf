@@ -141,7 +141,7 @@ def main():
 
   plt.clf()
   n_bins = k+1
-  n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5, color='red')
+  n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5)
   initial_converged_fp = os.path.join(args.outdir, 'initialization_convergence_hist.png')
   plt.xlabel('Number persisting')
   plt.ylabel('Frequency')
@@ -155,7 +155,7 @@ def main():
 
     plt.clf()
     n_bins = k+1
-    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5, color='red')
+    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5)
     initial_converged_fp = os.path.join(args.outdir, 'initialization_truth_hist.png')
     plt.xlabel('Number existing')
     plt.ylabel('Frequency')
@@ -169,7 +169,7 @@ def main():
 
     plt.clf()
     n_bins = k+1
-    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5, color='red')
+    n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5)
     initial_converged_fp = os.path.join(args.outdir, 'convergence_truth_hist.png')
     plt.xlabel('Number existing')
     plt.ylabel('Frequency')
