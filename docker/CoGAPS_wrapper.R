@@ -41,7 +41,7 @@ main = function() {
   # sampleFactors is samples x latent
   # featureLoadings is feature x latent
   # data \approx sampleFactors \cdot featureLoadings
-  results = CoGAPS(data, params, transposeData=!args$transpose_data)
+  results = CoGAPS(data, params, transposeData=!args$transpose_data, outputFrequency=10)
   write.csv(results@sampleFactors, file.path(args$outdir, 'sample_by_latent.csv'))
   write.csv(results@featureLoadings, file.path(args$outdir, 'feature_by_latent.csv'))
   return(results)
