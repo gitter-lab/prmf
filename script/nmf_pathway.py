@@ -550,6 +550,13 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   for i, node in enumerate(nodelist):
     node_to_index[node] = i
 
+  # preprocess networks and nodelist
+  # the nodelist specifies the entire universe of identifiers for this run
+  # remove nodes (and incident edges) which are not present in the nodelist
+  # TODO warn? move this description to --help
+  for i, G in enumerate(Gs):
+    Gs[i] = G.subgraph(nodelist)
+
   Ws = []
   Ds = []
   Ls = []
@@ -702,7 +709,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   fp_to_G = {}
   for G, fp in G_fp_pairs:
     fp_to_G[fp] = G
-  Gs = map(lambda x: x[0], G_fp_pairs)
+  Gs = list(map(lambda x: x[0], G_fp_pairs))
 
   # TODO warn if --node-attribute is not found
 
