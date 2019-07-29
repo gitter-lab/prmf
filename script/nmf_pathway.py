@@ -11,7 +11,6 @@ import copy
 import datetime
 import math
 import os, os.path
-import psutil
 import random
 np.seterr(divide='raise')
 EPSILON = np.finfo(np.float32).eps
