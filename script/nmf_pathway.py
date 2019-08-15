@@ -4,6 +4,7 @@ from argparse import RawTextHelpFormatter
 import numpy as np
 import scipy.optimize
 import scipy.sparse as sp
+from sklearn.preprocessing import quantile_transform
 import networkx as nx
 import factorlib as fl
 from factorlib import prmf
@@ -11,6 +12,7 @@ import copy
 import datetime
 import math
 import os, os.path
+import pandas as pd
 import random
 np.seterr(divide='raise')
 EPSILON = np.finfo(np.float32).eps
@@ -653,6 +655,45 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
 
   return U, V, obj_data
 
+def check_header(fpath, delim):
+  # check if there is a header in the data file
+  has_header = False
+  with open(fpath, 'r') as fh:
+    for line in fh:
+      line = line.rstrip()
+      words = line.split(delim)
+      for word in words:
+        try:
+          float(word)
+        except ValueError as err:
+          has_header=True
+          break
+      break
+  return has_header
+
+def check_row_names(fpath, delim, has_header):
+  # check if there are row names in the data file
+  has_row_names = False
+  with open(fpath, 'r') as fh:
+    data_line = None
+    i = 0
+    target_line = 1
+    if has_header:
+      target_line = 2
+      
+    for line in fh:
+      i += 1
+      data_line = line.rstrip()
+      if i >= target_line:
+        break
+
+    words = data_line.split(delim)
+    try:
+      float(words[0])
+    except ValueError as err:
+      has_row_names = True
+  return has_row_names
+
 def main():
   parser = argparse.ArgumentParser(description="""
 Python implementation of Pathway-Regularized NMF.
@@ -717,7 +758,36 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
     np.random.seed(seed)
     random.seed(seed)
 
-  nodelist = fl.parse_nodelist(open(args.nodelist))
+  has_header = check_header(args.data, args.delimiter)
+  has_row_names = check_row_names(args.data, args.delimiter, has_header)
+  # load data
+  X = None
+  if args.m_samples is None:
+    X = np.genfromtxt(args.data, delimiter=args.delimiter)
+    #X = pd.read_csv(args.data, sep=args.delimiter)
+  else:
+    X = np.genfromtxt(args.data, delimiter=args.delimiter, max_rows=args.m_samples)
+    #X = pd.read_csv(args.data, sep=args.delimiter, nrows=args.m_samples)
+  
+  # transpose data if desired
+  m, n = X.shape
+  if args.high_dimensional:
+    if m > n:
+      X = X.transpose()
+  else:
+    if m < n:
+      X = X.transpose()
+
+  if args.nodelist is not None:
+    nodelist = fl.parse_nodelist(open(args.nodelist))
+#  else:
+#    if has_header:
+#      # use the header to construct a nodelist
+#      #nodelist = 
+#      #fl.embed_arr(nodelist, header_fields, X
+#    else:
+#      sys.stderr.write("--nodelist is not provided and there is no header in <--data>\n")
+#      sys.exit(25)
 
   # check node identifiers in G against nodelist
   nodelist_set = set(nodelist)
@@ -743,14 +813,12 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   V_fp = os.path.join(args.outdir, "V.csv")
   obj_fp = os.path.join(args.outdir, "obj.txt")
 
-  X = np.genfromtxt(args.data, delimiter=",")
-  m, n = X.shape
-  if args.high_dimensional:
-    if m > n:
-      X = X.transpose()
-  else:
-    if m < n:
-      X = X.transpose()
+  # normalize data if desired
+  # data at this stage is assumed to be observations x features
+  # normalization is done for each feature value
+  # e.g. the sample with the highest read count for gene X gets the value 1 in the gene X column
+  if args.normalize:
+    data = quantile_transform(data)
 
   # --manifolds-init - {{
   pathway_init_fp = os.path.join(args.outdir, 'init_pathways.txt')
