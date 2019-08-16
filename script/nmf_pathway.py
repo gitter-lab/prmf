@@ -763,11 +763,17 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   # load data
   X = None
   if args.m_samples is None:
-    X = np.genfromtxt(args.data, delimiter=args.delimiter)
-    #X = pd.read_csv(args.data, sep=args.delimiter)
+    #X = np.genfromtxt(args.data, delimiter=args.delimiter)
+    if has_header:
+      X = pd.read_csv(args.data, sep=args.delimiter)
+    else:
+      X = pd.read_csv(args.data, sep=args.delimiter, header=None)
   else:
-    X = np.genfromtxt(args.data, delimiter=args.delimiter, max_rows=args.m_samples)
-    #X = pd.read_csv(args.data, sep=args.delimiter, nrows=args.m_samples)
+    #X = np.genfromtxt(args.data, delimiter=args.delimiter, max_rows=args.m_samples)
+    if has_header:
+      X = pd.read_csv(args.data, sep=args.delimiter, nrows=args.m_samples)
+    else:
+      X = pd.read_csv(args.data, sep=args.delimiter, nrows=args.m_samples, header=None)
   
   # transpose data if desired
   m, n = X.shape
@@ -778,18 +784,31 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
     if m < n:
       X = X.transpose()
 
+  # finalize data prep for nmf_pathway:
+  # parse nodelist if provided or infer it from X as a dataframe
+  # convert data frame to numpy
+  nodelist = None
   if args.nodelist is not None:
     nodelist = fl.parse_nodelist(open(args.nodelist))
-#  else:
-#    if has_header:
-#      # use the header to construct a nodelist
-#      #nodelist = 
-#      #fl.embed_arr(nodelist, header_fields, X
-#    else:
-#      sys.stderr.write("--nodelist is not provided and there is no header in <--data>\n")
-#      sys.exit(25)
+    X = X.to_numpy()
+  else:
+    if has_header:
+      # use the header to construct a nodelist
+      nodelist = list(X.columns)
+      nodelist_set = set(nodelist)
+      for G in Gs:
+        for node in G:
+          if node not in nodelist_set:
+            nodelist.append(node)
+            nodelist_set.add(node)
+
+      X = fl.embed_arr(nodelist, list(X.columns), X.to_numpy())
+    else:
+      sys.stderr.write("--nodelist is not provided and there is no header in <--data>\n")
+      sys.exit(25)
 
   # check node identifiers in G against nodelist
+  # TODO rework this test for inferred nodelist
   nodelist_set = set(nodelist)
   G_index_to_frac = {}
   all_zero = True
@@ -871,7 +890,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   with open(obj_fp, 'w') as obj_fh:
     ind_to_lapls = obj_data.pop('ind_to_lapls', {})
     for k,v in obj_data.items():
-      obj_fh.write("{} = {}\n".format(k,v))
+      obj_fh.write("{} = {:0.5f}\n".format(k,v))
 
     # write which manifold file was used for each latent factor
     ks = sorted(ind_to_lapls.keys())
