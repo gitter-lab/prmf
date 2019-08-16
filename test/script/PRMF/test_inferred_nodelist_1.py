@@ -46,12 +46,12 @@ for k in range(k_latent):
 
 # test with nodelist passed explicity
 sp.check_call(args=['nmf_pathway.py', "--data", "data.tsv", "--manifolds"] + manifold_fps + ['--node-attribute', 'name', "--nodelist", 'nodelist.txt', "--outdir", os.curdir, '--delimiter', '\t', '--seed', "1"], stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w'))
-sp.check_call(args=['diff', '-q', 'expected_obj.txt', 'obj.txt'])
+sp.check_call(args=['diff', '-q', 'test_inferred_nodelist_1_expected_obj.txt', 'obj.txt'])
 print('test with nodelist passed')
 
 # test with inferred nodelist but measurements on all genes
 X_df.to_csv('data_header.tsv', sep='\t', header=nodelist, index=False)
 
 sp.check_call(args=['nmf_pathway.py', "--data", "data_header.tsv", "--manifolds"] + manifold_fps + ['--node-attribute', 'name', "--outdir", os.curdir, '--delimiter', '\t', '--seed', "1"], stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w'))
-sp.check_call(args=['diff', '-q', 'expected_obj.txt', 'obj.txt'])
+sp.check_call(args=['diff', '-q', 'test_inferred_nodelist_1_expected_obj.txt', 'obj.txt'])
 print('test without nodelist passed')
