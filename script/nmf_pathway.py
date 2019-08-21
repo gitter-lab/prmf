@@ -14,6 +14,7 @@ import math
 import os, os.path
 import pandas as pd
 import random
+import csv
 np.seterr(divide='raise')
 EPSILON = np.finfo(np.float32).eps
 
@@ -762,18 +763,20 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   has_row_names = check_row_names(args.data, args.delimiter, has_header)
   # load data
   X = None
-  if args.m_samples is None:
-    #X = np.genfromtxt(args.data, delimiter=args.delimiter)
-    if has_header:
-      X = pd.read_csv(args.data, sep=args.delimiter)
-    else:
-      X = pd.read_csv(args.data, sep=args.delimiter, header=None)
-  else:
-    #X = np.genfromtxt(args.data, delimiter=args.delimiter, max_rows=args.m_samples)
-    if has_header:
-      X = pd.read_csv(args.data, sep=args.delimiter, nrows=args.m_samples)
-    else:
-      X = pd.read_csv(args.data, sep=args.delimiter, nrows=args.m_samples, header=None)
+  # pd.read_csv defaults updated by CLI arguments
+  nrows = None
+  if args.m_samples is not None:
+    n_rows = args.m_samples
+  header = 'infer'
+  if not has_header:
+    header = None
+  index_col = None
+  if has_row_names:
+    index_col = 0
+  X = pd.read_csv(args.data, sep=args.delimiter, header=header, nrows=nrows, index_col=index_col)
+  samples = None
+  if has_row_names:
+    samples = list(X.index)
   
   # transpose data if desired
   m, n = X.shape
@@ -885,8 +888,10 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
 
   # TODO other arguments
   U, V, obj_data = nmf_pathway(X, Gs, nodelist=nodelist, gamma=args.gamma, tradeoff=tradeoff, k_latent=args.k_latent, U_init=U_init, V_init=V_init)
-  np.savetxt(U_fp, U, delimiter=",")
-  np.savetxt(V_fp, V, delimiter=",")
+  U = pd.DataFrame(U, index=samples, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
+  V = pd.DataFrame(V, index=nodelist, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
+  U.to_csv(U_fp, sep=",", index=has_row_names, quoting=csv.QUOTE_NONNUMERIC)
+  V.to_csv(V_fp, sep=",", quoting=csv.QUOTE_NONNUMERIC)
   with open(obj_fp, 'w') as obj_fh:
     ind_to_lapls = obj_data.pop('ind_to_lapls', {})
     for k,v in obj_data.items():
