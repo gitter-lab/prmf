@@ -837,7 +837,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   # normalization is done for each feature value
   # e.g. the sample with the highest read count for gene X gets the value 1 in the gene X column
   if args.normalize:
-    data = quantile_transform(data)
+    X = quantile_transform(X)
 
   # --manifolds-init - {{
   pathway_init_fp = os.path.join(args.outdir, 'init_pathways.txt')
