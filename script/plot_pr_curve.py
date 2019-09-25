@@ -58,6 +58,9 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
 
   # plot Precision-Recall curves
   match_ind = 0
+  method_to_avg_precision_vals = {}
+  for i in range(len(W_mats)):
+    method_to_avg_precision_vals[i] = []
   for pathway_id in range(pathways_mat.shape[1]):
     plt.clf()
     y_true = pathways_mat[:,pathway_id]
@@ -67,6 +70,7 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
       factor_id, auc = pathway_to_latent_map[pathway_id]
       y_score = W_mats[i][:,factor_id]
       precision, recall, thresholds = sklearn.metrics.precision_recall_curve(y_true, y_score)
+      method_to_avg_precision_vals[i].append(sklearn.metrics.average_precision_score(y_true, y_score))
       plt.plot(recall, precision, color=colors[i], label=label_strs[i].format(auc), linewidth=2.0)
     plt.plot(np.linspace(0,1,num=50), np.repeat(true_fraction, 50), label="Random; AUC={:0.3f}".format(true_fraction), linewidth=2.0)
     plt.xlabel('Recall', fontsize='x-large')
@@ -78,6 +82,13 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
     ofp = os.path.join(args.outdir, "fig{}.png".format(match_ind))
     plt.savefig(ofp, bbox_inches='tight')
     match_ind += 1
+
+  # report the average of average precision for each method
+  with open(os.path.join(args.outdir, 'avg_precision.txt'), 'w') as ofh:
+    for i in range(len(W_mats)):
+      avg_of_avg = np.mean(method_to_avg_precision_vals[i])
+      label = args.labels[i]
+      ofh.write("{}\t{}\n".format(label, avg_of_avg))
 
 if __name__ == "__main__":
   main()
