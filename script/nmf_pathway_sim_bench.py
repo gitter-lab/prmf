@@ -13,6 +13,10 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   parser.add_argument("--rng-seed", help="Seed for random number generators", default=None)
   parser.add_argument("--condor", action='store_true')
   parser.add_argument("--dry-run", action='store_true')
+  parser.add_argument("--do-nmf", default=True, type=bool)
+  parser.add_argument("--do-plier", default=True, type=bool)
+  parser.add_argument("--do-nbs", default=True, type=bool)
+  parser.add_argument("--do-cogaps'", default=True, type=bool)
 
   # simulation
   parser.add_argument("--n-gene-lists", help="Number of gene lists to simulate", type=int, default=6)
@@ -74,33 +78,34 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   # factorization
   # two branches: nmf and nmf_pathway
   # 1) nmf - {{
-  nmf_outdir = os.path.join(args.outdir, "nmf")
-  script_utils.mkdir_p(nmf_outdir)
-  attrs = {
-    'exe': "nmf.py",
-    'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', nmf_outdir],
-    'out': os.path.join(nmf_outdir, 'nmf.out'),
-    'err': os.path.join(nmf_outdir, 'nmf.err'),
-    'env': 'prmf'
-  }
-  if(args.rng_seed is not None):
-    attrs['args'] += ['--seed', args.rng_seed]
-  nmf_gene_by_latent_fp = os.path.join(nmf_outdir, "V.csv")
-  nmf_job_id = job_id
-  job_graph.add_node(nmf_job_id, attrs)
-  job_graph.add_edge(diffusion_job_id, nmf_job_id)
-  job_id += 1
+  if args.do_nmf:
+    nmf_outdir = os.path.join(args.outdir, "nmf")
+    script_utils.mkdir_p(nmf_outdir)
+    attrs = {
+      'exe': "nmf.py",
+      'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', nmf_outdir],
+      'out': os.path.join(nmf_outdir, 'nmf.out'),
+      'err': os.path.join(nmf_outdir, 'nmf.err'),
+      'env': 'prmf'
+    }
+    if(args.rng_seed is not None):
+      attrs['args'] += ['--seed', args.rng_seed]
+    nmf_gene_by_latent_fp = os.path.join(nmf_outdir, "V.csv")
+    nmf_job_id = job_id
+    job_graph.add_node(nmf_job_id, attrs)
+    job_graph.add_edge(diffusion_job_id, nmf_job_id)
+    job_id += 1
 
-  attrs = {
-    'exe': "evaluate_screen_sim.py",
-    'args': ["--gene-by-latent", nmf_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
-    'out': os.path.join(nmf_outdir, "evaluate.out"),
-    'err': os.path.join(nmf_outdir, "evaluate.err"),
-    'env': 'prmf'
-  }
-  job_graph.add_node(job_id, attrs)
-  job_graph.add_edge(job_id-1, job_id)
-  job_id += 1
+    attrs = {
+      'exe': "evaluate_screen_sim.py",
+      'args': ["--gene-by-latent", nmf_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
+      'out': os.path.join(nmf_outdir, "evaluate.out"),
+      'err': os.path.join(nmf_outdir, "evaluate.err"),
+      'env': 'prmf'
+    }
+    job_graph.add_node(job_id, attrs)
+    job_graph.add_edge(job_id-1, job_id)
+    job_id += 1
   # }} - nmf
 
   # 2) nmf_pathway - {{
@@ -136,104 +141,133 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
 
 
   # 3) PLIER - {{
-  PLIER_outdir = os.path.join(args.outdir, "PLIER")
-  script_utils.mkdir_p(PLIER_outdir)
-  attrs = {
-    'exe': 'PLIER_wrapper.R',
-    'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--node-attribute', 'name', '--outdir', PLIER_outdir],
-    'out': os.path.join(PLIER_outdir, "PLIER_wrapper.out"),
-    'err': os.path.join(PLIER_outdir, "PLIER_wrapper.err"),
-    'env': 'PLIER'
-  }
-  if(args.rng_seed is not None):
-    attrs['args'] += ['--seed', args.rng_seed]
-  PLIER_gene_by_latent_fp = os.path.join(PLIER_outdir, "Z.csv")
-  PLIER_job_id = job_id
-  job_graph.add_node(PLIER_job_id, attrs)
-  job_graph.add_edge(diffusion_job_id, PLIER_job_id)
-  job_id += 1
+  if args.do_plier:
+    PLIER_outdir = os.path.join(args.outdir, "PLIER")
+    script_utils.mkdir_p(PLIER_outdir)
+    attrs = {
+      'exe': 'PLIER_wrapper.R',
+      'args': ['--data', diffused_fp, '--nodelist', args.nodelist, '--k-latent', args.k_latent, '--pathways-file', args.manifolds_file, '--node-attribute', 'name', '--outdir', PLIER_outdir],
+      'out': os.path.join(PLIER_outdir, "PLIER_wrapper.out"),
+      'err': os.path.join(PLIER_outdir, "PLIER_wrapper.err"),
+      'env': 'PLIER'
+    }
+    if(args.rng_seed is not None):
+      attrs['args'] += ['--seed', args.rng_seed]
+    PLIER_gene_by_latent_fp = os.path.join(PLIER_outdir, "Z.csv")
+    PLIER_job_id = job_id
+    job_graph.add_node(PLIER_job_id, attrs)
+    job_graph.add_edge(diffusion_job_id, PLIER_job_id)
+    job_id += 1
 
-  # evaluation
-  attrs = {
-    'exe': "evaluate_screen_sim.py",
-    'args': ["--gene-by-latent", PLIER_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
-    'out': os.path.join(PLIER_outdir, "evaluate.out"),
-    'err': os.path.join(PLIER_outdir, "evaluate.err"),
-    'env': 'prmf'
-  }
-  job_graph.add_node(job_id, attrs)
-  job_graph.add_edge(job_id-1, job_id)
-  job_id += 1
+    # evaluation
+    attrs = {
+      'exe': "evaluate_screen_sim.py",
+      'args': ["--gene-by-latent", PLIER_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
+      'out': os.path.join(PLIER_outdir, "evaluate.out"),
+      'err': os.path.join(PLIER_outdir, "evaluate.err"),
+      'env': 'prmf'
+    }
+    job_graph.add_node(job_id, attrs)
+    job_graph.add_edge(job_id-1, job_id)
+    job_id += 1
   # }} - PLIER
 
   # 4) NBS - {{
   # NOTE NBS does its own diffusion based on binary somatic mutation profiles so we pass the simulated hits rather than our diffused data
-  NBS_outdir = os.path.join(args.outdir, 'NBS')
-  script_utils.mkdir_p(NBS_outdir)
-  attrs = {
-    'exe': 'pyNBS_wrapper.py',
-    'args': ['--nodelist', args.nodelist, '--gene-lists'] + sim_list_fps + ['--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
-    'out': os.path.join(NBS_outdir, 'pyNBS_wrapper.out'),
-    'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err'),
-    'env': 'pyNBS'
-  }
-  NBS_job_id = job_id
-  NBS_gene_by_latent_fp = os.path.join(NBS_outdir, "W.csv")
-  job_graph.add_node(NBS_job_id, attrs)
-  job_graph.add_edge(simulation_job_id, NBS_job_id)
-  job_id += 1
+  if args.do_nbs:
+    NBS_outdir = os.path.join(args.outdir, 'NBS')
+    script_utils.mkdir_p(NBS_outdir)
+    attrs = {
+      'exe': 'pyNBS_wrapper.py',
+      'args': ['--nodelist', args.nodelist, '--gene-lists'] + sim_list_fps + ['--network', args.network, '--k-latent', args.k_latent, '--outdir', NBS_outdir],
+      'out': os.path.join(NBS_outdir, 'pyNBS_wrapper.out'),
+      'err': os.path.join(NBS_outdir, 'pyNBS_wrapper.err'),
+      'env': 'pyNBS'
+    }
+    NBS_job_id = job_id
+    NBS_gene_by_latent_fp = os.path.join(NBS_outdir, "W.csv")
+    job_graph.add_node(NBS_job_id, attrs)
+    job_graph.add_edge(simulation_job_id, NBS_job_id)
+    job_id += 1
 
-  # evaluation
-  attrs = {
-    'exe': "evaluate_screen_sim.py",
-    'args': ["--gene-by-latent", NBS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
-    'out': os.path.join(NBS_outdir, "evaluate.out"),
-    'err': os.path.join(NBS_outdir, "evaluate.err"),
-    'env': 'prmf'
-  }
-  job_graph.add_node(job_id, attrs)
-  job_graph.add_edge(NBS_job_id, job_id)
-  job_id += 1
+    # evaluation
+    attrs = {
+      'exe': "evaluate_screen_sim.py",
+      'args': ["--gene-by-latent", NBS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
+      'out': os.path.join(NBS_outdir, "evaluate.out"),
+      'err': os.path.join(NBS_outdir, "evaluate.err"),
+      'env': 'prmf'
+    }
+    job_graph.add_node(job_id, attrs)
+    job_graph.add_edge(NBS_job_id, job_id)
+    job_id += 1
   # }} - NBS
 
   # 5) CoGAPS - {{
-  CoGAPS_outdir = os.path.join(args.outdir, 'CoGAPS')
-  script_utils.mkdir_p(CoGAPS_outdir)
-  attrs = {
-    'exe': 'CoGAPS_wrapper.R',
-    'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', args.outdir],
-    'out': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.out'),
-    'err': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.err'),
-    'env': 'CoGAPS'
-  }
-  CoGAPS_job_id = job_id
-  CoGAPS_gene_by_latent_fp = os.path.join(CoGAPS_outdir, "P.csv")
-  job_graph.add_node(CoGAPS_job_id, attrs)
-  job_graph.add_edge(diffusion_job_id, CoGAPS_job_id)
-  job_id += 1
-  # }} - CoGAPS
+  if args.do_cogaps:
+    CoGAPS_outdir = os.path.join(args.outdir, 'CoGAPS')
+    script_utils.mkdir_p(CoGAPS_outdir)
+    attrs = {
+      'exe': 'CoGAPS_wrapper.R',
+      'args': ['--data', diffused_fp, '--k-latent', args.k_latent, '--outdir', args.outdir],
+      'out': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.out'),
+      'err': os.path.join(CoGAPS_outdir, 'CoGAPS_wrapper.err'),
+      'env': 'CoGAPS'
+    }
+    CoGAPS_job_id = job_id
+    CoGAPS_gene_by_latent_fp = os.path.join(CoGAPS_outdir, "P.csv")
+    job_graph.add_node(CoGAPS_job_id, attrs)
+    job_graph.add_edge(diffusion_job_id, CoGAPS_job_id)
+    job_id += 1
 
-  # evaluation
-  attrs = {
-    'exe': "evaluate_screen_sim.py",
-    'args': ["--gene-by-latent", CoGAPS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
-    'out': os.path.join(NBS_outdir, "evaluate.out"),
-    'err': os.path.join(NBS_outdir, "evaluate.err"),
-    'env': 'prmf'
-  }
-  job_graph.add_node(job_id, attrs)
-  job_graph.add_edge(NBS_job_id, job_id)
-  job_id += 1
+    # evaluation
+    attrs = {
+      'exe': "evaluate_screen_sim.py",
+      'args': ["--gene-by-latent", CoGAPS_gene_by_latent_fp, "--nodelist", args.nodelist, "--true-seeds", chosen_seeds_fp],
+      'out': os.path.join(CoGAPS_outdir, "evaluate.out"),
+      'err': os.path.join(CoGAPS_outdir, "evaluate.err"),
+      'env': 'prmf'
+    }
+    job_graph.add_node(job_id, attrs)
+    job_graph.add_edge(NBS_job_id, job_id)
+    job_id += 1
+  # }} - CoGAPS
 
   # plot
   plot_outdir = os.path.join(args.outdir, 'pr_curves')
   script_utils.mkdir_p(plot_outdir)
+
+  gene_by_latent_csvs = []
+  labels = []
+  if args.do_nmf:
+    labels.append('NMF')
+    nmf_gene_by_latent_fp = os.path.join(nmf_outdir, "V.csv")
+    gene_by_latent_csvs.append(nmf_gene_by_latent_fp)
+
+  labels.append('PRMF')
+  gene_by_latent_csvs.append(prmf_gene_by_latent_fp)
+
+  if args.do_plier:
+    labels.append("PLIER")
+    PLIER_gene_by_latent_fp = os.path.join(PLIER_outdir, "Z.csv")
+    gene_by_latent_csvs.append(PLIER_gene_by_latent_fp)
+
+  if args.do_nbs:
+    labels.append("NBS")
+    NBS_gene_by_latent_fp = os.path.join(NBS_outdir, "W.csv")
+    gene_by_latent_csvs.append(NBS_gene_by_latent_fp)
+
+  if args.do_cogaps:
+    labels.append("CoGAPS")
+    CoGAPS_gene_by_latent_fp = os.path.join(CoGAPS_outdir, "P.csv")
+    gene_by_latent_csvs.append(CoGAPS_gene_by_latent_fp)
+
   attrs = {
     'exe': 'plot_pr_curve.py',
     'args': [
-      '--gene-by-latent-csvs', nmf_gene_by_latent_fp, prmf_gene_by_latent_fp, PLIER_gene_by_latent_fp, NBS_gene_by_latent_fp, CoGAPS_gene_by_latent_fp, 
-      '--labels', 'NMF', 'PRMF', 'PLIER', 'NBS', 'CoGAPS',
-      '--nodelist', args.nodelist, '--true-seeds', chosen_seeds_fp, '--outdir', plot_outdir],
+      '--gene-by-latent-csvs'] + gene_by_latent_csvs +
+      ['--labels'] + labels +
+      ['--nodelist', args.nodelist, '--true-seeds', chosen_seeds_fp, '--outdir', plot_outdir],
     'out': os.path.join(plot_outdir, 'plot.out'),
     'err': os.path.join(plot_outdir, 'plot.err'),
     'env': 'prmf'
