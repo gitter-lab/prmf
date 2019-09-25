@@ -7,6 +7,7 @@ import numpy as np
 import networkx as nx
 import sklearn
 import sklearn.metrics
+import scipy
 import scipy.sparse as sp
 from scipy.stats import gamma
 from scipy.sparse.linalg import norm
@@ -764,3 +765,34 @@ def filter_vec_by_graph(G, vec, nodelist):
   vec_sub = vec[inds]
   return vec_sub, nodelist_sub
 
+def measure_cv_performance(gene_by_latent_train, data_test):
+  """
+  Measure NMF model performance on held out data. Performance is evaluated based on the model's ability
+  to reconstuct held out samples.
+    \hat{u} := arg min_{u} || x - uV^T || s.t. u >= 0
+    \hat{x} := \hat{u} V^T
+    error = || x - \hat{x} ||
+    normalized_error = error / ||x||
+
+  Parameters
+  ----------
+  gene_by_latent_train : np.array
+    V in the above equations
+
+  data_test : np.array
+    X in the above equations
+
+  Returns
+  -------
+  error : np.array
+    normalized error for each sample
+  """
+  m_samples, n_genes = data_test.shape
+  error = np.zeros(m_samples,)
+
+  # TODO multi-sample version of nnls?
+  for m in range(m_samples):
+    u_hat, err = scipy.optimize.nnls(gene_by_latent_train, data_test[m,:])
+    error[m] = err / np.linalg.norm(data_test[m,:])
+
+  return error

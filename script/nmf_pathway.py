@@ -5,6 +5,7 @@ import numpy as np
 import scipy.optimize
 import scipy.sparse as sp
 from sklearn.preprocessing import quantile_transform
+from sklearn.model_selection import train_test_split
 import networkx as nx
 import factorlib as fl
 from factorlib import prmf
@@ -726,7 +727,6 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
 
   # TODO update gamma default
 
-
   manifold_fps = []
   if args.manifolds is None and args.manifolds_file is None:
     sys.stderr.write("Exactly one of --manifolds or --manifolds-file is required.\n")
@@ -835,6 +835,14 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   V_fp = os.path.join(args.outdir, "V.csv")
   obj_fp = os.path.join(args.outdir, "obj.txt")
 
+  # cross validation
+  # TODO update with sklearn.model_selection.KFold
+  X_test = None
+  if args.cross_validation is not None:
+    # TODO validate cross_validation input in [0,1]
+    X_train, X_test = train_test_split(X, test_size=args.cross_validation)
+    X = X_train
+
   # normalize data if desired
   # data at this stage is assumed to be observations x features
   # normalization is done for each feature value
@@ -892,6 +900,15 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   V = pd.DataFrame(V, index=nodelist, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
   U.to_csv(U_fp, sep=",", index=has_row_names, quoting=csv.QUOTE_NONNUMERIC)
   V.to_csv(V_fp, sep=",", quoting=csv.QUOTE_NONNUMERIC)
+
+  # cross validation
+  if args.cross_validation is not None:
+    normalized_test_errors = fl.measure_cv_performance(V, X_test)
+    avg_normalized_test_error = np.mean(normalized_test_errors)
+    error_fp = os.path.join(args.outdir, 'test_error.csv')
+    np.savetxt(error_fp, normalized_test_errors, delimiter=",")
+    obj_data['average_normalized_test_error'] = avg_normalized_test_error
+
   with open(obj_fp, 'w') as obj_fh:
     ind_to_lapls = obj_data.pop('ind_to_lapls', {})
     for k,v in obj_data.items():
@@ -905,6 +922,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
       lapl_ind = lapl_inds[0]
       G, fp = G_fp_pairs[lapl_ind]
       obj_fh.write("{} -> {}\n".format(k, fp))
+
 
 if __name__ == "__main__":
   main()

@@ -2,6 +2,7 @@
 import sys, argparse
 import os, os.path
 import numpy as np
+import factorlib as fl
 from sklearn import decomposition
 
 def main():
@@ -17,6 +18,7 @@ where X has shape (n_obs, n_feature)
   parser.add_argument("--outdir", "-o", type=str, help="Directory to write results to", required=True)
   parser.add_argument("--k-latent", type=int, default=6)
   parser.add_argument("--seed", default=None, help="RNG seed")
+  parser.add_argument("--cross-validation", "-c", type=float, help="If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with")
   args = parser.parse_args()
 
   U_fp = os.path.join(args.outdir, "U.csv")
@@ -36,10 +38,25 @@ where X has shape (n_obs, n_feature)
   else:
     estimator = decomposition.NMF(n_components=args.k_latent, random_state=int(args.seed))
 
+  # cross validation
+  X_test = None
+  if args.cross_validation is not None:
+    # TODO validate cross_validation input in [0,1]
+    X_train, X_test = train_test_split(X, test_size=args.cross_validation)
+    X = X_train
+
   U = estimator.fit_transform(X)
   V = estimator.components_.astype(np.double).transpose()
   obj = estimator.reconstruction_err_
   #obj = np.linalg.norm(X - U * V_t)
+
+  # cross validation
+  if args.cross_validation is not None:
+    normalized_test_errors = fl.measure_cv_performance(V, X_test)
+    avg_normalized_test_error = np.mean(normalized_test_errors)
+    error_fp = os.path.join(args.outdir, 'test_error.csv')
+    np.savetxt(error_fp, normalized_test_errors, delimiter=",")
+    obj_data['average_normalized_test_error'] = avg_normalized_test_error
 
   np.savetxt(U_fp, U, delimiter=",")
   np.savetxt(V_fp, V, delimiter=",")
