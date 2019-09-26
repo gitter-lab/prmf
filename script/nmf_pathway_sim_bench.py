@@ -4,6 +4,16 @@ import os, os.path
 import networkx as nx
 from factorlib import script_utils
 
+def str2bool(v):
+  if isinstance(v, bool):
+   return v
+  if v.lower() in ('yes', 'true', 't', 'y', '1'):
+    return True
+  elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+    return False
+  else:
+    raise argparse.ArgumentTypeError('Boolean value expected.')
+
 def main():
   parser = argparse.ArgumentParser(description=
 """
@@ -13,10 +23,10 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   parser.add_argument("--rng-seed", help="Seed for random number generators", default=None)
   parser.add_argument("--condor", action='store_true')
   parser.add_argument("--dry-run", action='store_true')
-  parser.add_argument("--do-nmf", default=True, type=bool)
-  parser.add_argument("--do-plier", default=True, type=bool)
-  parser.add_argument("--do-nbs", default=True, type=bool)
-  parser.add_argument("--do-cogaps'", default=True, type=bool)
+  parser.add_argument("--do-nmf", default=True, type=str2bool)
+  parser.add_argument("--do-plier", default=True, type=str2bool)
+  parser.add_argument("--do-nbs", default=True, type=str2bool)
+  parser.add_argument("--do-cogaps", default=True, type=str2bool)
 
   # simulation
   parser.add_argument("--n-gene-lists", help="Number of gene lists to simulate", type=int, default=6)
@@ -31,6 +41,7 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   # other arguments used in diffusion: nodelist
 
   # factorization
+  parser.add_argument("--cross-validation", help="Fraction of data in [0,1] to hold out and test reconstruction performance on")
   parser.add_argument("--manifolds-file", required=True)
   parser.add_argument("--gamma", default="1.0")
   parser.add_argument("--k-latent", default="6")
@@ -90,6 +101,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
     }
     if(args.rng_seed is not None):
       attrs['args'] += ['--seed', args.rng_seed]
+    if(args.cross_validation is not None):
+      attrs['args'] += ['--cross-validation', args.cross_validation]
     nmf_gene_by_latent_fp = os.path.join(nmf_outdir, "V.csv")
     nmf_job_id = job_id
     job_graph.add_node(nmf_job_id, attrs)
@@ -120,6 +133,8 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   }
   if(args.rng_seed is not None):
     attrs['args'] += ['--seed', args.rng_seed]
+  if(args.cross_validation is not None):
+    attrs['args'] += ['--cross-validation', args.cross_validation]
   prmf_gene_by_latent_fp = os.path.join(nmf_pathway_outdir, "V.csv")
   prmf_job_id = job_id
   job_graph.add_node(prmf_job_id, attrs)
@@ -274,11 +289,15 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   }
   job_graph.add_node(job_id, attrs)
   # run after all methods
-  job_graph.add_edge(nmf_job_id, job_id)
+  if args.do_nmf:
+    job_graph.add_edge(nmf_job_id, job_id)
   job_graph.add_edge(prmf_job_id, job_id)
-  job_graph.add_edge(PLIER_job_id, job_id)
-  job_graph.add_edge(NBS_job_id, job_id)
-  job_graph.add_edge(CoGAPS_job_id, job_id)
+  if args.do_plier:
+    job_graph.add_edge(PLIER_job_id, job_id)
+  if args.do_nbs:
+    job_graph.add_edge(NBS_job_id, job_id)
+  if args.do_cogaps:
+    job_graph.add_edge(CoGAPS_job_id, job_id)
   job_id += 1
 
   condor = False
