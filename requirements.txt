@@ -2,4 +2,5 @@ numpy
 scipy
 matplotlib
 sklearn
-networkx
+networkx<2.0
+pandas
