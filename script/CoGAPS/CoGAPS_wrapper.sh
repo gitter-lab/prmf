@@ -1,3 +1,2 @@
 #!/bin/sh
-conda activate CoGAPS
-CoGAPS_wrapper.R "$@"
+/usr/bin/time CoGAPS_wrapper.R "$@"
