@@ -45,7 +45,7 @@ for k in range(k_latent):
   manifold_fps.append(manifold_fp)
 
 # test with nodelist passed explicity
-sp.check_call(args=['nmf_pathway.py', "--data", "data.tsv", "--manifolds"] + manifold_fps + ['--node-attribute', 'name', "--nodelist", 'nodelist.txt', "--outdir", os.curdir, '--delimiter', '\t', '--seed', "1"], stdout=open(os.devnull, 'w'), stderr=open(os.devnull, 'w'))
+sp.check_call(args=['nmf_pathway.py', "--data", "data.tsv", "--manifolds"] + manifold_fps + ['--node-attribute', 'name', "--nodelist", 'nodelist.txt', "--outdir", os.curdir, '--delimiter', '\t', '--seed', "1"], stdout=open('test_inferred_nodelist_1.1.out', 'w'), stderr=open('test_inferred_nodelist_1.1.err', 'w'))
 sp.check_call(args=['diff', '-q', 'test_inferred_nodelist_1_expected_obj.txt', 'obj.txt'])
 print('test with nodelist passed')
 
