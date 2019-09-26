@@ -5,9 +5,50 @@ TODO add biomart python API functions here
 """
 import sys
 import re
+import os, os.path
+import subprocess as sp
+import glob
+
+def download_mapping_tsv(outdir, release='latest'):
+  """
+  Download an Ensembl identifier mapping file (HGNC <-> ENSP)
+
+  Parameters
+  ----------
+  outdir: str
+    Directory to place downloaded file in; file will be named as it is on EBI's FTP server
+
+  release: int or str
+    either 'latest' or a specific release number such as '97'
+
+  Returns
+  -------
+  rv : str or None
+    the downloaded filepath or None if it cannot be determined (due to glob wildcards matching multiple files)
+
+  TODO
+  ----
+  """
+  rv = None
+  url = None
+  if release == 'latest':
+    url = 'ftp://ftp.ensembl.org/pub/current_tsv/homo_sapiens/Homo_sapiens.GRCh38.*.refseq.tsv.gz'
+  else:
+    url = 'ftp://ftp.ensembl.org/pub/release-{}/tsv/homo_sapiens/Homo_sapiens.GRCh38.{}.refseq.tsv.gz'.format(release, release)
+
+  bn = os.path.basename(url)
+  fpath = os.path.join(outdir, bn)
+  glob_rv = glob.glob(fpath)
+  if len(glob_rv) == 1:
+    rv = glob_rv[0]
+
+  args = ['wget', url]
+  sp.check_call(args, cwd=outdir)
+
+  return rv
 
 def parse_mapping_tsv(fh, key_index=0, value_index=1, delim='\t'):
-  """
+ """
   Parse a TSV file like the file at 
     ftp://ftp.ensembl.org/pub/release-94/tsv/homo_sapiens/Homo_sapiens.GRCh38.94.refseq.tsv.gz
   into a mapping 
