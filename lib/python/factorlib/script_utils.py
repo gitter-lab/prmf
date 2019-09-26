@@ -298,8 +298,9 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, exit_
     job_order = nx.topological_sort(digraph)
     env_warned = False
     for job_id in job_order:
+      job_attrs = digraph.node[job_id]
       if 'env' in job_attrs and not env_warned:
-        sys.stderr.write("[WARNING] one or more jobs have an environment specified, but this functionality has only been implemented for condor")
+        sys.stderr.write("[WARNING] one or more jobs have an environment specified, but this functionality has only been implemented for condor\n")
         env_warned = True
 
       # wait for any predecessors to finish
@@ -315,7 +316,6 @@ def run_digraph(outdir, digraph, condor=False, dry_run=False, root_node=0, exit_
       #  raise RuntimeError("[ERROR] a predecessor to {} failed".format(digraph.node[job_id]['exe']))
 
       # launch this node's job
-      job_attrs = digraph.node[job_id]
       args = [job_attrs['exe']] + job_attrs['args']
       stdout_fh = None
       if('out' in job_attrs):
