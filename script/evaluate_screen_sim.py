@@ -3,6 +3,7 @@ import sys, argparse
 import os, os.path
 import numpy as np
 import sklearn.metrics
+import pandas as pd
 import factorlib as fl
 
 def matching_id_to_ind(factor_id):
@@ -13,12 +14,14 @@ def main():
 Evaluate nmf_pathway.py results using simulated ground truth
 """)
   parser.add_argument("--gene-by-latent", type=str, required=True, help=".csv file")
-  parser.add_argument("--nodelist", type=argparse.FileType('r'), required=True)
+  parser.add_argument("--nodelist", type=argparse.FileType('r'), required=True) # TODO remove
   parser.add_argument("--true-seeds", type=argparse.FileType('r'), required=True)
   args = parser.parse_args()
 
-  W_mat = np.genfromtxt(args.gene_by_latent, delimiter=",")
-  nodelist = fl.parse_nodelist(args.nodelist)
+  # assume csv has row and column names
+  W_df = pd.read_csv(args.gene_by_latent, sep=",", header='infer', index_col=0)
+  nodelist = list(W_df.index)
+  W_mat = W_df.values
 
   true_seed_fps = []
   for line in args.true_seeds:
