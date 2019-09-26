@@ -38,6 +38,8 @@ def parse_string_fh(fh, threshold=0.0, score='combined_score'):
   score : str
     the name of a column in the string format to use as the edge confidence score
     default: combined_score
+    Can be "neighborhood" "fusion" "cooccurence" "coexpression" "experimental" "database" 
+    "textmining" or "combined_score"
 
   Returns
   -------
