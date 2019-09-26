@@ -6,6 +6,7 @@ import scipy.optimize
 import scipy.sparse as sp
 from sklearn.preprocessing import quantile_transform
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
 import networkx as nx
 import factorlib as fl
 from factorlib import prmf
@@ -836,12 +837,17 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   obj_fp = os.path.join(args.outdir, "obj.txt")
 
   # cross validation
-  # TODO update with sklearn.model_selection.KFold
+  # TODO use other folds
   X_test = None
   if args.cross_validation is not None:
-    # TODO validate cross_validation input in [0,1]
-    X_train, X_test = train_test_split(X, test_size=args.cross_validation)
-    X = X_train
+    kf = KFold(n_splits = round(1/args.cross_validation))
+    for train_index, test_index in kf.split(X):
+      X_train = X[train_index]
+      X_test = X[test_index]
+
+      X = X_train
+      samples = [samples[i] for i in train_index]
+      break
 
   # normalize data if desired
   # data at this stage is assumed to be observations x features

@@ -21,3 +21,4 @@ def add_prmf_arguments(parser):
   parser.add_argument("--normalize", action='store_true', help="If flag is provided, quantile normalize the data")
   parser.add_argument("--delimiter", default=",", help="Field delimiter in <--data>")
   parser.add_argument("--m-samples", help="If provided, only use the first <--m-samples> rows in <--data>; useful for observing script behavior on a smaller dataset", type=int)
+  parser.add_argument("--cross-validation", "-c", type=float, help="If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with")

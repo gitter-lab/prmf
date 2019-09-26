@@ -4,6 +4,10 @@ import os, os.path
 import numpy as np
 import factorlib as fl
 from sklearn import decomposition
+import csv
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
 
 def main():
   parser = argparse.ArgumentParser(description="""
@@ -25,7 +29,11 @@ where X has shape (n_obs, n_feature)
   V_fp = os.path.join(args.outdir, "V.csv")
   obj_fp = os.path.join(args.outdir, "obj.csv")
 
-  X = np.genfromtxt(args.data, delimiter=",")
+  # assume csv has row and column names
+  X = pd.read_csv(args.data, sep=",", header='infer', index_col=0)
+  samples = list(X.index)
+  nodelist = list(X.columns)
+  X = X.values
 
   # normalize assuming m < n (true for my application but unusual)
   m, n = X.shape
@@ -39,11 +47,19 @@ where X has shape (n_obs, n_feature)
     estimator = decomposition.NMF(n_components=args.k_latent, random_state=int(args.seed))
 
   # cross validation
+  # TODO validate cross_validation input in [0,1]
+  # TODO change cross_validation input for KFold
   X_test = None
+  X_train = None
   if args.cross_validation is not None:
-    # TODO validate cross_validation input in [0,1]
-    X_train, X_test = train_test_split(X, test_size=args.cross_validation)
-    X = X_train
+    kf = KFold(n_splits = round(1/args.cross_validation))
+    for train_index, test_index in kf.split(X):
+      X_train = X[train_index]
+      X_test = X[test_index]
+
+      X = X_train
+      samples = [samples[i] for i in train_index]
+      break
 
   U = estimator.fit_transform(X)
   V = estimator.components_.astype(np.double).transpose()
@@ -51,17 +67,25 @@ where X has shape (n_obs, n_feature)
   #obj = np.linalg.norm(X - U * V_t)
 
   # cross validation
+  avg_normalized_test_error = None
   if args.cross_validation is not None:
     normalized_test_errors = fl.measure_cv_performance(V, X_test)
     avg_normalized_test_error = np.mean(normalized_test_errors)
     error_fp = os.path.join(args.outdir, 'test_error.csv')
     np.savetxt(error_fp, normalized_test_errors, delimiter=",")
-    obj_data['average_normalized_test_error'] = avg_normalized_test_error
 
   np.savetxt(U_fp, U, delimiter=",")
   np.savetxt(V_fp, V, delimiter=",")
+
+  U = pd.DataFrame(U, index=samples, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
+  V = pd.DataFrame(V, index=nodelist, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
+  U.to_csv(U_fp, sep=",", index=True, quoting=csv.QUOTE_NONNUMERIC)
+  V.to_csv(V_fp, sep=",", quoting=csv.QUOTE_NONNUMERIC)
+
   with open(obj_fp, 'w') as fh:
-    fh.write("{} = {}".format("obj", obj))
+    fh.write("{} = {}\n".format("obj", obj))
+    if avg_normalized_test_error is not None:
+      fh.write("{} = {}".format("avg_normalized_test_error", avg_normalized_test_error))
 
 if __name__ == "__main__":
   main()
