@@ -5,6 +5,8 @@ import scipy.io
 import scipy.sparse as sp
 import networkx as nx 
 import factorlib as fl
+import pandas as pd
+import csv
 
 def main():
   parser = argparse.ArgumentParser(description="""
@@ -15,7 +17,7 @@ Diffuse node scores over a network. The diffused matrix is of shape (n_nodes, n_
     help="Association between gene identifier and matrix index provided as a whitespace delimited list")
   parser.add_argument("--gene-lists", nargs="+", help="one or more files with an node identifiers on each line")
   parser.add_argument("--gene-csv", help="One csv file with genes along columns and observations along rows; must contain column names but not row names")
-  parser.add_argument("--diffused", "-d", type=argparse.FileType("wb"), required=True,
+  parser.add_argument("--diffused", "-d", type=argparse.FileType("w"), required=True,
     help="Diffused matrix")
   parser.add_argument("--alpha", "-a", type=float, default=0.7,
     help="Diffusion rate parameter")
@@ -70,7 +72,9 @@ Diffuse node scores over a network. The diffused matrix is of shape (n_nodes, n_
     # TODO does this work with 'wb'?
     fl.ampl_write_sparse_arr(smoothed_mat, args.diffused, len(nodelist))
   else:
-    np.savetxt(args.diffused, smoothed_mat.todense(), delimiter=",")
+    index = list(map(lambda x: "sample{}".format(x+1), range(len(args.gene_lists))))
+    smoothed_mat_df = pd.DataFrame(smoothed_mat.todense(), index=index, columns=nodelist)
+    smoothed_mat_df.to_csv(args.diffused, sep=",", index=True, quoting=csv.QUOTE_NONNUMERIC)
 
 if __name__ == "__main__":
   main()
