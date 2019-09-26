@@ -172,9 +172,9 @@ def main():
     n_bins = k+1
     n, bins, patches = plt.hist(counts, bins=np.arange(n_bins+1)-0.5, color='red')
     initial_converged_fp = os.path.join(args.outdir, 'convergence_truth_hist.png')
-    plt.xlabel('Number existing')
+    plt.xlabel('KEGG pathways recovered')
     plt.ylabel('Frequency')
-    plt.title('Converged pathways existing in ground truth set (N = {})'.format(N))
+    plt.title('Pathway recovery using simulated data (N = {})'.format(N))
     plt.savefig(initial_converged_fp)
   # }} -
 
