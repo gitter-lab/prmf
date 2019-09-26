@@ -6,6 +6,7 @@ import sklearn
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+import pandas as pd
 import factorlib as fl
 
 def matching_id_to_ind(factor_id):
@@ -24,11 +25,10 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
 
   # parse inputs - {{
   W_mats = []
-  label_strs = []
   colors = [] # TODO
 
-  W_mats = list(map(lambda x: np.genfromtxt(x, delimiter=","), args.gene_by_latent_csvs))
-  labels = list(map(lambda x: x + "; AUC={:0.3f}", args.labels))
+  W_mats = list(map(lambda x: pd.read_csv(x, sep=",", header='infer', index_col=0).values, args.gene_by_latent_csvs))
+  label_strs = list(map(lambda x: x + "; AUC={:0.3f}", args.labels))
   nodelist = fl.parse_nodelist(args.nodelist)
 
   true_seed_fps = []
@@ -71,7 +71,8 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
       y_score = W_mats[i][:,factor_id]
       precision, recall, thresholds = sklearn.metrics.precision_recall_curve(y_true, y_score)
       method_to_avg_precision_vals[i].append(sklearn.metrics.average_precision_score(y_true, y_score))
-      plt.plot(recall, precision, color=colors[i], label=label_strs[i].format(auc), linewidth=2.0)
+      plt.plot(recall, precision, label=label_strs[i].format(auc), linewidth=2.0)
+      #plt.plot(recall, precision, color=colors[i], label=label_strs[i].format(auc), linewidth=2.0)
     plt.plot(np.linspace(0,1,num=50), np.repeat(true_fraction, 50), label="Random; AUC={:0.3f}".format(true_fraction), linewidth=2.0)
     plt.xlabel('Recall', fontsize='x-large')
     plt.ylabel('Precision', fontsize='x-large')
