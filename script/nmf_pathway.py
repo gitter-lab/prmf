@@ -747,7 +747,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
     G = nx.read_graphml(fp).to_undirected()
     G = fl.relabel_nodes(G, args.node_attribute)
     G_fp_pairs.append((G,fp))
-  G_fp_pairs = sorted(G_fp_pairs, key=lambda x: x[0].order())
+  #G_fp_pairs = sorted(G_fp_pairs, key=lambda x: x[0].order())
   fp_to_G = {}
   for G, fp in G_fp_pairs:
     fp_to_G[fp] = G
@@ -905,7 +905,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   U = pd.DataFrame(U, index=samples, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
   V = pd.DataFrame(V, index=nodelist, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
   U.to_csv(U_fp, sep=",", index=has_row_names, quoting=csv.QUOTE_NONNUMERIC)
-  V.to_csv(V_fp, sep=",", quoting=csv.QUOTE_NONNUMERIC)
+  V.to_csv(V_fp, sep=",", index=True, quoting=csv.QUOTE_NONNUMERIC)
 
   # cross validation
   if args.cross_validation is not None:
