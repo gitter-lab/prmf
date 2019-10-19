@@ -4,16 +4,6 @@ import os, os.path
 import networkx as nx
 from factorlib import script_utils
 
-def str2bool(v):
-  if isinstance(v, bool):
-   return v
-  if v.lower() in ('yes', 'true', 't', 'y', '1'):
-    return True
-  elif v.lower() in ('no', 'false', 'f', 'n', '0'):
-    return False
-  else:
-    raise argparse.ArgumentTypeError('Boolean value expected.')
-
 def main():
   parser = argparse.ArgumentParser(description=
 """
@@ -23,10 +13,10 @@ Evalute nmf_pathway.py by simulating gene lists and compare against nmf_init.py
   parser.add_argument("--rng-seed", help="Seed for random number generators", default=None)
   parser.add_argument("--condor", action='store_true')
   parser.add_argument("--dry-run", action='store_true')
-  parser.add_argument("--do-nmf", default=True, type=str2bool)
-  parser.add_argument("--do-plier", default=True, type=str2bool)
-  parser.add_argument("--do-nbs", default=True, type=str2bool)
-  parser.add_argument("--do-cogaps", default=True, type=str2bool)
+  parser.add_argument("--do-nmf", default=True, type=script_utils.str2bool)
+  parser.add_argument("--do-plier", default=True, type=script_utils.str2bool)
+  parser.add_argument("--do-nbs", default=True, type=script_utils.str2bool)
+  parser.add_argument("--do-cogaps", default=True, type=script_utils.str2bool)
 
   # simulation
   parser.add_argument("--n-gene-lists", help="Number of gene lists to simulate", type=int, default=6)
