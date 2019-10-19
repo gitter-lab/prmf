@@ -10,16 +10,19 @@ from scipy.stats import dirichlet
 EPSILON = np.finfo(np.float32).eps
 
 def main(args):
+  X, U, V, pathways, other_pathways = run_simulation(args)
+  save_simulation(outdir, X, U, V, pathways, other_pathways)
+
+def run_simulation(args):
   p_other_pathways = 970
   pathway_order = 300
   k_latent = 30
   m_samples = 1000
   n_genes = 20000
-  seed = None
   alpha = 5 # parameter for gamma distribution
   dirichlet_param = np.ones(k_latent) / k_latent
 
-  np.random.seed(seed)
+  np.random.seed(args.seed)
 
   pathways = []
   all_pathway_members = []
@@ -100,15 +103,23 @@ def save_simulation(outdir, X, U, V, Gs, Gs_other):
   )
   V.to_csv(os.path.join(outdir, "V.csv"), sep=",", quoting=csv.QUOTE_NONNUMERIC)
 
+  pathway_files = []
   for i, G in enumerate(Gs):
     for node in G.nodes():
       G.node[node]['name'] = "ENSG{}".format(node+1)
-    nx.write_graphml(G, os.path.join(outdir, "pathway{}.graphml".format(i)))
+    pathway_file = os.path.join(outdir, "pathway{}.graphml".format(i))
+    pathway_files.append(pathway_file)
+    nx.write_graphml(G, pathway_file)
 
   for i, G in enumerate(Gs_other):
     for node in G.nodes():
       G.node[node]['name'] = "ENSG{}".format(node+1)
-    nx.write_graphml(G, os.path.join(outdir, "pathway{}.graphml".format(i+len(Gs)+1)))
+    pathway_file = os.path.join(outdir, "pathway{}.graphml".format(i+len(Gs)+1))
+    pathway_files.append(pathway_file)
+    nx.write_graphml(G, pathway_file)
+
+  with open(os.path.join(outdir, 'pathways_file.txt'), 'w') as fh:
+    fh.write('\n'.join(pathway_files))
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description="""
@@ -117,8 +128,12 @@ Generative simulation for matrix factorization.
 For X approx UV^T where X is shape m_samples by n_genes, simulate sets of relationships among 
 genes, called "pathways", which describe the dependency structure of gamma random variables 
 defined on the genes.
+
+Write files X.csv, U.csv, V.csv, pathway0.graphml, pathway1.graphml, ...pathwayN.graphml where 
+pathway0.graphml, ... , pathway(K-1).graphml are the ground truth pathways. Write file 
+pathways_file.txt which is a newline delimited file of the filepaths of pathway0.graphml, 
+... , pathwayN.graphml.
 """)
   parser.add_argument('--outdir', required=True, help="Output directory")
-  #args = parser.parse_args()
-  args = 0
+  args = parser.parse_args()
   main(args)
