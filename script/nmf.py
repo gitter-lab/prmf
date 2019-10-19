@@ -17,6 +17,8 @@ Run traditional NMF:
 where X has shape (n_obs, n_feature)
   U has shape (n_obs, n_latent)
   V has shape (n_feature, n_latent)
+
+Writes U.csv with the U matrix including row and column names, V.csv with the V matrix including row and column names, and obj.csv which includes information about the objective function and cross validation if --cross-validation argument is provided.
 """)
   parser.add_argument("--data", type=str, help="Input data matrix in CSV format", required=True)
   parser.add_argument("--outdir", "-o", type=str, help="Directory to write results to", required=True)
