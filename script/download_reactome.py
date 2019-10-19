@@ -4,6 +4,7 @@ import argparse
 import itertools as it
 import os, os.path
 import requests
+import json
 
 EXPRESSION_PATHWAYS_URL = "https://reactome.org/ContentService/data/pathway/R-HSA-74160/containedEvents"
 
@@ -201,7 +202,20 @@ class BioPaxDoc:
 
 def get_expression_pathways(outdir):
   ofp = os.path.join(args.outdir, 'pathways.json')
-  req_obj = requests.get(EXPRESSION_PATHWAYS_URL)
+  json_str = None
+  if not os.path.exists(ofp):
+    headers = {'accept': 'application/json'}
+    req_obj = requests.get(EXPRESSION_PATHWAYS_URL, headers=headers)
+    json_str = req_obj.text
+    with open(ofp, 'w') as fh:
+      fh.write(json_str)
+  else:
+    with open(ofp, 'r') as fh:
+      json_str = fh.read()
+
+  pathways = json.loads(json_str)
+  print(len(pathways))
+  return pathways
 
 if __name__ == "__main__":
   # TODO update CLI
@@ -209,6 +223,8 @@ if __name__ == "__main__":
   parser.add_argument("--infile", "-i", required=True)
   parser.add_argument("--outdir", "-o", required=True)
   args = parser.parse_args()
+
+  get_expression_pathways(args.outdir)
 
   bioPaxDoc = BioPaxDoc(args.infile)
   for control_elem in bioPaxDoc.root.findall('.//' + CONTROL):
