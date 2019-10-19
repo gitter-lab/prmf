@@ -22,6 +22,7 @@ where X has shape (n_obs, n_feature)
   parser.add_argument("--outdir", "-o", type=str, help="Directory to write results to", required=True)
   parser.add_argument("--k-latent", type=int, default=6)
   parser.add_argument("--seed", default=None, help="RNG seed")
+  parser.add_argument("--delimiter", "-d", default=",", type=str, help="Field delimiter used in the --data file")
   parser.add_argument("--cross-validation", "-c", type=float, help="If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with")
   args = parser.parse_args()
 
@@ -30,7 +31,7 @@ where X has shape (n_obs, n_feature)
   obj_fp = os.path.join(args.outdir, "obj.csv")
 
   # assume csv has row and column names
-  X = pd.read_csv(args.data, sep=",", header='infer', index_col=0)
+  X = pd.read_csv(args.data, sep=args.delimiter, header='infer', index_col=0)
   samples = list(X.index)
   nodelist = list(X.columns)
   X = X.values
@@ -42,9 +43,9 @@ where X has shape (n_obs, n_feature)
 
   estimator = None
   if args.seed is None:
-    estimator = decomposition.NMF(n_components=args.k_latent)
+    estimator = decomposition.NMF(n_components=args.k_latent, init='random')
   else:
-    estimator = decomposition.NMF(n_components=args.k_latent, random_state=int(args.seed))
+    estimator = decomposition.NMF(n_components=args.k_latent, random_state=int(args.seed), init='random')
 
   # cross validation
   # TODO validate cross_validation input in [0,1]
