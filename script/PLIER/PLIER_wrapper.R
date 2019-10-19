@@ -59,9 +59,9 @@ splitext = function(text) {
 }
 
 main2 = function(args) {
-  # attach row names to data
+  # assume data has row and column names
   # assume data is such that there are more features than observations and that features belong on rows
-  data = read.csv(args$data, header=F)
+  data = read.csv(args$data, row.names=1)
   data_dim = dim(data)
   if(data_dim[1] < data_dim[2]) {
     data = t(data)
@@ -69,10 +69,7 @@ main2 = function(args) {
   }
   # If Z-score normalization, error is thrown:
   # Error in svd(Y, nu = k, nv = k) : infinite or missing values in 'x'
-  # TODO what if nodelist is not the right size
   data = rowNorm(data)
-  nodelist = readLines(args$nodelist)
-  row.names(data) = nodelist
 
   # PLIER initialization requires that all genes have some measurement
   # subset the data to meet this requirement
@@ -108,6 +105,7 @@ main2 = function(args) {
     }
     close(con)
     prior = do.call(combinePaths, pathways)
+    colnames(prior) = pathway_names
   } else {
     tbl = read.table(args$pathways_csv, sep=',')
     row.names = rownames(tbl)
@@ -134,13 +132,14 @@ main2 = function(args) {
   # TODO numActPat, heldOutGenes?
   # TODO other things added to namespace if computeAUC
   # TODO remove minGenes
-  plierResult = PLIER(as.matrix(data[rownames_inter,]), prior[rownames_inter,], k=args$k_latent, trace=T, computeAUC=F, seed=args$seed, minGenes=0)
+  write('colnames', stdout())
+  write(colnames(prior), stdout())
+  # NOTE if PLIER fails because B is ill-conditioned, increasing L1 and/or L2 may eliminate the problem due to how the update rules for B are defined
+  # NOTE if args$L1 or args$L2 are null, PLIER will generate defaults
+  plierResult = PLIER(as.matrix(data[rownames_inter,]), prior[rownames_inter,], k=args$k_latent, trace=T, seed=args$seed, L1=args$L1, L2=args$L2)
   write.csv(plierResult$residual, file.path(args$outdir, 'residual.csv'))
   write.csv(plierResult$B, file.path(args$outdir, 'B.csv'))
-
-  # embed Z in #{nodelist}-dimensional space (use association above)
-  Z_embed = embed_array_named(plierResult$Z, nodelist)
-  write.table(Z_embed, file.path(args$outdir, 'Z.csv'), col.names=F, row.names=F, sep=",")
+  write.table(plierResult$Z, file.path(args$outdir, 'Z.csv'), col.names=F, row.names=F, sep=",")
 
   # add pathway names to U as well (just as for C := prior)
   # Z - CU
@@ -179,15 +178,15 @@ is_mutually_exclusive_required_group = function(env, members) {
   return(rv)
 }
 
-
 main = function() {
   parser = ArgumentParser(description='Construct binary matrices from pathway files and run PLIER')
   parser$add_argument('--data', required=T)
-  parser$add_argument('--nodelist', required=T)
   parser$add_argument('--pathways-csv')
   parser$add_argument('--pathways-file')
   parser$add_argument('--outdir', required=T)
   parser$add_argument('--k-latent', default=6, type='integer')
+  parser$add_argument('--L1', help='Regularization parameter for reconstructing Z (the PLIER-generated gene by latent matrix) with the product of C (the user-provided prior matrix) and U (the PLIER-generated prior by latent matrix). If not provided, use PLIER default')
+  parser$add_argument('--L2', help='Regularization parameter for Frobenius norm on B (the PLIER-generated latent by sample matrix): the shrinkage parameter on B. If not provided, use PLIER default')
   parser$add_argument('--seed', default=1, type='integer')
   parser$add_argument('--node-attribute', default='id', help="graphml node attribute to use for gene identifiers")
   parser$add_argument('--extra-prior', action='store_true')
