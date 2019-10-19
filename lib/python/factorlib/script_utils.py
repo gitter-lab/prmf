@@ -388,10 +388,10 @@ def log_script(argv):
   Parameters
   ----------
   argv : list of str
-    return value of sys.argv()
+    return value of sys.argv
   """
   sys.stderr.write(" ".join(argv) + "\n")
-  sys.stderr.write("Revision: {}\n".format(get_revision_number()))
+  #sys.stderr.write("Revision: {}\n".format(get_revision_number()))
 
 def mkdir_p(dirpath):
   try:
