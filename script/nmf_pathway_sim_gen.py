@@ -11,7 +11,7 @@ EPSILON = np.finfo(np.float32).eps
 
 def main(args):
   X, U, V, pathways, other_pathways = run_simulation(args)
-  save_simulation(outdir, X, U, V, pathways, other_pathways)
+  save_simulation(args.outdir, X, U, V, pathways, other_pathways)
 
 def run_simulation(args):
   p_other_pathways = 970
@@ -31,7 +31,7 @@ def run_simulation(args):
     # TODO raises NetworkXError
     # TODO the tree model is easy to work with but is not realistic because a gene's expression 
     # may be regulated by many proteins which would require a node to have multiple parents
-    G = nx.random_powerlaw_tree(pathway_order, gamma=3, seed=seed, tries=100000)
+    G = nx.random_powerlaw_tree(pathway_order, gamma=3, seed=args.seed, tries=100000)
     mapping = {}
     for i in range(len(pathway_members)):
       mapping[i] = pathway_members[i]
@@ -43,7 +43,7 @@ def run_simulation(args):
   other_pathways = []
   for p in range(p_other_pathways):
     pathway_members = np.random.randint(0, n_genes, size=pathway_order)
-    G = nx.random_powerlaw_tree(pathway_order, gamma=3, seed=seed, tries=100000)
+    G = nx.random_powerlaw_tree(pathway_order, gamma=3, seed=args.seed, tries=100000)
     mapping = {}
     for i in range(len(pathway_members)):
       mapping[i] = pathway_members[i]
@@ -114,7 +114,7 @@ def save_simulation(outdir, X, U, V, Gs, Gs_other):
   for i, G in enumerate(Gs_other):
     for node in G.nodes():
       G.node[node]['name'] = "ENSG{}".format(node+1)
-    pathway_file = os.path.join(outdir, "pathway{}.graphml".format(i+len(Gs)+1))
+    pathway_file = os.path.join(outdir, "pathway{}.graphml".format(i+len(Gs)))
     pathway_files.append(pathway_file)
     nx.write_graphml(G, pathway_file)
 
@@ -135,5 +135,6 @@ pathways_file.txt which is a newline delimited file of the filepaths of pathway0
 ... , pathwayN.graphml.
 """)
   parser.add_argument('--outdir', required=True, help="Output directory")
+  parser.add_argument('--seed', type=int)
   args = parser.parse_args()
   main(args)
