@@ -97,8 +97,8 @@ main2 = function(args) {
       rownames(pathway_matrix) = vertex_attr(pathway_graph, args$node_attribute, index = V(pathway_graph))
       bn_ext = basename(line)
       splitext_rv = splitext(bn_ext)
-      bn = splitext_rv[1]
-      ext = splitext_rv[2]
+      bn = splitext_rv[[1]]
+      ext = splitext_rv[[2]]
       colnames(pathway_matrix) = bn
       pathways[[i]] = pathway_matrix
       pathway_names[[i]] = bn
@@ -185,8 +185,8 @@ main = function() {
   parser$add_argument('--pathways-file')
   parser$add_argument('--outdir', required=T)
   parser$add_argument('--k-latent', default=6, type='integer')
-  parser$add_argument('--L1', help='Regularization parameter for reconstructing Z (the PLIER-generated gene by latent matrix) with the product of C (the user-provided prior matrix) and U (the PLIER-generated prior by latent matrix). If not provided, use PLIER default')
-  parser$add_argument('--L2', help='Regularization parameter for Frobenius norm on B (the PLIER-generated latent by sample matrix): the shrinkage parameter on B. If not provided, use PLIER default')
+  parser$add_argument('--L1', help='Regularization parameter for reconstructing Z (the PLIER-generated gene by latent matrix) with the product of C (the user-provided prior matrix) and U (the PLIER-generated prior by latent matrix). If not provided, use PLIER default', type='double')
+  parser$add_argument('--L2', help='Regularization parameter for Frobenius norm on B (the PLIER-generated latent by sample matrix): the shrinkage parameter on B. If not provided, use PLIER default', type='double')
   parser$add_argument('--seed', default=1, type='integer')
   parser$add_argument('--node-attribute', default='id', help="graphml node attribute to use for gene identifiers")
   parser$add_argument('--extra-prior', action='store_true')
