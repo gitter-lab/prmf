@@ -1,16 +1,19 @@
 #!/usr/bin/env python
+import csv
 import sys, argparse
 import os, os.path
 import numpy as np
 import pandas as pd
 import networkx as nx
 import factorlib as fl
+from factorlib import script_utils
 import re
 
 # TODO 
 # used to represent the ground truth pathways which are assumed to be the first K_LATENT pathways in the pathways file 
 K_LATENT = 30
 PATHWAY_INT_REGEXP = re.compile('pathway(\d+)')
+SIM_DIR_REGEXP = re.compile('sim(\d+)')
 
 def main():
   parser = argparse.ArgumentParser(description="""
@@ -21,8 +24,13 @@ number of ground truth pathways that each method recovers in each simulated run
   parser.add_argument("--indir", help="Argument used as outdir to gen_sim_pipeline.py")
   parser.add_argument("--outdir", help="Directory to write results including a box and whisker plot for all the methods evaluated")
   args = parser.parse_args()
+  script_utils.log_script(sys.argv)
 
-  sim_dirs = os.listdir(args.indir)
+  sim_dirs = []
+  for fname in os.listdir(args.indir):
+    match_data = SIM_DIR_REGEXP.match(fname)
+    if match_data is not None:
+      sim_dirs.append(os.path.join(args.indir, fname))
   pathways_files = []
   nmf_gene_by_latent_files = []
   prmf_obj_files = []
@@ -33,34 +41,58 @@ number of ground truth pathways that each method recovers in each simulated run
     prmf_obj_files.append(os.path.join(sim_dir, 'prmf', 'obj.txt'))
     plier_pathway_by_latent_files.append(os.path.join(sim_dir, 'plier', 'U.csv'))
 
-  nmf_vals = eval_nmf_runs(nmf_gene_by_latent_files)
-  prmf_vals = eval_prmf_runs()
-  plier_vals = eval_plier_runs()
+  nmf_vals, list_nmf_pathway_latent_scores_df = eval_nmf_runs(pathways_files, nmf_gene_by_latent_files)
+  for i, nmf_pathway_latent_scores_df in enumerate(list_nmf_pathway_latent_scores_df):
+    nmf_pathway_latent_scores_df.to_csv(os.path.join(args.outdir, "pathway_latent_scores_{}.csv".format(i)), sep=",", index=True, quoting=csv.QUOTE_NONNUMERIC)
+  prmf_vals = eval_prmf_runs(pathways_files, prmf_obj_files)
+  plier_vals = eval_plier_runs(pathways_files, plier_pathway_by_latent_files)
+
+  # TODO box plot
+  print('nmf')
+  print(nmf_vals)
+  print('prmf')
+  print(prmf_vals)
+  print('plier')
+  print(plier_vals)
 
 def eval_nmf_runs(pathways_files, nmf_gene_by_latent_files):
+  # TODO assumes true pathways are numbered 0 to 29, instead pass them as an argument
   vals = np.zeros((len(nmf_gene_by_latent_files),))
   if len(pathways_files) != len(nmf_gene_by_latent_files):
     raise Exception("len(pathways_files) = {} != {} = len(nmf_gene_by_latent_files)".format(len(pathways_files), len(nmf_gene_by_latent_files)))
 
-  for i in range(len(pathway_files)):
-    pathways_file = pathway_files[i]
+  list_pathway_latent_scores_df = []
+  for i in range(len(pathways_files)):
+    pathways_file = pathways_files[i]
     pathways = parse_pathways(pathways_file)
+    pathway_names = parse_pathway_names(pathways_file)
 
     nmf_gene_by_latent_file = nmf_gene_by_latent_files[i]
     nmf_gene_by_latent_df = pd.read_csv(nmf_gene_by_latent_file, index_col=0)
-    
+    n_gene, k_latent = nmf_gene_by_latent_df.shape
+
     pathway_latent_scores = np.zeros((len(pathways), K_LATENT))
     for j in range(len(pathways)): 
-      pathway_names = list(map(lambda x: x[1]['name'], pathways[i].nodes(data=True))) 
-      pathway_names_set = set(pathway_names) 
+      pathway_members = list(map(lambda x: x[1]['name'], pathways[j].nodes(data=True))) 
+      pathway_members_set = set(pathway_members) 
       all_names = set(nmf_gene_by_latent_df.index) 
-      non_pathway_names = all_names - pathway_names_set 
+      non_pathway_members = all_names - pathway_members_set 
       for k in range(K_LATENT): 
-        pathway_latent_scores[j,k] = np.mean(nmf_gene_by_latent_df.loc[pathway_names,"LV{}".format(k)]) 
-    latent_to_pathway = np.argmax(pathway_latent_scores, axis=0)
-    vals[i] = np.sum(latent_to_pathway < K_LATENT)
+        gene_by_latent_slice = nmf_gene_by_latent_df.loc[pathway_members,"LV{}".format(k)]
+        pathway_latent_scores[j,k] = np.mean(gene_by_latent_slice)
 
-  return vals
+    pathway_latent_scores_df = pd.DataFrame(pathway_latent_scores, index=pathway_names, columns=map(lambda x: "LV{}".format(x), range(k_latent)))
+    list_pathway_latent_scores_df.append(pathway_latent_scores_df)
+
+    latent_to_pathway = pathway_latent_scores_df.idxmax(axis=0)
+    selected_pathways = map(lambda x: x[1], latent_to_pathway.items())
+    count = 0 
+    for pathway in selected_pathways:
+      if parse_pathway_int(pathway) < K_LATENT:
+        count += 1
+    vals[i] = count
+
+  return vals, list_pathway_latent_scores_df
 
 def eval_prmf_runs(pathways_files, prmf_obj_files):
   if len(pathways_files) != len(prmf_obj_files):
@@ -71,7 +103,7 @@ def eval_prmf_runs(pathways_files, prmf_obj_files):
     prmf_obj_file = prmf_obj_files[i]
     latent_to_pathway = fl.parse_pathway_obj(prmf_obj_file)
     for k, v in latent_to_pathway.items():
-      pathay_int = parse_pathway_int(v)
+      pathway_int = parse_pathway_int(v)
       if pathway_int < K_LATENT:
         vals[i] += 1
   return vals
@@ -84,12 +116,19 @@ def eval_plier_runs(pathways_files, plier_pathway_by_latent_files):
   for i in range(len(plier_pathway_by_latent_files)):
     plier_pathway_by_latent_file = plier_pathway_by_latent_files[i]
     plier_pathway_by_latent_df = pd.read_csv(plier_pathway_by_latent_file, index_col=0)
-    argmax_df = np.argmax(plier_pathway_by_latent_df, axis=0)
-    # TODO check this logic especially, also need to update PLIER to correctly report the pathway names as row names in the U matrix
-    for pathway_bn in argmax_df.index:
-      pathway_int = parse_pathway_int(pathway_bn)
-      if pathway_int < K_LATENT:
-        vals[i] += 1
+    p_pathways, k_latent = plier_pathway_by_latent_df.shape
+
+    argmax_df = plier_pathway_by_latent_df.idxmax(axis=0)
+    for k in range(k_latent):
+      pathway_name = argmax_df.iloc[k]
+      latent_name = plier_pathway_by_latent_df.columns[k]
+
+      # max must be greater than 0 to be counted
+      argmax_val = plier_pathway_by_latent_df.loc[pathway_name, latent_name]
+      if(argmax_val > 0):
+        pathway_int = parse_pathway_int(pathway_name)
+        if pathway_int < K_LATENT:
+          vals[i] += 1
   return vals
 
 def get_true_pathways(pathways_file):
@@ -111,6 +150,16 @@ def parse_pathways(pathways_file):
       line = line.rstrip()
       G = nx.read_graphml(line)
       rv.append(G)
+  return rv
+
+def parse_pathway_names(pathways_file):
+  rv = []
+  with open(pathways_file, 'r') as fh:
+    for line in fh:
+      line = line.rstrip()
+      bn_ext = os.path.basename(line)
+      bn, ext = os.path.splitext(bn_ext)
+      rv.append(bn)
   return rv
 
 def parse_pathway_int(pathway_fp):
