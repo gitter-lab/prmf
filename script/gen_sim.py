@@ -65,7 +65,10 @@ def run_simulation(args):
       parent_val = node_to_val[edge[0]]
       node_to_val[edge[1]] = gamma.rvs(parent_val + alpha, size=1)[0]
 
-    V_col = gamma.rvs(alpha, size=n_genes)
+    # generate off-pathway data
+    avg_pathway_val = np.mean(list(node_to_val.values()))
+    print(avg_pathway_val)
+    V_col = gamma.rvs(avg_pathway_val, size=n_genes)
     for node, val in node_to_val.items():
       V_col[node] = val
     V_col = V_col.reshape(n_genes, 1)
