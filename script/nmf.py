@@ -4,6 +4,7 @@ import os, os.path
 import numpy as np
 import factorlib as fl
 from sklearn import decomposition
+from sklearn.preprocessing import quantile_transform
 import csv
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -25,6 +26,7 @@ Writes U.csv with the U matrix including row and column names, V.csv with the V 
   parser.add_argument("--k-latent", type=int, default=6)
   parser.add_argument("--seed", default=None, help="RNG seed")
   parser.add_argument("--delimiter", "-d", default=",", type=str, help="Field delimiter used in the --data file")
+  parser.add_argument("--no-normalize", action='store_true', help="If this flag is provided, do not normalize the data")
   parser.add_argument("--cross-validation", "-c", type=float, help="If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with")
   args = parser.parse_args()
 
@@ -42,6 +44,9 @@ Writes U.csv with the U matrix including row and column names, V.csv with the V 
   m, n = X.shape
   if m > n:
     X = X.transpose()
+
+  if not args.no_normalize:
+    X = quantile_transform(X)
 
   estimator = None
   if args.seed is None:

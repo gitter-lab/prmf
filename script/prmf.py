@@ -114,17 +114,33 @@ def count_distinct_lapls(ind_to_lapls):
     rv = min(rv, len(lapls))
   return rv
 
-# TODO rename ind_to_lapls to make clear that it is mapping to Laplacian indexes and not the Laplacian matrices
-def force_distinct_lapls(V, Ls, ind_to_lapls, k_to_feat_inds, gamma, delta):
+def force_distinct_lapls(V, Ls, ind_to_lapl_idxs, k_to_feat_inds, gamma, delta):
+  """
+  Finalize association between latent vector and pathway.
+
+  For each candidate pathway that remains, evaluate the manifold and ignore penalties of the objective function.
+  Construct a matching so that a latent vector is associated with the pathway which minimizes these penalty terms.
+
+  Parameters
+  -------
+  ind_to_lapl_idxs : dict
+    mapping from latent vector index to candidate pathway indexes
+    NOTE mutated in place
+
+  Returns
+  -------
+  ind_to_lapl_idxs : dict
+    mapping from latent vector index to final pathway index
+  """
   G = nx.Graph()
-  for k, lapls in ind_to_lapls.items():
+  for k, lapls in ind_to_lapl_idxs.items():
     for lapl in lapls:
       L = Ls[lapl]
       manifold_penalty = L.dot(V[:,k]).dot(V[:,k])
       ignore_penalty = 0
       for k2, nz_inds in k_to_feat_inds.items():
         ignore_penalty = np.sum(np.power(V[nz_inds,k2] + 1, -1))
-      denom = manifold_penalty + ignore_penalty
+      denom = gamma * manifold_penalty + delta * ignore_penalty
       weight = None
       if denom == 0:
         # set to 0 because this situation only occurs when the latent vector has 0s on
@@ -143,8 +159,8 @@ def force_distinct_lapls(V, Ls, ind_to_lapls, k_to_feat_inds, gamma, delta):
     else:
       k_node = int(n2[1:])
       l_node = int(n1[1:])
-    ind_to_lapls[k_node] = [l_node]
-  return ind_to_lapls
+    ind_to_lapl_idxs[k_node] = [l_node]
+  return ind_to_lapl_idxs
 
 def map_k_to_lapls(k_to_lapl_ind, Ws, Ds, Ls, lapl_to_feat_inds):
   k_to_W = {}
@@ -606,7 +622,6 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
       print(k, lapl_ind)
     print('----')
     if tradeoff is None:
-      # TODO _normal
       U, V, obj_data = nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta)
     else:
       U, V, obj_data, gamma, delta = nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, tradeoff=tradeoff, gamma=gamma, delta=delta)
@@ -853,7 +868,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   # data at this stage is assumed to be observations x features
   # normalization is done for each feature value
   # e.g. the sample with the highest read count for gene X gets the value 1 in the gene X column
-  if args.normalize:
+  if not args.no_normalize:
     X = quantile_transform(X)
 
   # --manifolds-init - {{
