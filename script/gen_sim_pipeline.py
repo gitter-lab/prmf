@@ -31,10 +31,10 @@ Generative simulation pipeline to benchmark PRMF against NMF, PLIER, CoGAPS, NBS
     outdir = os.path.join(args.outdir, 'sim{}'.format(i))
     script_utils.mkdir_p(outdir) 
     attrs = {
-      'exe': 'nmf_pathway_sim_gen.py',
+      'exe': 'gen_sim.py',
       'args': ['--outdir', outdir],
-      'out': os.path.join(outdir, 'nmf_pathway_sim_gen.out'),
-      'err': os.path.join(outdir, 'nmf_pathway_sim_gen.err'),
+      'out': os.path.join(outdir, 'gen_sim.out'),
+      'err': os.path.join(outdir, 'gen_sim.err'),
       'env': 'prmf'
     }
     if args.seed is not None:
