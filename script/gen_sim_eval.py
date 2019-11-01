@@ -34,26 +34,35 @@ number of ground truth pathways that each method recovers in each simulated run
   pathways_files = []
   nmf_gene_by_latent_files = []
   prmf_obj_files = []
+  prmf_gene_by_latent_files = []
   plier_pathway_by_latent_files = []
+  plier_gene_by_latent_files = []
   for sim_dir in sim_dirs:
     pathways_files.append(os.path.join(sim_dir, 'pathways_file.txt'))
     nmf_gene_by_latent_files.append(os.path.join(sim_dir, 'nmf', 'V.csv'))
+    prmf_gene_by_latent_files.append(os.path.join(sim_dir, 'prmf', 'V.csv'))
+    plier_gene_by_latent_files.append(os.path.join(sim_dir, 'plier', 'Z.csv'))
     prmf_obj_files.append(os.path.join(sim_dir, 'prmf', 'obj.txt'))
     plier_pathway_by_latent_files.append(os.path.join(sim_dir, 'plier', 'U.csv'))
 
-  nmf_vals, list_nmf_pathway_latent_scores_df = eval_nmf_runs(pathways_files, nmf_gene_by_latent_files)
-  for i, nmf_pathway_latent_scores_df in enumerate(list_nmf_pathway_latent_scores_df):
-    nmf_pathway_latent_scores_df.to_csv(os.path.join(args.outdir, "pathway_latent_scores_{}.csv".format(i)), sep=",", index=True, quoting=csv.QUOTE_NONNUMERIC)
-  prmf_vals = eval_prmf_runs(pathways_files, prmf_obj_files)
-  plier_vals = eval_plier_runs(pathways_files, plier_pathway_by_latent_files)
+  if len(nmf_gene_by_latent_files) > 0:
+    nmf_vals, list_nmf_pathway_latent_scores_df = eval_nmf_runs(pathways_files, nmf_gene_by_latent_files)
+    print('nmf')
+    print(nmf_vals)
+
+  if len(prmf_obj_files) > 0:
+    print('prmf')
+    prmf_vals = eval_prmf_runs(pathways_files, prmf_obj_files)
+    prmf_vals_by_mass = eval_nmf_runs(pathways_files, prmf_gene_by_latent_files)
+    print(prmf_vals)
+    print(prmf_vals_by_mass)
+
+  if len(plier_pathway_by_latent_files) > 0:
+    print('plier')
+    plier_vals = eval_plier_runs(pathways_files, plier_pathway_by_latent_files)
+    print(plier_vals)
 
   # TODO box plot
-  print('nmf')
-  print(nmf_vals)
-  print('prmf')
-  print(prmf_vals)
-  print('plier')
-  print(plier_vals)
 
 def eval_nmf_runs(pathways_files, nmf_gene_by_latent_files):
   # TODO assumes true pathways are numbered 0 to 29, instead pass them as an argument
