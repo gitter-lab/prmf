@@ -4,6 +4,7 @@ from argparse import RawTextHelpFormatter
 import numpy as np
 import scipy.optimize
 import scipy.sparse as sp
+from scipy.stats import multinomial
 from sklearn.preprocessing import quantile_transform
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
@@ -48,10 +49,10 @@ def find_mins(V, Ls):
     rv[k] = min_ind
   return rv
 
-def restrict(V, Ls, ind_to_lapls, lapl_to_feat_inds):
+def restrict(V, Ls, latent_to_pathway_data, lapl_to_feat_inds):
   """
   For each column vector index pair (v,i) : v = V[:,i], find a subset of the Laplacians 
-  Ls := ind_to_lapls[i] which have the property that the nodes in the graph associated
+  Ls := latent_to_pathway_data[i] which have the property that the nodes in the graph associated
   with L_j are relatively overrepresented in the mass of v:
     
     TODO (relative change)
@@ -61,60 +62,74 @@ def restrict(V, Ls, ind_to_lapls, lapl_to_feat_inds):
   ----------
   V : np.array
 
-  ind_to_lapls : dict<int, int>
+  latent_to_pathway_data : dict<int, <int, double>>
     key is a column index for V
-    value is a Laplacian index in Ls
+    value is a tuple of
+      Laplacian index in Ls
+      score for that Laplacian
+
+  lapl_to_feat_inds : list of list
+    outer list has length equivalent to p_pathways
+    inner list contains the gene indexes where that pathway is defined (which genes from all 
+      ~20,000 it is defined on)
 
   Returns
   -------
   rv : dict<int, int>
+    updated latent_to_pathway_data
   """
   n_feature, k_latent = V.shape
   percentile = 19.9
   rv = {}
   for k in range(k_latent):
-    L_inds = ind_to_lapls[k]
-    if(len(L_inds) > 1):
+    pathway_data = latent_to_pathway_data[k]
+    pathway_inds = list(map(lambda x: x[0], pathway_data))
+    if(len(pathway_inds) > 1):
       v = V[:,k] 
-      scores = np.zeros(len(L_inds))
-      for i, L_ind in enumerate(L_inds):
+      scores = np.zeros(len(pathway_inds))
+      for i, L_ind in enumerate(pathway_inds):
         nz_inds = lapl_to_feat_inds[L_ind]
         scores[i] = (np.sum(v[nz_inds]) / len(nz_inds)) / np.sum(v)
       score_inds = np.where(scores > np.percentile(scores,percentile))[0]
 
-      lapl_inds = []
+      pathway_inds = []
+      pathway_ind_score_tuples = []
       if len(score_inds) == 0:
         # then the scores are probably uniform so that the top 80 (= 100 - 19.9) percent cannot be identified
         # randomly select 80 percent of the candidates instead
-        n_candidates = len(L_inds)
-        L_inds_arr = np.array(L_inds)
+        n_candidates = len(pathway_inds)
+        pathway_inds_arr = np.array(pathway_inds)
         sample_size = math.ceil(n_candidates * (1 - percentile) / 100)
-        lapl_inds = np.random.choice(L_inds_arr, size=sample_size, replace=False)
+        pathway_inds = np.random.choice(pathway_inds_arr, size=sample_size, replace=False)
       else:
         for score_ind in score_inds:
-          lapl_ind = L_inds[score_ind]
-          lapl_inds.append(lapl_ind)
+          lapl_ind = pathway_inds[score_ind]
+          score = scores[score_ind]
+          ind_score_tpl = (lapl_ind, score)
 
-      rv[k] = lapl_inds
+          pathway_inds.append(lapl_ind)
+          pathway_ind_score_tuples.append(ind_score_tpl)
+
+      rv[k] = pathway_ind_score_tuples
     else:
       # otherwise converged to final Laplacian
-      rv[k] = L_inds
+      rv[k] = pathway_data
   return rv
 
-def init_ind_to_lapls(k_latent, Ls):
+def init_latent_to_pathway_data(k_latent, Ls):
   rv = {}
   for i in range(k_latent):
-    rv[i] = list(range(len(Ls)))
+    rv[i] = list(zip(list(range(len(Ls))), [1] * len(Ls)))
   return rv
 
-# TODO rename
-def count_distinct_lapls(ind_to_lapls):
+# TODO update this to add pathways to a set and count the size of the set
+def count_distinct_pathways(latent_to_pathway_data):
   rv = np.inf
-  for ind, lapls in ind_to_lapls.items():
+  for ind, lapls in latent_to_pathway_data.items():
     rv = min(rv, len(lapls))
   return rv
 
-def force_distinct_lapls(V, Ls, ind_to_lapl_idxs, k_to_feat_inds, gamma, delta):
+def force_distinct_lapls(V, Ls, latent_to_pathway_data, k_to_feat_inds, gamma, delta):
   """
   Finalize association between latent vector and pathway.
 
@@ -123,23 +138,25 @@ def force_distinct_lapls(V, Ls, ind_to_lapl_idxs, k_to_feat_inds, gamma, delta):
 
   Parameters
   -------
-  ind_to_lapl_idxs : dict
+  latent_to_pathway_data : dict
     mapping from latent vector index to candidate pathway indexes
     NOTE mutated in place
 
   Returns
   -------
-  ind_to_lapl_idxs : dict
+  latent_to_pathway_data : dict
     mapping from latent vector index to final pathway index
   """
   G = nx.Graph()
-  for k, lapls in ind_to_lapl_idxs.items():
-    for lapl in lapls:
+  for k, pathway_data in latent_to_pathway_data.items():
+    for pathway_datum in pathway_data:
+      lapl = pathway_datum[0]
       L = Ls[lapl]
       manifold_penalty = L.dot(V[:,k]).dot(V[:,k])
       ignore_penalty = 0
       for k2, nz_inds in k_to_feat_inds.items():
         ignore_penalty = np.sum(np.power(V[nz_inds,k2] + 1, -1))
+      # TODO include mass for matching?
       denom = gamma * manifold_penalty + delta * ignore_penalty
       weight = None
       if denom == 0:
@@ -159,8 +176,9 @@ def force_distinct_lapls(V, Ls, ind_to_lapl_idxs, k_to_feat_inds, gamma, delta):
     else:
       k_node = int(n2[1:])
       l_node = int(n1[1:])
-    ind_to_lapl_idxs[k_node] = [l_node]
-  return ind_to_lapl_idxs
+    # TODO update score value 2
+    latent_to_pathway_data[k_node] = [(l_node, 2)]
+  return latent_to_pathway_data
 
 def map_k_to_lapls(k_to_lapl_ind, Ws, Ds, Ls, lapl_to_feat_inds):
   k_to_W = {}
@@ -596,7 +614,9 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     feat_inds = list(map(lambda x: node_to_index[x], G.nodes()))
     lapl_to_feat_inds[i] = feat_inds
 
-  ind_to_lapls = init_ind_to_lapls(k_latent, Ls)
+  # track which Laplacian/pathway are candidates for each latent vector
+  # initially, all pathways are candidates
+  latent_to_pathway_data = init_latent_to_pathway_data(k_latent, Ls)
 
   converged = False
   candidates_remain = True
@@ -610,10 +630,21 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   best_dict = {} 
   best_dict['obj_data'] = {}
   best_dict['obj_data']['obj'] = np.Inf
+  do_multinomial = True # TODO expose as parameter
   while (i < max_iter) and (candidates_remain or not converged):
     # update active Laplacian for each latent vector every <modulus> iterations
     for k in range(k_latent):
-      lapl_ind = random.choice(ind_to_lapls[k])
+      lapl_inds = list(map(lambda x: x[0], latent_to_pathway_data[k]))
+      if do_multinomial:
+        # sample current pathway where high scoring pathways are more likely to be selected
+        lapl_scores = np.array(list(map(lambda x: x[1], latent_to_pathway_data[k])))
+        lapl_prob = lapl_scores / np.sum(lapl_scores)
+        multinomial_sample = multinomial.rvs(1, lapl_prob)
+        sample_ind = np.where(multinomial_sample != 0)[0][0]
+        lapl_ind = lapl_inds[sample_ind]
+      else:
+        # sample current pathway uniformly at random from candidate pathways
+        lapl_ind = random.choice(lapl_inds)
       k_to_lapl_ind[k] = lapl_ind
     k_to_W, k_to_D, k_to_L, k_to_feat_inds = map_k_to_lapls(k_to_lapl_ind, Ws, Ds, Ls, lapl_to_feat_inds)
 
@@ -637,16 +668,16 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     # after <modulus> updates, restrict candidates
     # dont restrict any further if the number of distinct Laplacians remaining is equal to <k_latent>
     if candidates_remain:
-      if (count_distinct_lapls(ind_to_lapls) <= k_latent):
+      if (count_distinct_pathways(latent_to_pathway_data) <= k_latent):
         # if this condition is met, force each latent factor to target different Laplacians
-        ind_to_lapls = force_distinct_lapls(V, Ls, ind_to_lapls, k_to_feat_inds, gamma, delta)
-        for k,v in ind_to_lapls.items():
+        latent_to_pathway_data = force_distinct_lapls(V, Ls, latent_to_pathway_data, k_to_feat_inds, gamma, delta)
+        for k,v in latent_to_pathway_data.items():
           print(k,v)
         candidates_remain = False
       else:
-        ind_to_lapls = restrict(V, Ls, ind_to_lapls, lapl_to_feat_inds)
+        latent_to_pathway_data = restrict(V, Ls, latent_to_pathway_data, lapl_to_feat_inds)
         candidates_remain = False
-        for k,v in ind_to_lapls.items():
+        for k,v in latent_to_pathway_data.items():
           if(len(v) > 1):
             candidates_remain = True
           print(k, v)
@@ -669,7 +700,7 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
   # X = U * (1/alpha * V^T)
   V = (1 / alpha) * V
 
-  obj_data['ind_to_lapls'] = ind_to_lapls
+  obj_data['latent_to_pathway_data'] = latent_to_pathway_data
 
   return U, V, obj_data
 
@@ -931,19 +962,18 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
     obj_data['average_normalized_test_error'] = avg_normalized_test_error
 
   with open(obj_fp, 'w') as obj_fh:
-    ind_to_lapls = obj_data.pop('ind_to_lapls', {})
+    latent_to_pathway_data = obj_data.pop('latent_to_pathway_data', {})
     for k,v in obj_data.items():
       obj_fh.write("{} = {:0.5f}\n".format(k,v))
 
     # write which manifold file was used for each latent factor
-    ks = sorted(ind_to_lapls.keys())
+    ks = sorted(latent_to_pathway_data.keys())
     for k in ks:
-      lapl_inds = ind_to_lapls[k]
+      lapl_inds = list(map(lambda x: x[0], latent_to_pathway_data[k]))
       # TODO pick first, assumes convergence
       lapl_ind = lapl_inds[0]
       G, fp = G_fp_pairs[lapl_ind]
       obj_fh.write("{} -> {}\n".format(k, fp))
-
 
 if __name__ == "__main__":
   main()
