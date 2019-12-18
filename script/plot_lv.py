@@ -98,6 +98,7 @@ Plot the top gene loadings for a latent vector
     incident_node_counts.append(count)
   # note baseline connection to spliceosome
   # cache: 6.66704127503065
+  # this takes 700 seconds to evaluate
   #count_sum = 0
   #for node in G_ppi.nodes():
   #  count_sum += count_incident_nodes(G_ppi, G_pathway, [node])
@@ -155,6 +156,7 @@ Plot the top gene loadings for a latent vector
   plt.clf()
   x_pos = np.arange(len(top_scoring_genes))
   plt.bar(x_pos, incident_node_counts, align='center')
+  plt.plot(np.arange(-1, len(top_scoring_genes)+1), np.repeat(avg_spliceosome_connection, len(x_pos)+2), 'r--')
   plt.xticks(x_pos, top_scoring_genes, rotation='vertical')
   plt.ylabel('Number of pathway connections')
   plt.title('Connectedness of top-scoring LV{} genes to {}'.format(args.latent_index, pathway_name))
