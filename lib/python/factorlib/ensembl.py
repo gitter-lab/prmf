@@ -48,17 +48,20 @@ def download_mapping_tsv(outdir, release='latest'):
   return rv
 
 def parse_mapping_tsv(fh, key_index=0, value_index=1, delim='\t'):
- """
+  """
   Parse a TSV file like the file at 
     ftp://ftp.ensembl.org/pub/release-94/tsv/homo_sapiens/Homo_sapiens.GRCh38.94.refseq.tsv.gz
   into a mapping 
   """
   rv = {}
-  if type(fh) == 'str':
+  if type(fh) is str:
     fh = open(fh, 'r')
   for line in fh:
     line = line.rstrip()
     words = line.split(delim)
+    # some values for key_index may be missing, skip those entries in the file
+    if key_index >= len(words):
+      continue
     key = words[key_index]
     value = None
     if(len(words) > value_index):
