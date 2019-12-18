@@ -18,11 +18,15 @@ import os, os.path
 import pandas as pd
 import random
 import csv
+import datetime
 np.seterr(divide='raise')
 EPSILON = np.finfo(np.float32).eps
 
 # TODO remove
 OUTDIR = None
+PATHWAY_TO_SUPPORT = None
+LAPLACIANS = []
+NORMALIZED_LAPLACIANS = []
 
 def invert_list_map(ll):
   rv = {}
@@ -48,6 +52,75 @@ def find_mins(V, Ls):
         min_ind = i
     rv[k] = min_ind
   return rv
+
+def normalize_laplacian(L, support):
+  D_to_minus_half = sp.dia_matrix(L.shape)
+  values = np.zeros(L.shape[0])
+  for ind in support:
+    v = L[ind, ind]
+    if v != 0:
+      values[ind] = v ** (-1/2)
+  D_to_minus_half.setdiag(values)
+  L_normal = D_to_minus_half.dot(L.dot(D_to_minus_half))
+  return L_normal
+
+def print_latent_to_pathway_data(latent_to_pathway_data):
+  """
+  Parameters
+  ----------
+  latent_to_pathway_data : dict<int, <int,double>>
+    see restrict
+  """
+  print("-----------------------------")
+  print("Latent to pathway match data:")
+  print("-----------------------------")
+  indent_level = 1
+  indent = indent_level * 2 * " "
+  for latent_id, pathway_data in latent_to_pathway_data.items():
+    # sort by best scoring match descending
+    print("Latent vector: {}".format(latent_id))
+    pathway_data = sorted(pathway_data, key=lambda x: x[1], reverse=True)
+    for pathway_id, score in pathway_data:
+      print(indent + "{}\t{}".format(pathway_id, score))
+
+def score_latent_pathway_match(pathway_to_support, Ls, latent_vec, pathway_id):
+  """
+  Parameters
+  ----------
+  pathway_to_support : dict<int, list<int>>
+    mapping from pathway graph index to a list of nodes that are in the graph
+    nodes are identified by integers which correspond to positions in <latent_vec>
+    TODO aka lapl_to_feat_inds
+
+  latent_vec : (n_genes, 1)-dimensional np.array
+
+  pathway_id : 
+    TODO aka pathway_ind
+
+  """
+  support = pathway_to_support[pathway_id]
+  L = Ls[pathway_id]
+  L_normal = normalize_laplacian(L, support)
+  latent_vec_unit = latent_vec / np.linalg.norm(latent_vec)
+
+  score_mass = np.sqrt(np.sum(np.power(latent_vec_unit[support], 2))) # in [0,1]
+  score_manifold = 1 - L_normal.dot(latent_vec_unit).dot(latent_vec_unit) # in [0,1]
+  score = score_mass + score_manifold
+  return score
+
+def score_latent_pathway_match_global(latent_vec, pathway_id):
+  """
+  See score_latent_pathway_match
+  Use of global variables here is to test compute savings
+  """
+  latent_vec_unit = latent_vec / np.linalg.norm(latent_vec)
+  support = PATHWAY_TO_SUPPORT[pathway_id]
+  L_normal = NORMALIZED_LAPLACIANS[pathway_id]
+
+  score_mass = np.sqrt(np.sum(np.power(latent_vec_unit[support], 2))) # in [0,1]
+  score_manifold = 1 - L_normal.dot(latent_vec_unit).dot(latent_vec_unit) # in [0,1]
+  score = score_mass + score_manifold
+  return score
 
 def restrict(V, Ls, latent_to_pathway_data, lapl_to_feat_inds):
   """
@@ -88,11 +161,11 @@ def restrict(V, Ls, latent_to_pathway_data, lapl_to_feat_inds):
       v = V[:,k] 
       scores = np.zeros(len(pathway_inds))
       for i, L_ind in enumerate(pathway_inds):
-        nz_inds = lapl_to_feat_inds[L_ind]
-        scores[i] = (np.sum(v[nz_inds]) / len(nz_inds)) / np.sum(v)
+        # scores[i] = score_latent_pathway_match(lapl_to_feat_inds, Ls, v, L_ind)
+        scores[i] = score_latent_pathway_match_global(v, L_ind)
+
       score_inds = np.where(scores > np.percentile(scores,percentile))[0]
 
-      pathway_inds = []
       pathway_ind_score_tuples = []
       if len(score_inds) == 0:
         # then the scores are probably uniform so that the top 80 (= 100 - 19.9) percent cannot be identified
@@ -100,14 +173,14 @@ def restrict(V, Ls, latent_to_pathway_data, lapl_to_feat_inds):
         n_candidates = len(pathway_inds)
         pathway_inds_arr = np.array(pathway_inds)
         sample_size = math.ceil(n_candidates * (1 - percentile) / 100)
-        pathway_inds = np.random.choice(pathway_inds_arr, size=sample_size, replace=False)
+        pathway_inds_rv = np.random.choice(pathway_inds_arr, size=sample_size, replace=False)
+        pathway_scores_rv = list(map(lambda x: scores[x], pathway_inds_rv))
+        pathway_ind_score_tuples = list(zip(pathway_inds_rv, pathway_scores_rv))
       else:
         for score_ind in score_inds:
           lapl_ind = pathway_inds[score_ind]
           score = scores[score_ind]
           ind_score_tpl = (lapl_ind, score)
-
-          pathway_inds.append(lapl_ind)
           pathway_ind_score_tuples.append(ind_score_tpl)
 
       rv[k] = pathway_ind_score_tuples
@@ -267,25 +340,17 @@ def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
     for k, L in k_to_L.items():
       v_unit = V[:,k] / np.linalg.norm(V[:,k])
 
-      # TODO could reorganize here to save compute
-      D_to_minus_half = sp.dia_matrix(L.shape)
-      values = np.zeros(L.shape[0])
-      nz_inds = k_to_feat_inds[k]
-      for ind in nz_inds:
-        v = L[ind, ind]
-        if v != 0:
-          values[ind] = v ** (-1/2)
-      D_to_minus_half.setdiag(values)
-      L_normal = D_to_minus_half.dot(L.dot(D_to_minus_half))
+      # TODO could reorganize here to save recomputing normalized Laplacian
+      support = k_to_feat_inds[k]
+      L_normal = normalize_laplacian(L, support)
       obj_manifold += L_normal.dot(v_unit).dot(v_unit)
 
-      nz_inds = k_to_feat_inds[k]
-      obj_ign += np.sum(np.power(v_unit[nz_inds] + 1, -1))
+      obj_ign += np.sum(np.power(v_unit[support] + 1, -1))
   else:
     for k, L in k_to_L.items():
       obj_manifold += L.dot(V[:,k]).dot(V[:,k])
-    for k, nz_inds in k_to_feat_inds.items():
-      obj_ign += np.sum(np.power(V[nz_inds,k] + 1, -1))
+    for k, support in k_to_feat_inds.items():
+      obj_ign += np.sum(np.power(V[support,k] + 1, -1))
 
   obj_fro = np.sum(np.multiply(U, U))
   obj_fro = obj_fro
@@ -558,6 +623,9 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     'manifold': manifold regularization penalty: gamma * sum_k min_i W[:,k]^T Ls[i] W[:,k]
     'obj': objective function value: sum of 'recon' and 'manifold'
   """
+  global PATHWAY_TO_SUPPORT
+  global LAPLACIANS
+  global NORMALIZED_LAPLACIANS
   # rescale to prevent underflow errors
   #alpha = 1 / np.min(X[X != 0])
   alpha = 1
@@ -613,6 +681,13 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     # features in the Laplacian matrix that have non-zero entries on the diagonal
     feat_inds = list(map(lambda x: node_to_index[x], G.nodes()))
     lapl_to_feat_inds[i] = feat_inds
+  PATHWAY_TO_SUPPORT = lapl_to_feat_inds
+  LAPLACIANS = Ls
+  for pathway_id, L in enumerate(LAPLACIANS):
+    support = PATHWAY_TO_SUPPORT[pathway_id]
+    L_normal = normalize_laplacian(L, support)
+    NORMALIZED_LAPLACIANS.append(L_normal)
+  print(PATHWAY_TO_SUPPORT)
 
   # track which Laplacian/pathway are candidates for each latent vector
   # initially, all pathways are candidates
@@ -671,16 +746,17 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
       if (count_distinct_pathways(latent_to_pathway_data) <= k_latent):
         # if this condition is met, force each latent factor to target different Laplacians
         latent_to_pathway_data = force_distinct_lapls(V, Ls, latent_to_pathway_data, k_to_feat_inds, gamma, delta)
-        for k,v in latent_to_pathway_data.items():
-          print(k,v)
+        print_latent_to_pathway_data(latent_to_pathway_data)
         candidates_remain = False
       else:
+        sys.stderr.write('Before restrict: ' + str(datetime.datetime.now()) + '\n')
         latent_to_pathway_data = restrict(V, Ls, latent_to_pathway_data, lapl_to_feat_inds)
+        sys.stderr.write('After restrict: ' + str(datetime.datetime.now()) + '\n')
         candidates_remain = False
         for k,v in latent_to_pathway_data.items():
           if(len(v) > 1):
             candidates_remain = True
-          print(k, v)
+        print_latent_to_pathway_data(latent_to_pathway_data)
 
     prev_obj = obj
     obj = obj_data['obj']
