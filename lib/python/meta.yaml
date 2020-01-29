@@ -18,5 +18,5 @@ test:
     - factorlib
 
 about:
-  license: GPL
+  license: MIT
   license_file: LICENSE
