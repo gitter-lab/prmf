@@ -819,6 +819,43 @@ def check_row_names(fpath, delim, has_header):
       has_row_names = True
   return has_row_names
 
+def parse_pathways(manifold_fps, node_attribute="name"):
+  """
+  Parse graphml files used for pathways. Restructure networkx objects so that gene names are 
+  used as node identifiers. By default, parse the graphml file at the end of this docstring 
+  so that "ENSG11486" is a node identifier rather than "11485".
+
+    <graphml ...>
+      <key attr.name="name" attr.type="string" for="node" id="d1" />
+      <graph edgedefault="undirected">
+        <node id="11485">
+          <data key="d1">ENSG11486</data>
+        </node>
+        ...
+      </graph>
+    </graphml>
+
+  Parameters
+  ----------
+  manifold_fps : list of str
+    list of filepaths to pathway files (in the graphml file format)
+
+  Returns
+  -------
+  G_fp_pairs : list of networkx.Graph
+    parsed pathways
+
+  TODO
+  ----
+  implement behavior so that "11485" could be used as a node identifier
+  """
+  G_fp_pairs = []
+  for fp in manifold_fps:
+    G = nx.read_graphml(fp).to_undirected()
+    G = fl.relabel_nodes(G, node_attribute)
+    G_fp_pairs.append((G,fp))
+  return G_fp_pairs
+
 def main():
   parser = argparse.ArgumentParser(description="""
 Python implementation of Pathway-Regularized NMF.
@@ -864,12 +901,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   else:
     sys.stderr.write("Exactly one of --manifolds or --manifolds-file is required.\n")
     sys.exit(23)
-  G_fp_pairs = []
-  for fp in manifold_fps:
-    G = nx.read_graphml(fp).to_undirected()
-    G = fl.relabel_nodes(G, args.node_attribute)
-    G_fp_pairs.append((G,fp))
-  #G_fp_pairs = sorted(G_fp_pairs, key=lambda x: x[0].order())
+  G_fp_pairs = parse_pathways(manifold_fps)
   fp_to_G = {}
   for G, fp in G_fp_pairs:
     fp_to_G[fp] = G
