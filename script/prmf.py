@@ -66,6 +66,10 @@ def normalize_laplacian(L, support):
 
 def print_latent_to_pathway_data(latent_to_pathway_data):
   """
+  TODO
+  ----
+  dump data to multiple latent x pathway csvs instead of printing to stdout
+
   Parameters
   ----------
   latent_to_pathway_data : dict<int, <int,double>>
@@ -367,7 +371,7 @@ def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
   }
   return obj_data
 
-def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=True, norm_X=None, tradeoff=0.5):
+def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=False, norm_X=None, tradeoff=0.5):
   """
   Perform <n_steps> update steps with a fixed Laplacian matrix for each latent factor
 
@@ -440,13 +444,13 @@ def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_s
     V[V < EPSILON] = EPSILON
 
     obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=gamma, delta=delta)
+    print(i+n_step+1, obj_data['obj'])
     if(verbose):
-      print(i+n_step+1, obj_data['obj'])
       print(obj_data)
 
   return U, V, obj_data
 
-def nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=True, norm_X=None, tradeoff=0.5):
+def nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=False, norm_X=None, tradeoff=0.5):
   """
   See nmf_manifold_vec_update ; this uses the normalized Laplacian instead
   """
@@ -484,13 +488,13 @@ def nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_in
     V[V < EPSILON] = EPSILON
 
     obj_data = nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=gamma, delta=delta)
+    print(i+n_step+1, obj_data['obj'])
     if(verbose):
-      print(i+n_step+1, obj_data['obj'])
       print(obj_data)
 
   return U, V, obj_data
 
-def nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, i=0, verbose=True, norm_X=None, tradeoff=0.5, gamma=1, delta=1):
+def nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, i=0, verbose=False, norm_X=None, tradeoff=0.5, gamma=1, delta=1):
   """
   See nmf_manifold_vec_update; this version sets gamma and delta for the _next_ gradient descent step 
   so that delta = gamma = (1 - tradeoff) * obj_recon / (tradeoff * obj_manifold)
@@ -543,13 +547,13 @@ def nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_
       gamma = ((1 - tradeoff) * obj_data['recon']) / denom
     delta = gamma
 
+    print(i+n_step+1, obj_data['obj'])
     if(verbose):
-      print(i+n_step+1, obj_data['obj'])
       print(obj_data)
 
   return U, V, obj_data, gamma, delta
 
-def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3, max_iter=1000, nodelist=None, modulus=10, U_init=None, V_init=None):
+def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3, max_iter=1000, nodelist=None, modulus=10, U_init=None, V_init=None, verbose=False):
   """
   Solve an optimization problem of the form
     min ||X - UV^T|| + 
@@ -610,6 +614,9 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
 
   V_init : np.array
     array with shape (n_feature, n_latent) used to initialize PRMF
+
+  verbose : bool
+    if true, increase printing to stdout
 
   Returns
   -------
@@ -687,7 +694,6 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
     support = PATHWAY_TO_SUPPORT[pathway_id]
     L_normal = normalize_laplacian(L, support)
     NORMALIZED_LAPLACIANS.append(L_normal)
-  print(PATHWAY_TO_SUPPORT)
 
   # track which Laplacian/pathway are candidates for each latent vector
   # initially, all pathways are candidates
@@ -723,14 +729,17 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
       k_to_lapl_ind[k] = lapl_ind
     k_to_W, k_to_D, k_to_L, k_to_feat_inds = map_k_to_lapls(k_to_lapl_ind, Ws, Ds, Ls, lapl_to_feat_inds)
 
-    print('----')
-    for k, lapl_ind in k_to_lapl_ind.items():
-      print(k, lapl_ind)
-    print('----')
+    if verbose:
+      print('--------------------------------------------')
+      print('Latent/Pathway association at this iteration')
+      print('--------------------------------------------')
+      for k, lapl_ind in k_to_lapl_ind.items():
+        print(k, lapl_ind)
+      print('--------------------------------------------')
     if tradeoff is None:
-      U, V, obj_data = nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta)
+      U, V, obj_data = nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta, verbose=verbose)
     else:
-      U, V, obj_data, gamma, delta = nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, tradeoff=tradeoff, gamma=gamma, delta=delta)
+      U, V, obj_data, gamma, delta = nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, tradeoff=tradeoff, gamma=gamma, delta=delta, verbose=verbose)
     i += modulus
     
     # track best
@@ -746,7 +755,8 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
       if (count_distinct_pathways(latent_to_pathway_data) <= k_latent):
         # if this condition is met, force each latent factor to target different Laplacians
         latent_to_pathway_data = force_distinct_lapls(V, Ls, latent_to_pathway_data, k_to_feat_inds, gamma, delta)
-        print_latent_to_pathway_data(latent_to_pathway_data)
+        if verbose:
+          print_latent_to_pathway_data(latent_to_pathway_data)
         candidates_remain = False
       else:
         sys.stderr.write('Before restrict: ' + str(datetime.datetime.now()) + '\n')
@@ -756,7 +766,8 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
         for k,v in latent_to_pathway_data.items():
           if(len(v) > 1):
             candidates_remain = True
-        print_latent_to_pathway_data(latent_to_pathway_data)
+        if verbose:
+          print_latent_to_pathway_data(latent_to_pathway_data)
 
     prev_obj = obj
     obj = obj_data['obj']
