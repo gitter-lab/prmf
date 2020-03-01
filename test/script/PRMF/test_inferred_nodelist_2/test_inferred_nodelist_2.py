@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import os
 from scipy.stats import gamma
-import factorlib as fl
+import prmf
 
 # differs from test_inferred_nodelist_1.py by having pathway nodes which are not measured in <data>
 
@@ -30,7 +30,7 @@ for k in range(k_latent):
   unmeasured_node = "ENSP" + str(n_genes + k)
   nodelist.append(unmeasured_node)
 
-X_embed = fl.embed_arr(nodelist, nodelist[:n_genes], X)
+X_embed = prmf.embed_arr(nodelist, nodelist[:n_genes], X)
 X_df = pd.DataFrame(data=X_embed, index=map(lambda x: str(x), range(m_samples)), columns=nodelist)
 
 # write data
