@@ -1,6 +1,6 @@
 #!/bin/sh
 # verbose and errexit
-set -ve
+set -e
 
 usage="download_pathways.sh <outdir>"
 if [ -z "$1" ]; then
