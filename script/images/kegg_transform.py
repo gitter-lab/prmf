@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import numpy as np
 import networkx as nx
-import factorlib.plot
+import prmf.plot
 
 DPI = 96
 LINE_WIDTH = 2.0
@@ -89,19 +89,19 @@ if __name__ == "__main__":
   row_range = np.arange(L.shape[0])
   ax.set_xticks(row_range + 0.5)
   yticklabels = map(lambda x: str(x), row_range)
-  ax.set_xticklabels(yticklabels, fontsize=factorlib.plot.TICK_FONT_SIZE)
+  ax.set_xticklabels(yticklabels, fontsize=prmf.plot.TICK_FONT_SIZE)
   ax.set_yticks(row_range + 0.5)
   yticklabels = map(lambda x: str(x), row_range)
-  ax.set_yticklabels(yticklabels, fontsize=factorlib.plot.TICK_FONT_SIZE)
+  ax.set_yticklabels(yticklabels, fontsize=prmf.plot.TICK_FONT_SIZE)
   ax.set_ylabel("Node", fontsize=24)
   ax.set_xlabel("Node", fontsize=24)
   ax.xaxis.set_label_position('top') 
   ax.xaxis.tick_top()
 
   norm = MidpointNormalize(midpoint=0)
-  mappable = ax.pcolor(L, cmap=plt.cm.RdGy, edgecolors='k', linewidth=factorlib.plot.LINE_WIDTH, vmin=vmin, vmax=vmax, norm=norm)
+  mappable = ax.pcolor(L, cmap=plt.cm.RdGy, edgecolors='k', linewidth=prmf.plot.LINE_WIDTH, vmin=vmin, vmax=vmax, norm=norm)
   colorbar = plt.colorbar(mappable, ax=ax, orientation='horizontal', ticks=[vmin, vmax], pad=0.05, fraction=0.08, aspect=6, use_gridspec=True)
-  colorbar.ax.tick_params(labelsize=factorlib.plot.TICK_FONT_SIZE)
+  colorbar.ax.tick_params(labelsize=prmf.plot.TICK_FONT_SIZE)
 
   laplacian_fp = os.path.join(args.outdir, 'kegg_laplacian.png')
   fig.savefig(laplacian_fp, bbox_inches='tight')

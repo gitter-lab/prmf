@@ -7,7 +7,7 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 plt.style.use('prmf')
-import factorlib as fl
+import prmf
 
 # TODO basename is used for ground truth in case file path changes (in case where programs 
 # are run on different machines)
@@ -25,13 +25,13 @@ def count_initialization_and_convergence_overlap(run_dirs):
 
     obj_path = os.path.join(run_dir, 'obj.txt')
     if os.path.exists(obj_path):
-      converge = fl.parse_pathway_obj(obj_path)
+      converge = prmf.parse_pathway_obj(obj_path)
     else:
       sys.stderr.write("[warning] Missing objective output for run with output directory {}\n".format(os.path.basename(run_dir)))
 
     init_path = os.path.join(run_dir, 'init_pathways.txt')
     if os.path.exists(init_path):
-      init = fl.parse_init(init_path)
+      init = prmf.parse_init(init_path)
     else:
       sys.stderr.write("[warning] Missing initialization output for run with output directory {}\n".format(os.path.basename(run_dir)))
 
@@ -63,7 +63,7 @@ def count_initialization_and_truth_overlap(run_dirs, ground_truth_fp):
 
     init_path = os.path.join(run_dir, 'init_pathways.txt')
     if os.path.exists(init_path):
-      init = fl.parse_init(init_path)
+      init = prmf.parse_init(init_path)
     else:
       sys.stderr.write("[warning] Missing initialization output for run with output directory {}\n".format(os.path.basename(run_dir)))
 
@@ -91,7 +91,7 @@ def count_converge_and_truth_overlap(run_dirs, ground_truth_fp):
 
     obj_path = os.path.join(run_dir, 'obj.txt')
     if os.path.exists(obj_path):
-      converge = fl.parse_pathway_obj(obj_path)
+      converge = prmf.parse_pathway_obj(obj_path)
     else:
       sys.stderr.write("[warning] Missing objective output for run with output directory {}\n".format(os.path.basename(run_dir)))
 
@@ -125,7 +125,7 @@ def main():
   # TODO cli
   all_dict = {}
   for run_dir in run_dirs:
-    pathways_dict = fl.parse_pathway_obj(os.path.join(run_dir, 'obj.txt'))
+    pathways_dict = prmf.parse_pathway_obj(os.path.join(run_dir, 'obj.txt'))
     pathways = pathways_dict.items()
     for pathway in pathways:
       if pathway in all_dict:

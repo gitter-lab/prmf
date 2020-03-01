@@ -5,7 +5,7 @@ import sys, argparse
 import os, os.path
 from urllib.parse import urlencode
 import requests
-import factorlib as fl
+import prmf
 
 KEGG_URI_BASE = "http://identifiers.org/kegg.pathway"
 REACTOME_URI_BASE = "http://identifiers.org/reactome/"
@@ -74,7 +74,7 @@ def get_pathways(pathway_ids, outdir, id_type='reactome', verbose=True):
   Create a file in <outdir> for each pathway in <pathway_ids>
   """
   if id_type != 'reactome' and id_type != 'kegg':
-    raise fl.FactorLibException("Invalid id_type={}; must be one of \"kegg\", \"reactome\".".format(id_type))
+    raise prmf.FactorLibException("Invalid id_type={}; must be one of \"kegg\", \"reactome\".".format(id_type))
   success = []
   fail = []
   last_request = False

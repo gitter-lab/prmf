@@ -5,11 +5,11 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import rc
-import factorlib as fl
-import factorlib.plot
+import prmf
+import prmf.plot
 rc('text', usetex=True)
 
-DPI = factorlib.plot.DPI
+DPI = prmf.plot.DPI
 EPSILON = np.finfo(np.float32).eps
 
 def project(w, G):
@@ -60,7 +60,7 @@ if __name__ == "__main__":
   data1[data1 == 0] = EPSILON
   vmin = 0.0
   vmax = 1.0
-  factorlib.plot.plot_vec(data1, ax1, aspect=3, vmin=vmin, vmax=vmax)
+  prmf.plot.plot_vec(data1, ax1, aspect=3, vmin=vmin, vmax=vmax)
 
   man_pen = manifold_penalty(data1, G)[0,0]
   title1 = "$w^T L w = {:1.3f}$".format(man_pen)
@@ -71,17 +71,17 @@ if __name__ == "__main__":
   title2 = r'$w^T L w + \sum_L \frac{1}{w_L + 1} = ' + '{:1.3f}'.format(man_pen + ign_pen) + r'$'
 
   title = title1 + '\n' + title2
-  pos = factorlib.plot.plot_graph(G, ax2, title=title, title_fontsize=24, title_y=1.08)
-  #factorlib.plot.plot_graph(G, ax3, pos=pos, title=title)
+  pos = prmf.plot.plot_graph(G, ax2, title=title, title_fontsize=24, title_y=1.08)
+  #prmf.plot.plot_graph(G, ax3, pos=pos, title=title)
 
   # penalty because not smooth on 2-
   data2 = np.array([0.0, 0.1, 0.8, 0.9, 0.8, 0.9, 0.7])
   data2[data2 == 0] = EPSILON
-  factorlib.plot.plot_vec(data2, ax4, aspect=3, vmin=vmin, vmax=vmax)
+  prmf.plot.plot_vec(data2, ax4, aspect=3, vmin=vmin, vmax=vmax)
 
   man_pen = manifold_penalty(data2, G)[0,0]
   ign_pen = ignore_penalty(data2, G)
   title = r'$w^T L w + \sum_L \frac{1}{w_L + 1} = ' + '{:1.3f}'.format(man_pen + ign_pen) + '$'
-  factorlib.plot.plot_graph(G, ax5, pos=pos, title=title, title_fontsize=24, title_y=1.08)
+  prmf.plot.plot_graph(G, ax5, pos=pos, title=title, title_fontsize=24, title_y=1.08)
 
   plt.savefig(args.outfile, bbox_inches='tight')

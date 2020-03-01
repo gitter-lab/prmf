@@ -5,8 +5,8 @@ import os.path
 import matplotlib.pyplot as plt
 import numpy as np
 import networkx as nx
-import factorlib as fl
-import factorlib.plot
+import prmf
+import prmf.plot
 
 def score_pathway_neighbors(ppi, pathway, nodelist, vec):
   """
@@ -72,10 +72,10 @@ if __name__ == "__main__":
   parser.add_argument('--outdir', required=True)
   args = parser.parse_args()
 
-  nodelist = fl.parse_nodelist(open(args.nodelist))
+  nodelist = prmf.parse_nodelist(open(args.nodelist))
   ppi_network = nx.read_graphml(args.ppi_network)
   gene_by_latent = np.genfromtxt(args.gene_by_latent, delimiter=",")
-  k_to_pathway_fp = fl.parse_pathway_obj(args.opt_outfile)
+  k_to_pathway_fp = prmf.parse_pathway_obj(args.opt_outfile)
   if(args.latent is not None):
     k_to_pathway_fp = {args.latent: k_to_pathway_fp[args.latent]}
 
@@ -99,15 +99,15 @@ if __name__ == "__main__":
     if pathway_name == "hsa04010":
       pathway_name = "MAPK Signaling Pathway"
     title = 'Top 10 {}-Interacting Genes'.format(pathway_name)
-    title = factorlib.plot.split_title(title)
+    title = prmf.plot.split_title(title)
 
     plt.clf()
     fig = plt.gcf()
     ax = fig.gca()
     G_out = nx.subgraph(ppi_network, list(node_to_score.keys()))
-    vec_sub, nodelist_sub = fl.filter_vec_by_graph(G_out, vec, nodelist)
+    vec_sub, nodelist_sub = prmf.filter_vec_by_graph(G_out, vec, nodelist)
     for node in node_to_score.keys():
       G_out.add_edge(node, pathway_node)
-    factorlib.plot.plot_pathway_interactors(G_out, pathway_node, fig, ax, vec_sub, nodelist_sub, vmin=np.min(vec), vmax=np.max(vec), title=title, title_y=1.05)
+    prmf.plot.plot_pathway_interactors(G_out, pathway_node, fig, ax, vec_sub, nodelist_sub, vmin=np.min(vec), vmax=np.max(vec), title=title, title_y=1.05)
     fig_out_fp = os.path.join(args.outdir, 'fig{}.png'.format(k))
     plt.savefig(fig_out_fp, bbox_inches='tight')

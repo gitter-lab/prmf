@@ -2,8 +2,8 @@
 import sys, argparse
 import os, os.path
 import networkx as nx
-import factorlib as fl
-from factorlib import string_db as sdb
+import prmf
+from prmf import string_db as sdb
 
 def main():
   parser = argparse.ArgumentParser(description="""
@@ -24,15 +24,15 @@ Construct a nodelist containing all nodes from STRING and all nodes from all net
     sys.stderr.write("Exactly one of --graphml-dir or --graphmls is required.\n")
     sys.exit(22)
 
-  # TODO use fl.prepare_nodelist for consistency
+  # TODO use prmf.prepare_nodelist for consistency
   Gs = []
   if args.graphmls is not None:
-    Gs = fl.parse_pathways(args.graphmls)
+    Gs = prmf.parse_pathways(args.graphmls)
   if args.graphml_dir is not None:
-    Gs = fl.parse_pathways_dir(args.graphml_dir)
+    Gs = prmf.parse_pathways_dir(args.graphml_dir)
 
   # relabel nodes if needed
-  Gs = list(map(lambda G: fl.relabel_nodes(G, args.node_attribute), Gs))
+  Gs = list(map(lambda G: prmf.relabel_nodes(G, args.node_attribute), Gs))
 
   G_ppi = sdb.parse_string_fh(args.stringdb)
 
@@ -52,7 +52,7 @@ Construct a nodelist containing all nodes from STRING and all nodes from all net
 
   Gs = [G_ppi] + list(Gs)
 
-  G_union = fl.weighted_union(Gs)
+  G_union = prmf.weighted_union(Gs)
   nodes = sorted(G_union.nodes())
   for node in nodes:
     args.out_nodelist.write(node + "\n")

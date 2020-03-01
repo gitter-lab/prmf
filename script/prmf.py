@@ -9,8 +9,8 @@ from sklearn.preprocessing import quantile_transform
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 import networkx as nx
-import factorlib as fl
-from factorlib import prmf
+import prmf
+from prmf import prmf_args
 import copy
 import datetime
 import math
@@ -863,7 +863,7 @@ def parse_pathways(manifold_fps, node_attribute="name"):
   G_fp_pairs = []
   for fp in manifold_fps:
     G = nx.read_graphml(fp).to_undirected()
-    G = fl.relabel_nodes(G, node_attribute)
+    G = prmf.relabel_nodes(G, node_attribute)
     G_fp_pairs.append((G,fp))
   return G_fp_pairs
 
@@ -958,7 +958,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   # convert data frame to numpy
   nodelist = None
   if args.nodelist is not None:
-    nodelist = fl.parse_nodelist(open(args.nodelist))
+    nodelist = prmf.parse_nodelist(open(args.nodelist))
     X = X.to_numpy()
   else:
     if has_header:
@@ -971,7 +971,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
             nodelist.append(node)
             nodelist_set.add(node)
 
-      X = fl.embed_arr(nodelist, list(X.columns), X.to_numpy())
+      X = prmf.embed_arr(nodelist, list(X.columns), X.to_numpy())
     else:
       sys.stderr.write("--nodelist is not provided and there is no header in <--data>\n")
       sys.exit(25)
@@ -1074,7 +1074,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
 
   # cross validation
   if args.cross_validation is not None:
-    normalized_test_errors = fl.measure_cv_performance(V, X_test)
+    normalized_test_errors = prmf.measure_cv_performance(V, X_test)
     avg_normalized_test_error = np.mean(normalized_test_errors)
     error_fp = os.path.join(args.outdir, 'test_error.csv')
     np.savetxt(error_fp, normalized_test_errors, delimiter=",")

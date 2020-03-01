@@ -7,7 +7,7 @@ import networkx as nx
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-import factorlib as fl
+import prmf
 
 def measure_smoothness(V, Gs, nodelist, node_attr='name'):
   """
@@ -41,7 +41,7 @@ def measure_smoothness(V, Gs, nodelist, node_attr='name'):
   latent_data = []
   for k in range(k_latent):
     G = Gs[k]
-    G = fl.relabel_nodes(G, node_attr)
+    G = prmf.relabel_nodes(G, node_attr)
 
     edge_diffs = []
     for u,v in G.edges_iter():
@@ -112,14 +112,14 @@ Plot the results in a histogram.
   n_genes, k_latent = V.shape
 
   obj_fp = os.path.join(args.indir, 'obj.txt')
-  latent_to_pathway_fp = fl.parse_pathway_obj(obj_fp)
+  latent_to_pathway_fp = prmf.parse_pathway_obj(obj_fp)
   Gs = []
   for k in range(k_latent):
     pathway_fp = latent_to_pathway_fp[k]
     G = nx.read_graphml(pathway_fp).to_undirected()
     Gs.append(G)
 
-  nodelist = fl.parse_nodelist(open(args.nodelist))
+  nodelist = prmf.parse_nodelist(open(args.nodelist))
 
   latent_edge_diffs = measure_smoothness(V, Gs, nodelist)
   report_smoothness(latent_edge_diffs, 'edge')

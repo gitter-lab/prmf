@@ -2,10 +2,10 @@
 import os, os.path
 import argparse, sys
 import re
-from factorlib import ensembl
-from factorlib.string_db import parse_string_fh
-from factorlib.script_utils import add_file_and_dir_args
-from factorlib.script_utils import check_file_and_dir_args
+from prmf import ensembl
+from prmf.string_db import parse_string_fh
+from prmf.script_utils import add_file_and_dir_args
+from prmf.script_utils import check_file_and_dir_args
 
 def main():
   parser = argparse.ArgumentParser(description="""

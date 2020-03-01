@@ -5,8 +5,8 @@ import networkx as nx
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import scipy.sparse as sp
-import factorlib as fl
-import factorlib.plot as flp
+import prmf
+import prmf.plot as flp
 EPSILON = np.finfo(np.float32).eps
 DPI = flp.DPI
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
   M = vec.reshape((1,n_nodes))
   M = sp.csc_matrix(M)
-  vec_dif = fl.diffusion(M, adj, alpha=0.6)
+  vec_dif = prmf.diffusion(M, adj, alpha=0.6)
   vec_dif = np.array(vec_dif.todense()).reshape((n_nodes,))
   print(vec_dif)
 

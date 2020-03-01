@@ -2,7 +2,7 @@
 import argparse, sys
 import os, os.path
 import networkx as nx
-from factorlib import script_utils
+from prmf import script_utils
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()

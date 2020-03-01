@@ -2,7 +2,7 @@
 import sys, argparse
 import os, os.path
 import numpy as np
-import factorlib as fl
+import prmf
 from sklearn import decomposition
 from sklearn.preprocessing import quantile_transform
 import csv
@@ -77,7 +77,7 @@ Writes U.csv with the U matrix including row and column names, V.csv with the V 
   # cross validation
   avg_normalized_test_error = None
   if args.cross_validation is not None:
-    normalized_test_errors = fl.measure_cv_performance(V, X_test)
+    normalized_test_errors = prmf.measure_cv_performance(V, X_test)
     avg_normalized_test_error = np.mean(normalized_test_errors)
     error_fp = os.path.join(args.outdir, 'test_error.csv')
     np.savetxt(error_fp, normalized_test_errors, delimiter=",")

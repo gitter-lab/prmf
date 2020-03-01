@@ -2,9 +2,9 @@
 import argparse
 import os.path
 import numpy as np
-import factorlib as fl
-from factorlib import ensembl
-from factorlib.string_db import parse_string_fh
+import prmf
+from prmf import ensembl
+from prmf.string_db import parse_string_fh
 
 def for_plier(args):
   hgnc_to_ensps_map = ensembl.map_hgnc_to_ensps(open(args.mapping_file))
@@ -14,7 +14,7 @@ def for_plier(args):
   csv_fp = os.path.join(args.outdir, "avana_data_plier.csv")
   nodelist_fp = os.path.join(args.outdir, "avana_nodelist_plier.csv")
 
-  data, row_names, col_names = fl.parse_achilles(args.gene_dependency)
+  data, row_names, col_names = prmf.parse_achilles(args.gene_dependency)
 
   # map column names
   col_names_ensp_or_hgnc = []
@@ -39,9 +39,9 @@ def for_prmf(args):
   csv_fp = os.path.join(args.outdir, "avana_data.csv")
   nodelist_fp = os.path.join(args.outdir, "avana_nodelist.csv")
 
-  Gs = fl.parse_pathways_dir(args.pathways_dir)
-  Gs = list(map(lambda G: fl.relabel_nodes(G, args.node_attribute), Gs))
-  data, row_names, col_names = fl.parse_achilles(args.gene_dependency)
+  Gs = prmf.parse_pathways_dir(args.pathways_dir)
+  Gs = list(map(lambda G: prmf.relabel_nodes(G, args.node_attribute), Gs))
+  data, row_names, col_names = prmf.parse_achilles(args.gene_dependency)
 
   # map column names
   col_names_ensp_or_hgnc = []
@@ -55,10 +55,10 @@ def for_prmf(args):
   lists = list(map(lambda H: H.nodes(), Gs))
   lists.append(col_names_ensp_or_hgnc)
   lists.append(G.nodes())
-  nodelist = fl.prepare_nodelist(lists)
+  nodelist = prmf.prepare_nodelist(lists)
 
   # embed data in len(nodelist)-dimensional space
-  data_embeded = fl.embed_arr(nodelist, col_names, data)
+  data_embeded = prmf.embed_arr(nodelist, col_names, data)
 
   with open(nodelist_fp, 'w') as fh:
     fh.write('\n'.join(nodelist))

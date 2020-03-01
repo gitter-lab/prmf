@@ -7,7 +7,7 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
-import factorlib as fl
+import prmf
 
 def matching_id_to_ind(factor_id):
   return int(factor_id[1:])
@@ -29,7 +29,7 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
 
   W_mats = list(map(lambda x: pd.read_csv(x, sep=",", header='infer', index_col=0).values, args.gene_by_latent_csvs))
   label_strs = list(map(lambda x: x + "; AUC={:0.3f}", args.labels))
-  nodelist = fl.parse_nodelist(args.nodelist)
+  nodelist = prmf.parse_nodelist(args.nodelist)
 
   true_seed_fps = []
   for line in args.true_seeds:
@@ -38,16 +38,16 @@ Evaluate NMF versus Pathway-Regularized Matrix Factorization by plotting PR curv
 
   true_seed_lists = []
   for true_seed_fp in true_seed_fps:
-    seed_list = fl.parse_seedlist(true_seed_fp)
+    seed_list = prmf.parse_seedlist(true_seed_fp)
     true_seed_lists.append(seed_list)
 
-  pathways_mat = fl.nodelists_to_mat(true_seed_lists, nodelist)
+  pathways_mat = prmf.nodelists_to_mat(true_seed_lists, nodelist)
   # }} - parse inputs
   
   # reorganize <matching> so we can find each method's latent factor that best matches the ground truth
   pathway_to_latent_maps = []
   for i in range(len(W_mats)):
-    matching = fl.match(W_mats[i], pathways_mat)
+    matching = prmf.match(W_mats[i], pathways_mat)
     pathway_to_latent_map = {}
     for match in matching:
       factor_id_match, pathway_id_match, auc = match

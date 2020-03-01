@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys, argparse
 import os, os.path
-import factorlib as fl
+import prmf
 import numpy.random as nprand
 
 # TODO rename pathways
@@ -16,7 +16,7 @@ def sample_pathways(args, nodelist):
   chosen_seed_fps = []
   for subset_ind in subset_inds:
     seed_list_fp = args.seed_lists[subset_ind]
-    seed_list = fl.parse_seedlist(seed_list_fp)
+    seed_list = prmf.parse_seedlist(seed_list_fp)
     seed_lists_sample.append(seed_list)
     chosen_seed_fps.append(seed_list_fp)
   seed_lists_sample.append(nodelist) # final seed list is background <nodelist>
@@ -42,7 +42,7 @@ def simulate_whole(args):
   """
   In contrast to simulate_mixture, do not combine nodes from different pathways into a single gene list
   """
-  nodelist = fl.parse_nodelist(args.nodelist)
+  nodelist = prmf.parse_nodelist(args.nodelist)
 
   # first, sample subset of seed-lists
   seed_lists_sample, seed_list_sizes, chosen_seed_fps = sample_pathways(args, nodelist)
@@ -78,7 +78,7 @@ def simulate_whole(args):
   write_seeds(args, chosen_seed_fps)
 
 def simulate_mixture(args):
-  nodelist = fl.parse_nodelist(args.nodelist)
+  nodelist = prmf.parse_nodelist(args.nodelist)
 
   # first, sample subset of seed-lists
   seed_lists_sample, seed_list_sizes, chosen_seed_fps = sample_pathways(args, nodelist)

@@ -2,8 +2,8 @@
 import sys, argparse
 import os, os.path
 import networkx as nx
-import factorlib as fl
-from factorlib import script_utils
+import prmf
+from prmf import script_utils
 
 def main():
   parser = argparse.ArgumentParser(description="""
@@ -18,7 +18,7 @@ Generative simulation pipeline to benchmark PRMF against NMF, PLIER, CoGAPS, NBS
   parser.add_argument("--do-prmf", default=True, help="If true, include PRMF in the benchmarking; default true", type=script_utils.str2bool)
   parser.add_argument("--do-plier", default=True, help="If true, include PLIER in the benchmarking; default true", type=script_utils.str2bool)
   args = parser.parse_args()
-  fl.script_utils.log_script(sys.argv)
+  prmf.script_utils.log_script(sys.argv)
 
   job_graph = nx.DiGraph()
   job_id = 0

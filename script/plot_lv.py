@@ -7,9 +7,9 @@ import networkx as nx
 import numpy as np
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-from factorlib import script_utils
-from factorlib import string_db
-from factorlib import ensembl
+from prmf import script_utils
+from prmf import string_db
+from prmf import ensembl
 
 def count_incident_nodes(G_ppi, G_pathway, nodes):
   """

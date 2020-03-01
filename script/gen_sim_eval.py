@@ -5,8 +5,8 @@ import os, os.path
 import numpy as np
 import pandas as pd
 import networkx as nx
-import factorlib as fl
-from factorlib import script_utils
+import prmf
+from prmf import script_utils
 import re
 
 # TODO 
@@ -114,7 +114,7 @@ def eval_prmf_runs(pathways_files, prmf_obj_files):
   vals = np.zeros((len(prmf_obj_files),))
   for i in range(len(prmf_obj_files)):
     prmf_obj_file = prmf_obj_files[i]
-    latent_to_pathway = fl.parse_pathway_obj(prmf_obj_file)
+    latent_to_pathway = prmf.parse_pathway_obj(prmf_obj_file)
     for k, v in latent_to_pathway.items():
       pathway_int = parse_pathway_int(v)
       if pathway_int < K_LATENT:

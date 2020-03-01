@@ -5,8 +5,8 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
-import factorlib as fl
-from factorlib.plot import plot_latent_and_graph
+import prmf
+from prmf.plot import plot_latent_and_graph
 
 # https://www.infobyip.com/detectmonitordpi.php
 DPI = 96
@@ -88,11 +88,11 @@ if __name__ == "__main__":
   pathway_mat = np.genfromtxt(args.pathway_mat, delimiter=",")
   if(len(pathway_mat.shape) == 1):
     pathway_mat = pathway_mat.reshape(pathway_mat.shape[0], 1)
-  latent_to_fp = fl.parse_pathway_obj(args.pathway_obj)
+  latent_to_fp = prmf.parse_pathway_obj(args.pathway_obj)
   latent_to_G = {}
   for k, fp in latent_to_fp.items():
     latent_to_G[k] = nx.read_graphml(fp)
-  nodelist = fl.parse_nodelist(open(args.nodelist))
+  nodelist = prmf.parse_nodelist(open(args.nodelist))
   mapping = parse_mapping_file(args.mapping_file)
 
   node_to_ind = {}
@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     if args.truncate:
       G, conn_dict, edge_dict = truncate_graph(G)
-      vec_sub, nodelist_sub = fl.filter_vec_by_graph(G, vec_sub, nodelist_sub)
+      vec_sub, nodelist_sub = prmf.filter_vec_by_graph(G, vec_sub, nodelist_sub)
 
     plot_latent_and_graph(G, fig, ax, data=vec_sub, nodelist=nodelist_sub, colormap=plt.cm.Reds, title=title_str, vmin=np.min(vec), vmax=np.max(vec))
     plt.savefig(ofp, bbox_inches='tight')

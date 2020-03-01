@@ -2,8 +2,8 @@
 import argparse, sys
 import os, os.path
 import networkx as nx
-from factorlib import script_utils
-from factorlib import prmf
+from prmf import script_utils
+from prmf import prmf_args
 
 def main():
   parser = argparse.ArgumentParser(description="""

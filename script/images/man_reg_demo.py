@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import rc
-import factorlib.plot
+import prmf.plot
 rc('text', usetex=True)
 
 # https://www.infobyip.com/detectmonitordpi.php
@@ -42,7 +42,7 @@ def main():
   ax2 = plt.subplot(gs[0,1])
 
   # create labels centered at each heatmap block
-  # TODO use fl.plot_vec
+  # TODO use prmf.plot_vec
   row_range = np.arange(shape_tpl[0])
   ax0.get_xaxis().set_visible(False)
   ax0.set_yticks(row_range + 0.5)
@@ -61,9 +61,9 @@ def main():
 
   # plot networks and manifold regularization value
   title1 = 'Penalty:\n$w^T L_2 w = {:1.3f}$'.format(manifold_regularization(data_flat, G1))
-  pos = factorlib.plot.plot_graph(G1, ax1, title=title1, title_fontsize=24, title_y=1.08)
+  pos = prmf.plot.plot_graph(G1, ax1, title=title1, title_fontsize=24, title_y=1.08)
   title2 = 'Penalty:\n$w^T L_1 w = {:1.3f}$'.format(manifold_regularization(data_flat, G2))
-  factorlib.plot.plot_graph(G2, ax2, pos=pos, title=title2, title_fontsize=24, title_y=1.08)
+  prmf.plot.plot_graph(G2, ax2, pos=pos, title=title2, title_fontsize=24, title_y=1.08)
 
   ax3 = plt.subplot(gs[1,0])
   ax3.axis('off')

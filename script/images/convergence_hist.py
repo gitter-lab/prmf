@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-import factorlib as fl
+import prmf
 
 def main():
   parser = argparse.ArgumentParser(description="""
@@ -28,7 +28,7 @@ Create a histogram of converged pathways
   # count number of converged pathways
   pathway_to_count = {}
   for run_dir in run_dirs:
-    pathways_dict = fl.parse_pathway_obj(os.path.join(run_dir, 'obj.txt'))
+    pathways_dict = prmf.parse_pathway_obj(os.path.join(run_dir, 'obj.txt'))
     pathways = pathways_dict.values()
     pathway_basenames = list(map(os.path.basename, pathways))
     for pathway in pathway_basenames:
