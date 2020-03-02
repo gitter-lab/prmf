@@ -3,7 +3,7 @@ Functions used in nmf_pathway.py that are shared by other scripts
 """
 import argparse
 
-# TODO move these back to prmf.py, use __init__.py and packaging to reference them in other locations
+# TODO move these back to prmf_runner.py, use __init__.py and packaging to reference them in other locations
 def add_prmf_arguments(parser):
   parser.add_argument("--data", type=str, required=True, help="n_obs x n_features matrix")
   parser.add_argument("--manifolds", nargs='+', help="graphml files to use as manifold. Node identifiers must appear in nodelist.")

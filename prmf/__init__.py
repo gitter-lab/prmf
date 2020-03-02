@@ -174,7 +174,7 @@ def diffusion(M, adj, alpha=0.7, tol=10e-6):  # TODO equation, M, alpha
 def parse_ws_delim(fh):
   return parse_nodelist(fh)
 
-# TODO move to prmf.py
+# TODO move to prmf_runner.py
 def parse_pathway_obj(fp):
   """
   Extract mapping of latent factor to pathway fp
@@ -189,7 +189,7 @@ def parse_pathway_obj(fp):
         rv[int(match_data.group(1))] = match_data.group(2)
   return rv
 
-# TODO move to prmf.py
+# TODO move to prmf_runner.py
 def parse_init(fp):
   """
   Extract filepaths used to initialize nmf_pathway.py as reported by its output stored in <fp>

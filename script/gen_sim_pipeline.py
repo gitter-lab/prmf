@@ -78,7 +78,7 @@ Generative simulation pipeline to benchmark PRMF against NMF, PLIER, CoGAPS, NBS
 
       # PRMF
       attrs = {
-        'exe': 'prmf.py',
+        'exe': 'prmf_runner.py',
         'args': ['--data', data, '--manifolds'] + pathways + ['--node-attribute', 'name', '--k-latent', '30', '--outdir', prmf_outdir],
         'out': os.path.join(prmf_outdir, 'prmf.out'),
         'err': os.path.join(prmf_outdir, 'prmf.err'),
