@@ -887,7 +887,7 @@ References
 ----------
 Cai 2008. Non-negative Matrix Factorization on Manifold
 """, formatter_class=RawTextHelpFormatter)
-  prmf.add_prmf_arguments(parser)
+  prmf_args.add_prmf_arguments(parser)
   args = parser.parse_args()
   OUTDIR = args.outdir
 
