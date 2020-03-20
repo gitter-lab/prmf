@@ -22,7 +22,7 @@ install:
   - wget https://github.com/manubot/manubot/blob/a4c826ceb954635810ba204a2393dce6fa7a5d5a/ci/deploy-docs.sh
 
 script:
-  - python -c "import prmf; print(prmf.__version__)"
+  - python -c "import prmf"
     # See https://github.com/manubot/manubot/blob/a4c826ceb954635810ba204a2393dce6fa7a5d5a/.travis.yml#L23
   - export PYTHONPATH=.
   - portray as_html --overwrite --output_dir=docs
