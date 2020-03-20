@@ -19,7 +19,7 @@ install:
   - pip install .
   # Use Manubot portray docs deploy script
   # Include this in repository with attribution if it works well
-  - wget https://github.com/manubot/manubot/blob/a4c826ceb954635810ba204a2393dce6fa7a5d5a/ci/deploy-docs.sh
+  - wget https://raw.githubusercontent.com/manubot/manubot/a4c826ceb954635810ba204a2393dce6fa7a5d5a/ci/deploy-docs.sh
 
 script:
   - python -c "import prmf"
