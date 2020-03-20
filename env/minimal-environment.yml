@@ -1,0 +1,10 @@
+name: prmf
+channels:
+  - defaults
+dependencies:
+  - matplotlib=2.1
+  - networkx=1.11
+  - numpy=1.14
+  - python=3.7
+  - scikit-learn=0.19
+  - scipy=1.0
