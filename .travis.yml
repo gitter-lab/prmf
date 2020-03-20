@@ -15,7 +15,25 @@ before_install:
   - conda activate prmf
 
 install:
+  - pip install portray==1.3.1
   - pip install .
+  # Use Manubot portray docs deploy script
+  # Include this in repository with attribution if it works well
+  - wget https://github.com/manubot/manubot/blob/a4c826ceb954635810ba204a2393dce6fa7a5d5a/ci/deploy-docs.sh
 
 script:
   - python -c "import prmf"
+    # See https://github.com/manubot/manubot/blob/a4c826ceb954635810ba204a2393dce6fa7a5d5a/.travis.yml#L23
+  - export PYTHONPATH=.
+  - portray as_html --overwrite --output_dir=docs
+
+# Deploy procedure from Manubot
+# https://github.com/manubot/manubot/blob/a4c826ceb954635810ba204a2393dce6fa7a5d5a/.travis.yml
+deploy:
+  - provider: script
+    script: bash deploy-docs.sh
+    skip_cleanup: true
+    on:
+      repo: gitter-lab/prmf
+      branch: master
+      condition: $TRAVIS_EVENT_TYPE = "push"
