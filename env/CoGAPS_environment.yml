@@ -1,0 +1,12 @@
+name: CoGAPS
+channels:
+  - defaults
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-essentials
+  - r-base
+  - r-biocmanager
+  - r-remotes
+  - r-gdata
+  - bioconductor-rhdf5lib

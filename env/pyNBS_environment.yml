@@ -1,0 +1,17 @@
+name: pyNBS
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=2.7
+  - lifelines
+  - networkx
+  - numpy
+  - matplotlib
+  - mkl
+  - pandas
+  - scipy
+  - scikit-learn
+  - seaborn
+  - pip:
+    - git+https://github.com/aabaker99/pyNBS@1.0

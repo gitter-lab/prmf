@@ -17,7 +17,7 @@ from sklearn.datasets import fetch_olivetti_faces
 from sklearn.cluster import MiniBatchKMeans
 
 import networkx as nx
-import factorlib as fl
+import prmf
 
 def main():
   parser = argparse.ArgumentParser(description="""
@@ -46,15 +46,15 @@ Prepare AMPL files to solve the same problem.
   # TODO transpose due to way my AMPL model is written (maybe should be rewritten to keep 
   # canonical obs x features data shape)
   with open(ampl_data_fp, 'w') as ampl_data_fh:
-    fl.write_ampl_data(faces.transpose(), ampl_data_fh)
+    prmf.write_ampl_data(faces.transpose(), ampl_data_fh)
   with open(ampl_params_fp, 'w') as ampl_params_fh:
-    fl.write_ampl_params(n_components, ampl_params_fh)
+    prmf.write_ampl_params(n_components, ampl_params_fh)
 
   # global centering
   faces_centered = faces - faces.mean(axis=0)
   # local centering
   faces_centered -= faces_centered.mean(axis=1).reshape(n_samples, -1)
-  fl.plot_olivetti_components(plt, faces_centered[:n_components], "First centered Olivetti faces")
+  prmf.plot_olivetti_components(plt, faces_centered[:n_components], "First centered Olivetti faces")
   plt.savefig(data_image_fp)
 
   # objective:
@@ -93,7 +93,7 @@ Prepare AMPL files to solve the same problem.
   #  plot_gallery("Pixelwise variance",
   #         estimator.noise_variance_.reshape(1, -1), n_col=1,
   #         n_row=1)
-  fl.plot_olivetti_components(plt, components_[:n_components], '%s - Train time %.1fs' % (name, train_time))
+  prmf.plot_olivetti_components(plt, components_[:n_components], '%s - Train time %.1fs' % (name, train_time))
   plt.savefig(comps_image_fp)
 
   # n_components x n_col
@@ -108,7 +108,7 @@ Prepare AMPL files to solve the same problem.
   print(comps.shape)
   for i in range(n_latent):
     latent_factor = comps[:,i]
-    G = fl.vec_to_graph_prim(latent_factor)
+    G = prmf.vec_to_graph_prim(latent_factor)
     Gs.append(G)
   with open(ampl_data_fp, 'a') as ampl_data_fh:
     # TODO 

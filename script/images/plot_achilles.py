@@ -3,7 +3,7 @@ import argparse
 import os, os.path
 import matplotlib.pyplot as plt
 import numpy as np
-import factorlib as fl
+import prmf
 
 def main():
   parser = argparse.ArgumentParser()
@@ -11,7 +11,7 @@ def main():
   parser.add_argument("outdir")
   args = parser.parse_args()
 
-  data, row_to_cell_line, gene_names = fl.parse_achilles(args.infile)
+  data, row_to_cell_line, gene_names = prmf.parse_achilles(args.infile)
   for i, cell_line in enumerate(row_to_cell_line):
     data_cell_line = data[i,:]
 

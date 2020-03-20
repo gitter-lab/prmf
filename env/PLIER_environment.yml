@@ -1,0 +1,9 @@
+name: PLIER
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - r-essentials
+  - r-base
+  - r-devtools
+  - r-remotes

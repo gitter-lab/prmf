@@ -9,7 +9,7 @@ from sklearn import decomposition
 from sklearn.datasets import fetch_olivetti_faces
 import sklearn.model_selection
 import networkx as nx
-import factorlib as fl
+import prmf
 
 def parse_h(fp, delimiter="\t"):
   """
@@ -114,23 +114,23 @@ Write optimization performance to stdout and optimal W and H matrices to separat
   ampl_lapl_fh = open(os.path.join(args.outdir, "laplacians.dat"), 'w')
 
   # olivetti.dat writes X_test as n_feature x n_samples
-  fl.write_ampl_data(X_test.transpose(), ampl_data_fh)
-  fl.write_ampl_params(n_components, ampl_params_fh)
+  prmf.write_ampl_data(X_test.transpose(), ampl_data_fh)
+  prmf.write_ampl_params(n_components, ampl_params_fh)
 
   Gs = []
   for k in range(args.k_components):
     comp = H_init[k,:]
     G = None
     if args.prior == "prim":
-      G = fl.vec_to_graph_prim(comp)
+      G = prmf.vec_to_graph_prim(comp)
     elif args.prior == "comb":
-      G = fl.vec_to_graph_comb(comp)
+      G = prmf.vec_to_graph_comb(comp)
     else:
       sys.stderr.write("invalid --prior, using prim\n")
-      G = fl.vec_to_graph_prim(comp)
+      G = prmf.vec_to_graph_prim(comp)
     Gs.append(G)
   laplacians = map(nx.laplacian_matrix, Gs)
-  fl.ampl_write_sparse_arrs(laplacians, ampl_lapl_fh)
+  prmf.ampl_write_sparse_arrs(laplacians, ampl_lapl_fh)
 
   # }}--
 

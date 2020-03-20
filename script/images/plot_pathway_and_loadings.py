@@ -5,8 +5,8 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
-import factorlib as fl
-from factorlib.plot import plot_latent_and_graph
+import prmf
+from prmf.plot import plot_latent_and_graph
 
 # https://www.infobyip.com/detectmonitordpi.php
 DPI = 96
@@ -80,16 +80,19 @@ if __name__ == "__main__":
   parser.add_argument("--pathway-mat")
   parser.add_argument("--pathway-obj")
   parser.add_argument("--nodelist")
+  parser.add_argument("--truncate", default=False, type=bool, help="If True, truncate graph down to 50 nodes for visualization")
   parser.add_argument("--mapping-file", help="Node identifier mapping")
   parser.add_argument("--outdir")
   args = parser.parse_args()
 
   pathway_mat = np.genfromtxt(args.pathway_mat, delimiter=",")
-  latent_to_fp = fl.parse_pathway_obj(args.pathway_obj)
+  if(len(pathway_mat.shape) == 1):
+    pathway_mat = pathway_mat.reshape(pathway_mat.shape[0], 1)
+  latent_to_fp = prmf.parse_pathway_obj(args.pathway_obj)
   latent_to_G = {}
   for k, fp in latent_to_fp.items():
     latent_to_G[k] = nx.read_graphml(fp)
-  nodelist = fl.parse_nodelist(open(args.nodelist))
+  nodelist = prmf.parse_nodelist(open(args.nodelist))
   mapping = parse_mapping_file(args.mapping_file)
 
   node_to_ind = {}
@@ -110,54 +113,60 @@ if __name__ == "__main__":
     ax.get_yaxis().set_visible(False)
     ofp = os.path.join(args.outdir, "fig{}.png".format(k))
 
+    # relabel nodes according to mapping and filter pathway nodes and their scores from latent factor
     vec = pathway_mat[:,k]
-    inds = []
-    for node in G.nodes():
-      ind = node_to_ind[node]
-      inds.append(ind)
-    # this may permute items in nodelist but the order of inds and vec_sub is consistent with nodelist_sub
-    vec_sub = vec[inds]
-
-    # relabel
-    # TODO is order of nodes retained after mapping?
-    G = nx.relabel_nodes(G, mapping)
-
     node_to_score = {}
+    vec_sub = []
     nodelist_sub = []
     for node in G.nodes():
+      ind = node_to_ind[node]
+      vec_sub.append(vec[ind])
+      if node in mapping:
+        nodelist_sub.append(mapping[node])
+      else:
+        nodelist_sub.append(node)
       node_to_score[node] = vec[ind]
-      nodelist_sub.append(node)
+    vec_sub = np.array(vec_sub)
+    G = nx.relabel_nodes(G, mapping)
+    for orig, new in mapping.items():
+      if orig in node_to_score:
+        # TODO assumes identifier lists orig and new do not overlap
+        score = node_to_score.pop(orig)
+        node_to_score[new] = score
 
     # TODO map fp to titles
     title_str = None
     bn = os.path.basename(os.path.splitext(fp)[0])
     bn = bn.split('_')[0]
-    if bn == "hsa04010":
-      title_str = "MAPK Signaling Pathway"
-    else:
-      title_str = bn
+    title_str = bn
 
     # DEBUG
     print(title_str)
+    print('-' * len(title_str))
+    print(vec_sub)
+    print('')
     for n1, n2 in G.edges():
       s1 = node_to_score[n1]
       s2 = node_to_score[n2]
-      print(n1, n2, s1, s2)
-    print(inds)
-    print(vec_sub)
+      diff = s1 - s2
+      print(n1, n2, s1, s2, diff)
+    print('')
 
-    print("vec stats:")
-    print(np.min(vec))
-    print(np.max(vec))
-    print(np.median(vec))
+    print("latent factor stats:")
+    print("min: ", np.min(vec))
+    print("max: ", np.max(vec))
+    print("median: ", np.median(vec))
+    print('')
 
-    print("vec_sub stats:")
-    print(np.min(vec_sub))
-    print(np.max(vec_sub))
-    print(np.median(vec_sub))
+    print("latent factor stats on pathway nodes:")
+    print("min: ", np.min(vec_sub))
+    print("max: ", np.max(vec_sub))
+    print("median: ",np.median(vec_sub))
+    print('')
 
-    G, conn_dict, edge_dict = truncate_graph(G)
-    vec_sub, nodelist_sub = fl.filter_vec_by_graph(G, vec_sub, nodelist_sub)
+    if args.truncate:
+      G, conn_dict, edge_dict = truncate_graph(G)
+      vec_sub, nodelist_sub = prmf.filter_vec_by_graph(G, vec_sub, nodelist_sub)
 
     plot_latent_and_graph(G, fig, ax, data=vec_sub, nodelist=nodelist_sub, colormap=plt.cm.Reds, title=title_str, vmin=np.min(vec), vmax=np.max(vec))
     plt.savefig(ofp, bbox_inches='tight')

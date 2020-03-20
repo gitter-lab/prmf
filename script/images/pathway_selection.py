@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
-import factorlib.plot as flp
+import prmf.plot as flp
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()

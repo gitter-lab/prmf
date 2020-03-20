@@ -1,0 +1,13 @@
+recon = 3242.24980
+manifold = 0.03889
+ignore = 289.98066
+fro = 172998.97305
+gamma = 8337.63767
+delta = 0.00020
+obj = 176565.51061
+0 -> graph3.graphml
+1 -> graph0.graphml
+2 -> graph5.graphml
+3 -> graph4.graphml
+4 -> graph2.graphml
+5 -> graph1.graphml
