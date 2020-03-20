@@ -34,6 +34,6 @@ deploy:
     script: bash deploy-docs.sh
     skip_cleanup: true
     on:
-      repo: manubot/manubot
+      repo: gitter-lab/prmf
       branch: master
       condition: $TRAVIS_EVENT_TYPE = "push"
