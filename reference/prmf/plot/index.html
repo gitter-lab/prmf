@@ -1,0 +1,1566 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>Plot - prmf</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.adb8469c.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#4caf50">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="green" data-md-color-accent="lightgreen">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#module-prmfplot" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../.." title="prmf" aria-label="prmf" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              prmf
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Plot
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../.." title="prmf" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    prmf
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-1" type="checkbox" id="nav-2-1" checked>
+    
+    <label class="md-nav__link" for="nav-2-1">
+      Prmf
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-1">
+        Prmf
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ampl/" title="Ampl" class="md-nav__link">
+      Ampl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ensembl/" title="Ensembl" class="md-nav__link">
+      Ensembl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../image_processing/" title="Image Processing" class="md-nav__link">
+      Image Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="Index" class="md-nav__link">
+      Index
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../intersect/" title="Intersect" class="md-nav__link">
+      Intersect
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Plot
+      </label>
+    
+    <a href="./" title="Plot" class="md-nav__link md-nav__link--active">
+      Plot
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plot_graph" class="md-nav__link">
+    plot_graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_latent_and_graph" class="md-nav__link">
+    plot_latent_and_graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_pathway_interactors" class="md-nav__link">
+    plot_pathway_interactors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_vec" class="md-nav__link">
+    plot_vec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split_title" class="md-nav__link">
+    split_title
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../prmf_args/" title="Prmf Args" class="md-nav__link">
+      Prmf Args
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../script_utils/" title="Script Utils" class="md-nav__link">
+      Script Utils
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../string_db/" title="String Db" class="md-nav__link">
+      String Db
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plot_graph" class="md-nav__link">
+    plot_graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_latent_and_graph" class="md-nav__link">
+    plot_latent_and_graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_pathway_interactors" class="md-nav__link">
+    plot_pathway_interactors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_vec" class="md-nav__link">
+    plot_vec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#split_title" class="md-nav__link">
+    split_title
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/gitter-lab/prmf/edit/master/reference/prmf/plot.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="module-prmfplot">Module prmf.plot</h1>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">colors</span>
+
+<span class="c1"># https://www.infobyip.com/detectmonitordpi.php</span>
+
+<span class="n">DPI</span> <span class="o">=</span> <span class="mi">96</span>
+
+<span class="n">LINE_WIDTH</span> <span class="o">=</span> <span class="mf">2.0</span>
+
+<span class="n">LABEL_FONT_SIZE</span> <span class="o">=</span> <span class="s1">&#39;xx-large&#39;</span>
+
+<span class="n">TICK_FONT_SIZE</span> <span class="o">=</span> <span class="s1">&#39;x-large&#39;</span>
+
+<span class="k">def</span> <span class="nf">plot_vec</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="kp">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">column_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_columns</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+  <span class="n">shape_tpl</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="kp">shape</span>
+
+  <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="kp">reshape</span><span class="p">((</span><span class="n">shape_tpl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+
+  <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">min</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="c1"># create labels centered at each heatmap block</span>
+
+  <span class="n">row_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">arange</span><span class="p">(</span><span class="n">shape_tpl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">row_range</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">yticklabels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">yticklabels</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">row_range</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">yticklabels</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Node&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Scores&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="c1"># only plot colorbar if column_index is the last column: n_columns - 1</span>
+
+  <span class="n">colorbar</span> <span class="o">=</span> <span class="kc">None</span>
+
+  <span class="k">if</span> <span class="kp">log</span><span class="p">:</span>
+
+    <span class="n">mappable</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Reds</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="n">n_columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+      <span class="n">colorbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">],</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">LogFormatter</span><span class="p">(),</span> <span class="n">use_gridspec</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+      <span class="n">colorbar</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">([</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">])</span>
+
+      <span class="n">colorbar</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">{:.0e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vmin</span><span class="p">),</span> <span class="s1">&#39;</span><span class="si">{:.0e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vmax</span><span class="p">)])</span>
+
+  <span class="k">else</span><span class="p">:</span>
+
+    <span class="n">mappable</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Reds</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="n">n_columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+      <span class="n">colorbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">],</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="n">use_gridspec</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="n">n_columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+    <span class="n">colorbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span> <span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+  <span class="n">labels</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+
+    <span class="n">labels</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_fontsize</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">title_y</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="kp">sqrt</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">order</span><span class="p">()),</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+  <span class="c1"># draw scatter manually to add node borders</span>
+
+  <span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="n">ys</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">for</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">center</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+    <span class="n">xs</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">ys</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">)</span>
+
+  <span class="c1"># choose a light red for contrast with black</span>
+
+  <span class="n">rgba</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Reds</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">rgba</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+  <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">pos</span>
+
+<span class="k">def</span> <span class="nf">plot_pathway_interactors</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pathway_node</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">nodelist</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span> <span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+  <span class="k">if</span> <span class="n">pathway_node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">G</span><span class="p">:</span>
+
+    <span class="k">raise</span> <span class="n">FactorLibException</span><span class="p">(</span><span class="s2">&quot;pathway_node must be a node in G&quot;</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">colormap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">colormap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Reds</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">min</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span><span class="o">.</span><span class="n">get_points</span><span class="p">()</span><span class="o">.</span><span class="kp">flatten</span><span class="p">()</span>
+
+  <span class="n">gs</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">left</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">x1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">y1</span><span class="p">)</span>
+
+  <span class="n">ax_1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+  <span class="n">ax_2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax_1</span><span class="p">)</span>
+
+  <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax_2</span><span class="p">)</span>
+
+  <span class="c1"># - {{ ax_1 heatmap</span>
+
+  <span class="c1"># use node identifiers as heatmap labels but use node indices as graph labels because they dont fit well</span>
+
+  <span class="c1"># associate node number with the identifier</span>
+
+  <span class="n">node_to_label</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">):</span>
+
+    <span class="n">node_to_label</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+  <span class="n">node_to_label</span><span class="p">[</span><span class="n">pathway_node</span><span class="p">]</span> <span class="o">=</span> <span class="n">pathway_node</span>
+
+  <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">node_to_label</span><span class="p">)</span>
+
+  <span class="n">label_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">):</span>
+
+    <span class="n">label_list</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+
+  <span class="n">plot_vec</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ax_1</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="n">label_list</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="kp">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="c1"># ax_1 heatmap }} -</span>
+
+  <span class="c1"># - {{ ax_2 graph</span>
+
+  <span class="n">ax_2</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax_2</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="kp">sqrt</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">order</span><span class="p">()),</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+  <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">)</span>
+
+  <span class="c1"># draw scatter manually to add node borders</span>
+
+  <span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="n">ys</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">for</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">center</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+    <span class="k">if</span> <span class="n">node_id</span> <span class="o">!=</span> <span class="n">pathway_node</span><span class="p">:</span>
+
+      <span class="n">xs</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+      <span class="n">ys</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="c1"># choose a light red for contrast with black</span>
+
+  <span class="n">rgba</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Reds</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
+
+  <span class="n">ax_2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">rgba</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+  <span class="c1"># label all nodes other than pathway_node</span>
+
+  <span class="n">G</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">pathway_node</span><span class="p">)</span>
+
+  <span class="n">pathway_node_center</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">pathway_node</span><span class="p">)</span>
+
+  <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax_2</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="c1"># label pathway_node</span>
+
+  <span class="n">ax_2</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">pathway_node_center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pathway_node_center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pathway_node</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">rgba</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">))</span>
+
+  <span class="n">ax_2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_fontsize</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">title_y</span><span class="p">)</span>
+
+  <span class="c1"># ax_2 graph }} -</span>
+
+  <span class="k">return</span> <span class="n">pos</span>
+
+<span class="k">def</span> <span class="nf">plot_latent_and_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nodelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+  <span class="n">column_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_col</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="kp">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+
+  <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span>
+
+  <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">  Plot a vector and a graph</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">nodelist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="k">raise</span> <span class="n">FactorLibException</span><span class="p">(</span><span class="s2">&quot;&lt;data&gt; and &lt;nodelist&gt; must be both set or both None&quot;</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">colormap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">colormap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Reds</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="c1"># generate data to be smooth on graph</span>
+
+    <span class="n">comps</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">comp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">comps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">zeros</span><span class="p">((</span><span class="n">G</span><span class="o">.</span><span class="n">order</span><span class="p">(),</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">comp</span><span class="p">:</span>
+
+      <span class="n">data</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="kp">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.95</span>
+
+    <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">comps</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+
+      <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">comp</span><span class="p">:</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="kp">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+
+  <span class="k">else</span><span class="p">:</span>
+
+    <span class="c1"># use provided data</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="kp">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">nodelist</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+
+  <span class="c1"># split ax into 2+ subplots</span>
+
+  <span class="c1"># if there are too many nodes to plot, separate heatmap into multiple pieces</span>
+
+  <span class="n">n_heatmaps</span> <span class="o">=</span> <span class="mi">1</span>
+
+  <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+  <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="kp">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max_col</span><span class="p">:</span>
+
+    <span class="n">n_heatmaps</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="n">width_ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+
+  <span class="n">n_col</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">width_ratios</span><span class="p">)</span>
+
+  <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span><span class="o">.</span><span class="n">get_points</span><span class="p">()</span><span class="o">.</span><span class="kp">flatten</span><span class="p">()</span>
+
+  <span class="n">gs</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_col</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="n">width_ratios</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">x1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">y1</span><span class="p">)</span>
+
+  <span class="n">axes</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_heatmaps</span><span class="p">):</span>
+
+    <span class="c1"># skip every other ax in gridspec because it is used to make space for heatmap labels</span>
+
+    <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="mi">2</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+    <span class="n">axes</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+  <span class="c1"># add ax for graph</span>
+
+  <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">gs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+  <span class="n">axes</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+  <span class="c1"># use node identifiers as heatmap labels but use node indices as graph labels because they dont fit well</span>
+
+  <span class="k">if</span> <span class="n">nodelist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">nodelist</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+
+  <span class="n">node_to_ind</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">):</span>
+
+    <span class="n">node_to_ind</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+  <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">node_to_ind</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">min</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">nodelabels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">nodelabels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">):</span>
+
+      <span class="n">nodelabels</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_heatmaps</span><span class="p">):</span>
+
+    <span class="n">data_start</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">max_col</span> <span class="o">*</span> <span class="n">i</span>
+
+    <span class="n">data_end</span> <span class="o">=</span> <span class="n">max_col</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">data_this</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data_start</span><span class="p">:</span><span class="n">data_end</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">yticklabels</span> <span class="o">=</span> <span class="n">nodelabels</span><span class="p">[</span><span class="n">data_start</span><span class="p">:</span><span class="n">data_end</span><span class="p">]</span>
+
+    <span class="n">plot_vec</span><span class="p">(</span><span class="n">data_this</span><span class="p">,</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="n">yticklabels</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="kp">log</span><span class="o">=</span><span class="kp">log</span><span class="p">,</span> <span class="n">column_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">n_columns</span><span class="o">=</span><span class="n">n_heatmaps</span><span class="p">)</span>
+
+  <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+  <span class="n">pos</span> <span class="o">=</span> <span class="n">plot_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">title_fontsize</span><span class="p">,</span> <span class="n">title_y</span><span class="o">=</span><span class="n">title_y</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">pos</span>
+
+<span class="k">def</span> <span class="nf">split_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">n_lines</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+
+  <span class="n">title_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+  <span class="n">cur_len</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="n">words</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="kp">split</span><span class="p">()</span>
+
+  <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+
+    <span class="n">word_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+    <span class="n">new_words</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+    <span class="n">cur_len</span> <span class="o">+=</span> <span class="n">word_len</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">cur_len</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">title_len</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_lines</span><span class="p">):</span>
+
+      <span class="n">new_words</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_words</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">DPI</span>
+</code></pre></div>
+
+
+<div class="codehilite"><pre><span></span><code><span class="n">LABEL_FONT_SIZE</span>
+</code></pre></div>
+
+
+<div class="codehilite"><pre><span></span><code><span class="n">LINE_WIDTH</span>
+</code></pre></div>
+
+
+<div class="codehilite"><pre><span></span><code><span class="n">TICK_FONT_SIZE</span>
+</code></pre></div>
+
+
+<h2 id="functions">Functions</h2>
+<h3 id="plot_graph">plot_graph</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_graph</span><span class="p">(</span>
+    <span class="n">G</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">colormap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">title_fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+    <span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">plot_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">colormap</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">title_fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span><span class="w"> </span><span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="n">vmin</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">vmax</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">G</span><span class="p">.</span><span class="n">nodes</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">labels</span><span class="o">[</span><span class="n">node</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">get_xaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">get_yaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">fontsize</span><span class="o">=</span><span class="n">title_fontsize</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">title_y</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">G</span><span class="p">.</span><span class="k">order</span><span class="p">()),</span><span class="w"> </span><span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">draw</span><span class="w"> </span><span class="n">scatter</span><span class="w"> </span><span class="n">manually</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">borders</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">xs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">node_id</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">pos</span><span class="p">.</span><span class="n">items</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">xs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">center</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ys</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">center</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">nx</span><span class="p">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nf">choose</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">light</span><span class="w"> </span><span class="n">red</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">contrast</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">black</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">rgba</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">Reds</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="w"> </span><span class="n">ys</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="o">=</span><span class="n">rgba</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">nx</span><span class="p">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="w"> </span><span class="n">font_size</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="plot_latent_and_graph">plot_latent_and_graph</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_latent_and_graph</span><span class="p">(</span>
+    <span class="n">G</span><span class="p">,</span>
+    <span class="n">fig</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">nodelist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">nodelabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">column_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">colormap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_col</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">title_fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Plot a vector and a graph</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">plot_latent_and_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">nodelist</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">nodelabels</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">column_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">colormap</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">max_col</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nf">log</span><span class="o">=</span><span class="k">True</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="n">title_fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">vmin</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">vmax</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Plot a vector and a graph</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">nodelist</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">raise</span><span class="w"> </span><span class="n">FactorLibException</span><span class="p">(</span><span class="ss">&quot;&lt;data&gt; and &lt;nodelist&gt; must be both set or both None&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">colormap</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">colormap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">Reds</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">get_xaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">get_yaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="n">generate</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">smooth</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">graph</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">comps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sorted</span><span class="p">(</span><span class="n">nx</span><span class="p">.</span><span class="n">connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">),</span><span class="w"> </span><span class="k">key</span><span class="o">=</span><span class="n">lambda</span><span class="w"> </span><span class="nl">x</span><span class="p">:</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="nf">reverse</span><span class="o">=</span><span class="k">True</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">comp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">(</span><span class="n">comps</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">G</span><span class="p">.</span><span class="k">order</span><span class="p">(),</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">comp</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">data</span><span class="o">[</span><span class="n">node</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.6</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">random</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">(</span><span class="n">comp</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">data</span><span class="o">[</span><span class="n">node</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.95</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">comp</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">comps</span><span class="o">[</span><span class="n">1:</span><span class="o">]</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">comp</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">data</span><span class="o">[</span><span class="n">node</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">random</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">else</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">provided</span><span class="w"> </span><span class="k">data</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">data</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="nf">len</span><span class="p">(</span><span class="n">nodelist</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">split</span><span class="w"> </span><span class="n">ax</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="mi">2</span><span class="o">+</span><span class="w"> </span><span class="n">subplots</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">there</span><span class="w"> </span><span class="k">are</span><span class="w"> </span><span class="n">too</span><span class="w"> </span><span class="n">many</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">plot</span><span class="p">,</span><span class="w"> </span><span class="n">separate</span><span class="w"> </span><span class="n">heatmap</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">multiple</span><span class="w"> </span><span class="n">pieces</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">n_heatmaps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">width_ratios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">1,5</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="k">data</span><span class="p">.</span><span class="n">shape</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nl">max_col</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">n_heatmaps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">width_ratios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">1,1,1,4</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">n_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">width_ratios</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">y0</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">.</span><span class="n">get_position</span><span class="p">().</span><span class="n">get_points</span><span class="p">().</span><span class="n">flatten</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">gs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mpl</span><span class="p">.</span><span class="n">gridspec</span><span class="p">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">width_ratios</span><span class="o">=</span><span class="n">width_ratios</span><span class="p">,</span><span class="w"> </span><span class="nf">left</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">bottom</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span><span class="w"> </span><span class="nf">right</span><span class="o">=</span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="k">top</span><span class="o">=</span><span class="n">y1</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">axes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="n">n_heatmaps</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="n">skip</span><span class="w"> </span><span class="k">every</span><span class="w"> </span><span class="n">other</span><span class="w"> </span><span class="n">ax</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">gridspec</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="nf">space</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">heatmap</span><span class="w"> </span><span class="n">labels</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="n">gs</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">axes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">ax</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">graph</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="n">gs</span><span class="o">[</span><span class="n">-1</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">axes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">identifiers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">heatmap</span><span class="w"> </span><span class="n">labels</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">indices</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">graph</span><span class="w"> </span><span class="n">labels</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">they</span><span class="w"> </span><span class="n">dont</span><span class="w"> </span><span class="n">fit</span><span class="w"> </span><span class="n">well</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">nodelist</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">nodelist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sorted</span><span class="p">(</span><span class="n">G</span><span class="p">.</span><span class="n">nodes</span><span class="p">())</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">node_to_ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">node_to_ind</span><span class="o">[</span><span class="n">node</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">node_to_ind</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">vmin</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">vmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="nf">min</span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">vmax</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">vmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="nf">max</span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">nodelabels</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">nodelabels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">nodelabels</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;{}: {}&#39;</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="n">n_heatmaps</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">data_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">max_col</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">data_end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_col</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">data_this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">data_start:data_end,0</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">yticklabels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nodelabels</span><span class="o">[</span><span class="n">data_start:data_end</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">plot_vec</span><span class="p">(</span><span class="n">data_this</span><span class="p">,</span><span class="w"> </span><span class="n">axes</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">yticklabels</span><span class="o">=</span><span class="n">yticklabels</span><span class="p">,</span><span class="w"> </span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="w"> </span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span><span class="w"> </span><span class="nf">log</span><span class="o">=</span><span class="nf">log</span><span class="p">,</span><span class="w"> </span><span class="n">column_index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">n_columns</span><span class="o">=</span><span class="n">n_heatmaps</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">axes</span><span class="o">[</span><span class="n">-1</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plot_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">fontsize</span><span class="o">=</span><span class="n">title_fontsize</span><span class="p">,</span><span class="w"> </span><span class="n">title_y</span><span class="o">=</span><span class="n">title_y</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="plot_pathway_interactors">plot_pathway_interactors</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_pathway_interactors</span><span class="p">(</span>
+    <span class="n">G</span><span class="p">,</span>
+    <span class="n">pathway_node</span><span class="p">,</span>
+    <span class="n">fig</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">nodelist</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">title_fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">,</span>
+    <span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">colormap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">plot_pathway_interactors</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">pathway_node</span><span class="p">,</span><span class="w"> </span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="p">,</span><span class="w"> </span><span class="n">nodelist</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">title_fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span><span class="w"> </span><span class="n">title_y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="n">colormap</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">vmin</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">vmax</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="o">=</span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">pathway_node</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">G</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">raise</span><span class="w"> </span><span class="n">FactorLibException</span><span class="p">(</span><span class="ss">&quot;pathway_node must be a node in G&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">colormap</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">colormap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">Reds</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">get_xaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">get_yaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">vmin</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">vmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="nf">min</span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">vmax</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">vmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="nf">max</span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">y0</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ax</span><span class="p">.</span><span class="n">get_position</span><span class="p">().</span><span class="n">get_points</span><span class="p">().</span><span class="n">flatten</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">gs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mpl</span><span class="p">.</span><span class="n">gridspec</span><span class="p">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">width_ratios</span><span class="o">=[</span><span class="n">1,5</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="nf">left</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">bottom</span><span class="o">=</span><span class="n">y0</span><span class="p">,</span><span class="w"> </span><span class="nf">right</span><span class="o">=</span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="k">top</span><span class="o">=</span><span class="n">y1</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="n">gs</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">Subplot</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="w"> </span><span class="n">gs</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax_1</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">ax_2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">{{</span><span class="w"> </span><span class="n">ax_1</span><span class="w"> </span><span class="n">heatmap</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">identifiers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">heatmap</span><span class="w"> </span><span class="n">labels</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">indices</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">graph</span><span class="w"> </span><span class="n">labels</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">they</span><span class="w"> </span><span class="n">dont</span><span class="w"> </span><span class="n">fit</span><span class="w"> </span><span class="n">well</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">associate</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">identifier</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">node_to_label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">node_to_label</span><span class="o">[</span><span class="n">node</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">node_to_label</span><span class="o">[</span><span class="n">pathway_node</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pathway_node</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">node_to_label</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">label_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">nodelist</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">label_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;{}: {}&#39;</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">plot_vec</span><span class="p">(</span><span class="k">data</span><span class="p">,</span><span class="w"> </span><span class="n">ax_1</span><span class="p">,</span><span class="w"> </span><span class="n">yticklabels</span><span class="o">=</span><span class="n">label_list</span><span class="p">,</span><span class="w"> </span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="w"> </span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span><span class="w"> </span><span class="nf">log</span><span class="o">=</span><span class="k">True</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">ax_1</span><span class="w"> </span><span class="n">heatmap</span><span class="w"> </span><span class="err">}}</span><span class="w"> </span><span class="o">-</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">{{</span><span class="w"> </span><span class="n">ax_2</span><span class="w"> </span><span class="n">graph</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax_2</span><span class="p">.</span><span class="n">get_xaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax_2</span><span class="p">.</span><span class="n">get_yaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">G</span><span class="p">.</span><span class="k">order</span><span class="p">()),</span><span class="w"> </span><span class="n">iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">nx</span><span class="p">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="o">=</span><span class="n">ax_2</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">draw</span><span class="w"> </span><span class="n">scatter</span><span class="w"> </span><span class="n">manually</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">borders</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">xs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">node_id</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">pos</span><span class="p">.</span><span class="n">items</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">node_id</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nl">pathway_node</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">xs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">center</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">ys</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">center</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nf">choose</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">light</span><span class="w"> </span><span class="n">red</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">contrast</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">black</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">rgba</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">Reds</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax_2</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span><span class="w"> </span><span class="n">ys</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="o">=</span><span class="n">rgba</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="ow">all</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="n">other</span><span class="w"> </span><span class="k">than</span><span class="w"> </span><span class="n">pathway_node</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G</span><span class="p">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">pathway_node</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">pathway_node_center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pos</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">pathway_node</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">nx</span><span class="p">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">ax</span><span class="o">=</span><span class="n">ax_2</span><span class="p">,</span><span class="w"> </span><span class="n">font_size</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="n">pathway_node</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax_2</span><span class="p">.</span><span class="nc">text</span><span class="p">(</span><span class="n">pathway_node_center</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">pathway_node_center</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">pathway_node</span><span class="p">,</span><span class="w"> </span><span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">,</span><span class="w"> </span><span class="n">bbox</span><span class="o">=</span><span class="n">dict</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="n">rgba</span><span class="p">,</span><span class="w"> </span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">ax_2</span><span class="p">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">fontsize</span><span class="o">=</span><span class="n">title_fontsize</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">title_y</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">ax_2</span><span class="w"> </span><span class="n">graph</span><span class="w"> </span><span class="err">}}</span><span class="w"> </span><span class="o">-</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="plot_vec">plot_vec</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_vec</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">aspect</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">yticklabels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">column_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">n_columns</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">plot_vec</span><span class="p">(</span><span class="k">data</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="k">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="k">False</span><span class="p">,</span> <span class="n">column_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_columns</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+  <span class="n">shape_tpl</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="n">shape</span>
+
+  <span class="k">data</span> <span class="o">=</span> <span class="k">data</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">shape_tpl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+
+  <span class="k">if</span> <span class="n">vmin</span> <span class="k">is</span> <span class="k">None</span><span class="p">:</span>
+
+    <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="k">min</span><span class="p">(</span><span class="k">data</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">vmax</span> <span class="k">is</span> <span class="k">None</span><span class="p">:</span>
+
+    <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="k">max</span><span class="p">(</span><span class="k">data</span><span class="p">)</span>
+
+  <span class="o">#</span> <span class="k">create</span> <span class="n">labels</span> <span class="n">centered</span> <span class="k">at</span> <span class="k">each</span> <span class="n">heatmap</span> <span class="n">block</span>
+
+  <span class="n">row_range</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">shape_tpl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+  <span class="n">ax</span><span class="p">.</span><span class="n">get_xaxis</span><span class="p">().</span><span class="n">set_visible</span><span class="p">(</span><span class="k">False</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="p">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">row_range</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">yticklabels</span> <span class="k">is</span> <span class="k">None</span><span class="p">:</span>
+
+    <span class="n">yticklabels</span> <span class="o">=</span> <span class="k">map</span><span class="p">(</span><span class="n">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">row_range</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="p">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">yticklabels</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+
+    <span class="n">ax</span><span class="p">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="ss">&quot;Node&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="n">ax</span><span class="p">.</span><span class="n">set_title</span><span class="p">(</span><span class="ss">&quot;Scores&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">LABEL_FONT_SIZE</span><span class="p">)</span>
+
+  <span class="o">#</span> <span class="k">only</span> <span class="n">plot</span> <span class="n">colorbar</span> <span class="k">if</span> <span class="n">column_index</span> <span class="k">is</span> <span class="n">the</span> <span class="k">last</span> <span class="k">column</span><span class="p">:</span> <span class="n">n_columns</span> <span class="o">-</span> <span class="mi">1</span>
+
+  <span class="n">colorbar</span> <span class="o">=</span> <span class="k">None</span>
+
+  <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+
+    <span class="n">mappable</span> <span class="o">=</span> <span class="n">ax</span><span class="p">.</span><span class="n">pcolor</span><span class="p">(</span><span class="k">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">Reds</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">colors</span><span class="p">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">),</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="n">n_columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+      <span class="n">colorbar</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">],</span> <span class="k">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">05</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">08</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="n">mpl</span><span class="p">.</span><span class="n">ticker</span><span class="p">.</span><span class="n">LogFormatter</span><span class="p">(),</span> <span class="n">use_gridspec</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+
+      <span class="n">colorbar</span><span class="p">.</span><span class="n">set_ticks</span><span class="p">([</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">])</span>
+
+      <span class="n">colorbar</span><span class="p">.</span><span class="n">set_ticklabels</span><span class="p">([</span><span class="s1">&#39;{:.0e}&#39;</span><span class="p">.</span><span class="n">format</span><span class="p">(</span><span class="n">vmin</span><span class="p">),</span> <span class="s1">&#39;{:.0e}&#39;</span><span class="p">.</span><span class="n">format</span><span class="p">(</span><span class="n">vmax</span><span class="p">)])</span>
+
+  <span class="k">else</span><span class="p">:</span>
+
+    <span class="n">mappable</span> <span class="o">=</span> <span class="n">ax</span><span class="p">.</span><span class="n">pcolor</span><span class="p">(</span><span class="k">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">Reds</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">LINE_WIDTH</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="n">n_columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+      <span class="n">colorbar</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">],</span> <span class="k">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">05</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">08</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">,</span> <span class="n">use_gridspec</span><span class="o">=</span><span class="k">True</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">column_index</span> <span class="o">==</span> <span class="n">n_columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+    <span class="n">colorbar</span><span class="p">.</span><span class="n">ax</span><span class="p">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">TICK_FONT_SIZE</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="split_title">split_title</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">split_title</span><span class="p">(</span>
+    <span class="n">title</span><span class="p">,</span>
+    <span class="n">n_lines</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">split_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">n_lines</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+
+  <span class="n">title_len</span> <span class="o">=</span> <span class="n">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+  <span class="n">cur_len</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="n">new_words</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="n">words</span> <span class="o">=</span> <span class="n">title</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+  <span class="k">for</span> <span class="n">word</span> <span class="k">in</span> <span class="n">words</span><span class="p">:</span>
+
+    <span class="n">word_len</span> <span class="o">=</span> <span class="n">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+    <span class="n">new_words</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+    <span class="n">cur_len</span> <span class="o">+=</span> <span class="n">word_len</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">cur_len</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">title_len</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_lines</span><span class="p">):</span>
+
+      <span class="n">new_words</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="n">new_words</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../intersect/" title="Intersect" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Intersect
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../prmf_args/" title="Prmf Args" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Prmf Args
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Powered by
+        <a href="http://timothycrosley.github.io/portray">portray.</a>
+        You too can
+        <a href="http://timothycrosley.github.io/portray">
+          portray</a>
+        your Python project well using automatic documentation.
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.1",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1462 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>Image Processing - prmf</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.adb8469c.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#4caf50">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="green" data-md-color-accent="lightgreen">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#module-prmfimage_processing" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../.." title="prmf" aria-label="prmf" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              prmf
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Image Processing
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../.." title="prmf" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    prmf
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-1" type="checkbox" id="nav-2-1" checked>
+    
+    <label class="md-nav__link" for="nav-2-1">
+      Prmf
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-1">
+        Prmf
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ampl/" title="Ampl" class="md-nav__link">
+      Ampl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ensembl/" title="Ensembl" class="md-nav__link">
+      Ensembl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Image Processing
+      </label>
+    
+    <a href="./" title="Image Processing" class="md-nav__link md-nav__link--active">
+      Image Processing
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_neighbors" class="md-nav__link">
+    get_neighbors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_nn_prior" class="md-nav__link">
+    pixel_nn_prior
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_prior" class="md-nav__link">
+    pixel_prior
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_similarity" class="md-nav__link">
+    pixel_similarity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_to_index" class="md-nav__link">
+    pixel_to_index
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_olivetti_components" class="md-nav__link">
+    plot_olivetti_components
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vec_to_graph" class="md-nav__link">
+    vec_to_graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vec_to_graph_comb" class="md-nav__link">
+    vec_to_graph_comb
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vec_to_graph_prim" class="md-nav__link">
+    vec_to_graph_prim
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="Index" class="md-nav__link">
+      Index
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../intersect/" title="Intersect" class="md-nav__link">
+      Intersect
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../plot/" title="Plot" class="md-nav__link">
+      Plot
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../prmf_args/" title="Prmf Args" class="md-nav__link">
+      Prmf Args
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../script_utils/" title="Script Utils" class="md-nav__link">
+      Script Utils
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../string_db/" title="String Db" class="md-nav__link">
+      String Db
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    Variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_neighbors" class="md-nav__link">
+    get_neighbors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_nn_prior" class="md-nav__link">
+    pixel_nn_prior
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_prior" class="md-nav__link">
+    pixel_prior
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_similarity" class="md-nav__link">
+    pixel_similarity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pixel_to_index" class="md-nav__link">
+    pixel_to_index
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plot_olivetti_components" class="md-nav__link">
+    plot_olivetti_components
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vec_to_graph" class="md-nav__link">
+    vec_to_graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vec_to_graph_comb" class="md-nav__link">
+    vec_to_graph_comb
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vec_to_graph_prim" class="md-nav__link">
+    vec_to_graph_prim
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/gitter-lab/prmf/edit/master/reference/prmf/image_processing.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="module-prmfimage_processing">Module prmf.image_processing</h1>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">OLIVETTI_SHAPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">plot_olivetti_components</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span><span class="w"> </span><span class="n">images</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Components&#39;</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Parameters</span>
+
+<span class="ss">  ----------</span>
+
+<span class="ss">  images : list of np.array</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">gallery_row</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">gallery_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">image_shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OLIVETTI_SHAPE</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">2.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gallery_col</span><span class="p">,</span><span class="w"> </span><span class="mf">2.26</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gallery_row</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">plt</span><span class="p">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="k">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">comp</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gallery_row</span><span class="p">,</span><span class="w"> </span><span class="n">gallery_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">vmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">comp</span><span class="p">.</span><span class="nf">max</span><span class="p">(),</span><span class="w"> </span><span class="o">-</span><span class="n">comp</span><span class="p">.</span><span class="nf">min</span><span class="p">())</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">comp</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_shape</span><span class="p">),</span><span class="w"> </span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">gray</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">           </span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">           </span><span class="n">vmin</span><span class="o">=-</span><span class="n">vmax</span><span class="p">,</span><span class="w"> </span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(())</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">plt</span><span class="p">.</span><span class="n">yticks</span><span class="p">(())</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">plt</span><span class="p">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">,</span><span class="w"> </span><span class="mf">0.99</span><span class="p">,</span><span class="w"> </span><span class="mf">0.93</span><span class="p">,</span><span class="w"> </span><span class="mf">0.04</span><span class="p">,</span><span class="w"> </span><span class="mf">0.</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">pixel_similarity</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">x_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">n_row</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">y_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">n_row</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">x_j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">n_row</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">y_j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">n_row</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">math</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">((</span><span class="n">x_i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x_j</span><span class="p">)</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">y_i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y_j</span><span class="p">)</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">dist</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="nf">Convert</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pixel</span><span class="w"> </span><span class="n">coordinates</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="n">coordinates</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n_col</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">j</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">pixel_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  In images, we expect the pixel intensity of nearby pixels to be only slightly different</span>
+
+<span class="ss">  from the neighboring pixels</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G_pixel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="p">.</span><span class="n">shape</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="n">product</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">),</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="n">n_col</span><span class="p">))</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">pixel_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="o">[</span><span class="n">i,j</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">neighbors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">neighbor</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">neighbors</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">k_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">k_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">neighbor</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">G_pixel</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k_1</span><span class="p">,</span><span class="w"> </span><span class="n">k_2</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="err">:</span><span class="w"> </span><span class="mi">1</span><span class="err">}</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">G_pixel</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">pixel_nn_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Identify the neighboring pixel with the most similar intensity</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G_nn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="p">.</span><span class="n">shape</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="p">.</span><span class="n">flatten</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">percentile_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="nf">stdev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="n">product</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">),</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="n">n_col</span><span class="p">))</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">pixel_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="o">[</span><span class="n">i,j</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">pixel_v</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">percentile_v</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">continue</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">neighbors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">best_sim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">neighbor</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">neighbors</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">neigh_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="o">[</span><span class="n">neighbor[0</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">neighbor</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="err">]</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">sim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rbf_similarity</span><span class="p">(</span><span class="nf">stdev</span><span class="p">,</span><span class="w"> </span><span class="n">pixel_v</span><span class="p">,</span><span class="w"> </span><span class="n">neigh_v</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">neigh_v</span><span class="w"> </span><span class="o">&gt;</span><span class="w">  </span><span class="n">percentile_v</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">sim</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nl">best_sim</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">neighbor</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">best_sim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">best</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">k_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">k_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">best</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">G_nn</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k_1</span><span class="p">,</span><span class="w"> </span><span class="n">k_2</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="err">:</span><span class="w"> </span><span class="n">best_sim</span><span class="err">}</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">G_nn</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">vec_to_graph_comb</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Construct network that is a combination of nearest_neighbors in the image space</span>
+
+<span class="ss">  and pixel intensity similarity among those neighbors</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">mat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G_pixel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G_nn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_nn_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">combine_graphs</span><span class="p">(</span><span class="o">[</span><span class="n">G_pixel, G_nn</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="n">0.5, 0.5</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">G</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">vec_to_graph_prim</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Primitive version which only examines the neighboring pixels; always 1-NN</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">def</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nf">Convert</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">pixel</span><span class="w"> </span><span class="n">coordinates</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="n">coordinates</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n_col</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">j</span><span class="w"></span>
+
+<span class="w">  </span><span class="nf">stdev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">mat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">percentile_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="n">product</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">),</span><span class="w"> </span><span class="k">range</span><span class="p">(</span><span class="n">n_col</span><span class="p">))</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">neighbors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">pixel_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="o">[</span><span class="n">i,j</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">pixel_v</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">percentile_v</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">continue</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">n_row</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">n_col</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">best_dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">neighbor</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">neighbors</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">neigh_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="o">[</span><span class="n">neighbor[0</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">neighbor</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="err">]</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rbf_similarity</span><span class="p">(</span><span class="nf">stdev</span><span class="p">,</span><span class="w"> </span><span class="n">pixel_v</span><span class="p">,</span><span class="w"> </span><span class="n">neigh_v</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">neigh_v</span><span class="w"> </span><span class="o">&gt;</span><span class="w">  </span><span class="n">percentile_v</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">dist</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nl">best_dist</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">neighbor</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">best_dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">best</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">k_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">k_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixel_to_index</span><span class="p">(</span><span class="o">*</span><span class="n">best</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">G</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k_1</span><span class="p">,</span><span class="w"> </span><span class="n">k_2</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="err">:</span><span class="w"> </span><span class="n">best_dist</span><span class="err">}</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">G</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">get_neighbors</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Get neighboring pixel coordinates</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">neighbors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">n_row</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">n_col</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">neighbors</span><span class="w"></span>
+
+<span class="err">#</span><span class="w"> </span><span class="n">TODO</span><span class="w"> </span><span class="n">n_row</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">n_col</span><span class="w"></span>
+
+<span class="n">def</span><span class="w"> </span><span class="n">vec_to_graph</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">.</span><span class="n">flatten</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="nf">stdev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">percentile_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">def</span><span class="w"> </span><span class="n">rbf_sim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">rbf_similarity</span><span class="p">(</span><span class="nf">stdev</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">def</span><span class="w"> </span><span class="n">sim</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rbf_sim</span><span class="p">(</span><span class="n">vec</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">vec</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pixel_similarity</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">TODO</span><span class="w"> </span><span class="n">slow</span><span class="w"> </span><span class="n">implementation</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="n">combinations</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">shape</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="o">&lt;</span><span class="n">percentile</span><span class="o">&gt;</span><span class="w"> </span><span class="k">percent</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="n">threshold</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">vec</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">percentile_v</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">vec</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">percentile_v</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">G</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="err">:</span><span class="w"> </span><span class="n">sim</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="err">}</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G_prime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform_nearest_neighbors</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">G_prime</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h2 id="variables">Variables</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">OLIVETTI_SHAPE</span>
+</code></pre></div>
+
+
+<h2 id="functions">Functions</h2>
+<h3 id="get_neighbors">get_neighbors</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">get_neighbors</span><span class="p">(</span>
+    <span class="n">n_row</span><span class="p">,</span>
+    <span class="n">n_col</span><span class="p">,</span>
+    <span class="n">i</span><span class="p">,</span>
+    <span class="n">j</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Get neighboring pixel coordinates</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">get_neighbors</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Get neighboring pixel coordinates</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="n">neighbors</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+    <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+  <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">n_row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+    <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+  <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+    <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+  <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">n_col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+    <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="n">neighbors</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="pixel_nn_prior">pixel_nn_prior</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pixel_nn_prior</span><span class="p">(</span>
+    <span class="n">mat</span><span class="p">,</span>
+    <span class="n">percentile</span><span class="o">=</span><span class="mi">50</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Identify the neighboring pixel with the most similar intensity</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">pixel_nn_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Identify the neighboring pixel with the most similar intensity</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="n">G_nn</span> <span class="o">=</span> <span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span>
+
+  <span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span> <span class="o">=</span> <span class="n">mat</span><span class="p">.</span><span class="n">shape</span>
+
+  <span class="n">vec</span> <span class="o">=</span> <span class="n">mat</span><span class="p">.</span><span class="n">flatten</span><span class="p">()</span>
+
+  <span class="n">percentile_v</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">percentile</span><span class="p">)</span>
+
+  <span class="n">stdev</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="k">in</span> <span class="n">it</span><span class="p">.</span><span class="n">product</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">),</span> <span class="n">range</span><span class="p">(</span><span class="n">n_col</span><span class="p">)):</span>
+
+    <span class="n">pixel_v</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">pixel_v</span> <span class="o">&lt;</span> <span class="n">percentile_v</span><span class="p">):</span>
+
+      <span class="k">continue</span>
+
+    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">get_neighbors</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+
+    <span class="n">best</span> <span class="o">=</span> <span class="k">None</span>
+
+    <span class="n">best_sim</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">neighbor</span> <span class="k">in</span> <span class="n">neighbors</span><span class="p">:</span>
+
+      <span class="n">neigh_v</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+      <span class="n">sim</span> <span class="o">=</span> <span class="n">rbf_similarity</span><span class="p">(</span><span class="n">stdev</span><span class="p">,</span> <span class="n">pixel_v</span><span class="p">,</span> <span class="n">neigh_v</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">neigh_v</span> <span class="o">&gt;</span>  <span class="n">percentile_v</span> <span class="k">and</span> <span class="n">sim</span> <span class="o">&gt;</span> <span class="n">best_sim</span><span class="p">:</span>
+
+        <span class="n">best</span> <span class="o">=</span> <span class="n">neighbor</span>
+
+        <span class="n">best_sim</span> <span class="o">=</span> <span class="n">sim</span>
+
+    <span class="k">if</span> <span class="n">best</span> <span class="k">is</span> <span class="k">not</span> <span class="k">None</span><span class="p">:</span>
+
+      <span class="n">k_1</span> <span class="o">=</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+
+      <span class="n">k_2</span> <span class="o">=</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span> <span class="o">*</span><span class="n">best</span><span class="p">)</span>
+
+      <span class="n">G_nn</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k_1</span><span class="p">,</span> <span class="n">k_2</span><span class="p">,</span> <span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">best_sim</span><span class="err">}</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">G_nn</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="pixel_prior">pixel_prior</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pixel_prior</span><span class="p">(</span>
+    <span class="n">mat</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>In images, we expect the pixel intensity of nearby pixels to be only slightly different 
+from the neighboring pixels</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">pixel_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  In images, we expect the pixel intensity of nearby pixels to be only slightly different</span>
+
+<span class="ss">  from the neighboring pixels</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="n">G_pixel</span> <span class="o">=</span> <span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span>
+
+  <span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span> <span class="o">=</span> <span class="n">mat</span><span class="p">.</span><span class="n">shape</span>
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="k">in</span> <span class="n">it</span><span class="p">.</span><span class="n">product</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">),</span> <span class="n">range</span><span class="p">(</span><span class="n">n_col</span><span class="p">)):</span>
+
+    <span class="n">pixel_v</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">get_neighbors</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">neighbor</span> <span class="k">in</span> <span class="n">neighbors</span><span class="p">:</span>
+
+      <span class="n">k_1</span> <span class="o">=</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+
+      <span class="n">k_2</span> <span class="o">=</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span> <span class="o">*</span><span class="n">neighbor</span><span class="p">)</span>
+
+      <span class="n">G_pixel</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k_1</span><span class="p">,</span> <span class="n">k_2</span><span class="p">,</span> <span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="err">}</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">G_pixel</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="pixel_similarity">pixel_similarity</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pixel_similarity</span><span class="p">(</span>
+    <span class="n">n_row</span><span class="p">,</span>
+    <span class="n">n_col</span><span class="p">,</span>
+    <span class="n">i</span><span class="p">,</span>
+    <span class="n">j</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">pixel_similarity</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+
+  <span class="n">x_i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="n">n_row</span>
+
+  <span class="n">y_i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">n_row</span>
+
+  <span class="n">x_j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">//</span> <span class="n">n_row</span>
+
+  <span class="n">y_j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">%</span> <span class="n">n_row</span>
+
+  <span class="n">dist</span> <span class="o">=</span> <span class="n">math</span><span class="p">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x_i</span> <span class="o">-</span> <span class="n">x_j</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_i</span> <span class="o">-</span> <span class="n">y_j</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">dist</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="pixel_to_index">pixel_to_index</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">pixel_to_index</span><span class="p">(</span>
+    <span class="n">n_col</span><span class="p">,</span>
+    <span class="n">i</span><span class="p">,</span>
+    <span class="n">j</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="n">n_col</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+
+  <span class="o">#</span> <span class="k">Convert</span> <span class="k">from</span> <span class="n">pixel</span> <span class="n">coordinates</span> <span class="k">to</span> <span class="n">vector</span> <span class="n">coordinates</span>
+
+  <span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="n">n_col</span> <span class="o">+</span> <span class="n">j</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="plot_olivetti_components">plot_olivetti_components</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">plot_olivetti_components</span><span class="p">(</span>
+    <span class="n">plt</span><span class="p">,</span>
+    <span class="n">images</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Components&#39;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<h2 id="parameters">Parameters</h2>
+<p>images : list of np.array</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">plot_olivetti_components</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Components&#39;</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Parameters</span>
+
+<span class="ss">  ----------</span>
+
+<span class="ss">  images : list of np.array</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="n">gallery_row</span> <span class="o">=</span> <span class="mi">2</span>
+
+  <span class="n">gallery_col</span> <span class="o">=</span> <span class="mi">3</span>
+
+  <span class="n">image_shape</span> <span class="o">=</span> <span class="n">OLIVETTI_SHAPE</span>
+
+  <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">.</span> <span class="o">*</span> <span class="n">gallery_col</span><span class="p">,</span> <span class="mi">2</span><span class="p">.</span><span class="mi">26</span> <span class="o">*</span> <span class="n">gallery_row</span><span class="p">))</span>
+
+  <span class="n">plt</span><span class="p">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="k">size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">comp</span> <span class="k">in</span> <span class="n">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gallery_row</span><span class="p">,</span> <span class="n">gallery_col</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">vmax</span> <span class="o">=</span> <span class="k">max</span><span class="p">(</span><span class="n">comp</span><span class="p">.</span><span class="k">max</span><span class="p">(),</span> <span class="o">-</span><span class="n">comp</span><span class="p">.</span><span class="k">min</span><span class="p">())</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">comp</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_shape</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">cm</span><span class="p">.</span><span class="n">gray</span><span class="p">,</span>
+
+           <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span>
+
+           <span class="n">vmin</span><span class="o">=-</span><span class="n">vmax</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(())</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">yticks</span><span class="p">(())</span>
+
+  <span class="n">plt</span><span class="p">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">05</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">93</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">04</span><span class="p">,</span> <span class="mi">0</span><span class="p">.)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="vec_to_graph">vec_to_graph</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">vec_to_graph</span><span class="p">(</span>
+    <span class="n">vec</span><span class="p">,</span>
+    <span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">n_col</span><span class="o">=</span><span class="mi">64</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">vec_to_graph</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">vec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vec</span><span class="p">.</span><span class="n">flatten</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="nf">stdev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">percentile_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">percentile</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">def</span><span class="w"> </span><span class="n">rbf_sim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">rbf_similarity</span><span class="p">(</span><span class="nf">stdev</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">def</span><span class="w"> </span><span class="n">sim</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rbf_sim</span><span class="p">(</span><span class="n">vec</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">vec</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pixel_similarity</span><span class="p">(</span><span class="n">n_row</span><span class="p">,</span><span class="w"> </span><span class="n">n_col</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">TODO</span><span class="w"> </span><span class="n">slow</span><span class="w"> </span><span class="n">implementation</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="n">combinations</span><span class="p">(</span><span class="k">range</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">shape</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="o">&lt;</span><span class="n">percentile</span><span class="o">&gt;</span><span class="w"> </span><span class="k">percent</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="n">threshold</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">vec</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">percentile_v</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">vec</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">percentile_v</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">G</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="err">:</span><span class="w"> </span><span class="n">sim</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="err">}</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">G_prime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transform_nearest_neighbors</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="w"> </span><span class="n">n_neighbors</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">G_prime</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="vec_to_graph_comb">vec_to_graph_comb</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">vec_to_graph_comb</span><span class="p">(</span>
+    <span class="n">vec</span><span class="p">,</span>
+    <span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">n_col</span><span class="o">=</span><span class="mi">64</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Construct network that is a combination of nearest_neighbors in the image space
+and pixel intensity similarity among those neighbors</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">vec_to_graph_comb</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">n_col</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Construct network that is a combination of nearest_neighbors in the image space</span>
+
+<span class="ss">  and pixel intensity similarity among those neighbors</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="n">mat</span> <span class="o">=</span> <span class="n">vec</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span><span class="p">))</span>
+
+  <span class="n">G_pixel</span> <span class="o">=</span> <span class="n">pixel_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+
+  <span class="n">G_nn</span> <span class="o">=</span> <span class="n">pixel_nn_prior</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">percentile</span><span class="p">)</span>
+
+  <span class="k">G</span> <span class="o">=</span> <span class="n">combine_graphs</span><span class="p">([</span><span class="n">G_pixel</span><span class="p">,</span> <span class="n">G_nn</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="p">])</span>
+
+  <span class="k">return</span> <span class="k">G</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="vec_to_graph_prim">vec_to_graph_prim</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">vec_to_graph_prim</span><span class="p">(</span>
+    <span class="n">vec</span><span class="p">,</span>
+    <span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">n_col</span><span class="o">=</span><span class="mi">64</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Primitive version which only examines the neighboring pixels; always 1-NN</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">vec_to_graph_prim</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_row</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">n_col</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Primitive version which only examines the neighboring pixels; always 1-NN</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="k">G</span> <span class="o">=</span> <span class="n">nx</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span>
+
+  <span class="n">def</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+
+    <span class="o">#</span> <span class="k">Convert</span> <span class="k">from</span> <span class="n">pixel</span> <span class="n">coordinates</span> <span class="k">to</span> <span class="n">vector</span> <span class="n">coordinates</span>
+
+    <span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="n">n_col</span> <span class="o">+</span> <span class="n">j</span>
+
+  <span class="n">stdev</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+
+  <span class="n">mat</span> <span class="o">=</span> <span class="n">vec</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_row</span><span class="p">,</span> <span class="n">n_col</span><span class="p">))</span>
+
+  <span class="n">percentile_v</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">percentile</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="k">in</span> <span class="n">it</span><span class="p">.</span><span class="n">product</span><span class="p">(</span><span class="n">range</span><span class="p">(</span><span class="n">n_row</span><span class="p">),</span> <span class="n">range</span><span class="p">(</span><span class="n">n_col</span><span class="p">)):</span>
+
+    <span class="n">neighbors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">pixel_v</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">pixel_v</span> <span class="o">&lt;</span> <span class="n">percentile_v</span><span class="p">):</span>
+
+      <span class="k">continue</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+      <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">n_row</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+      <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+
+      <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">n_col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+
+      <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">best</span> <span class="o">=</span> <span class="k">None</span>
+
+    <span class="n">best_dist</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">neighbor</span> <span class="k">in</span> <span class="n">neighbors</span><span class="p">:</span>
+
+      <span class="n">neigh_v</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+      <span class="n">dist</span> <span class="o">=</span> <span class="n">rbf_similarity</span><span class="p">(</span><span class="n">stdev</span><span class="p">,</span> <span class="n">pixel_v</span><span class="p">,</span> <span class="n">neigh_v</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">neigh_v</span> <span class="o">&gt;</span>  <span class="n">percentile_v</span> <span class="k">and</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="n">best_dist</span><span class="p">:</span>
+
+        <span class="n">best</span> <span class="o">=</span> <span class="n">neighbor</span>
+
+        <span class="n">best_dist</span> <span class="o">=</span> <span class="n">dist</span>
+
+    <span class="k">if</span> <span class="n">best</span> <span class="k">is</span> <span class="k">not</span> <span class="k">None</span><span class="p">:</span>
+
+      <span class="n">k_1</span> <span class="o">=</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+
+      <span class="n">k_2</span> <span class="o">=</span> <span class="n">pixel_to_index</span><span class="p">(</span><span class="o">*</span><span class="n">best</span><span class="p">)</span>
+
+      <span class="k">G</span><span class="p">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k_1</span><span class="p">,</span> <span class="n">k_2</span><span class="p">,</span> <span class="err">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">best_dist</span><span class="err">}</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="k">G</span>
+</code></pre></div>
+
+
+</details>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../ensembl/" title="Ensembl" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Ensembl
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../" title="Index" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Index
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Powered by
+        <a href="http://timothycrosley.github.io/portray">portray.</a>
+        You too can
+        <a href="http://timothycrosley.github.io/portray">
+          portray</a>
+        your Python project well using automatic documentation.
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.1",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>

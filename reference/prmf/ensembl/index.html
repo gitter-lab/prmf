@@ -1,0 +1,1637 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>Ensembl - prmf</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.adb8469c.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#4caf50">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="green" data-md-color-accent="lightgreen">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#module-prmfensembl" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../.." title="prmf" aria-label="prmf" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              prmf
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Ensembl
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../.." title="prmf" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    prmf
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-1" type="checkbox" id="nav-2-1" checked>
+    
+    <label class="md-nav__link" for="nav-2-1">
+      Prmf
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-1">
+        Prmf
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ampl/" title="Ampl" class="md-nav__link">
+      Ampl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Ensembl
+      </label>
+    
+    <a href="./" title="Ensembl" class="md-nav__link md-nav__link--active">
+      Ensembl
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apply_map" class="md-nav__link">
+    apply_map
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#returns" class="md-nav__link">
+    Returns
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apply_mapping" class="md-nav__link">
+    apply_mapping
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download_mapping_tsv" class="md-nav__link">
+    download_mapping_tsv
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#returns_1" class="md-nav__link">
+    Returns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    TODO
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter_one_to_many" class="md-nav__link">
+    filter_one_to_many
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map_ensp_to_hgnc" class="md-nav__link">
+    map_ensp_to_hgnc
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_hgnc_to_ensps" class="md-nav__link">
+    map_hgnc_to_ensps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#returns_2" class="md-nav__link">
+    Returns
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parse_mapping_tsv" class="md-nav__link">
+    parse_mapping_tsv
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../image_processing/" title="Image Processing" class="md-nav__link">
+      Image Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="Index" class="md-nav__link">
+      Index
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../intersect/" title="Intersect" class="md-nav__link">
+      Intersect
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../plot/" title="Plot" class="md-nav__link">
+      Plot
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../prmf_args/" title="Prmf Args" class="md-nav__link">
+      Prmf Args
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../script_utils/" title="Script Utils" class="md-nav__link">
+      Script Utils
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../string_db/" title="String Db" class="md-nav__link">
+      String Db
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apply_map" class="md-nav__link">
+    apply_map
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#returns" class="md-nav__link">
+    Returns
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apply_mapping" class="md-nav__link">
+    apply_mapping
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download_mapping_tsv" class="md-nav__link">
+    download_mapping_tsv
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#returns_1" class="md-nav__link">
+    Returns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    TODO
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filter_one_to_many" class="md-nav__link">
+    filter_one_to_many
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    Parameters
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map_ensp_to_hgnc" class="md-nav__link">
+    map_ensp_to_hgnc
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_hgnc_to_ensps" class="md-nav__link">
+    map_hgnc_to_ensps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters_3" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#returns_2" class="md-nav__link">
+    Returns
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parse_mapping_tsv" class="md-nav__link">
+    parse_mapping_tsv
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/gitter-lab/prmf/edit/master/reference/prmf/ensembl.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="module-prmfensembl">Module prmf.ensembl</h1>
+<p>Ensembl.org recommends the use of biomart to map HGNC, ENSG, ENST, ENSP
+Currently these are implemented in the R script dl_ensembl_map
+TODO add biomart python API functions here</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Ensembl.org recommends the use of biomart to map HGNC, ENSG, ENST, ENSP</span>
+
+<span class="sd">Currently these are implemented in the R script dl_ensembl_map</span>
+
+<span class="sd">TODO add biomart python API functions here</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">os.path</span>
+
+<span class="kn">import</span> <span class="nn">subprocess</span> <span class="kn">as</span> <span class="nn">sp</span>
+
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="k">def</span> <span class="nf">download_mapping_tsv</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="s1">&#39;latest&#39;</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">  Download an Ensembl identifier mapping file (HGNC &lt;-&gt; ENSP)</span>
+
+<span class="sd">  Parameters</span>
+
+<span class="sd">  ----------</span>
+
+<span class="sd">  outdir: str</span>
+
+<span class="sd">    Directory to place downloaded file in; file will be named as it is on EBI&#39;s FTP server</span>
+
+<span class="sd">  release: int or str</span>
+
+<span class="sd">    either &#39;latest&#39; or a specific release number such as &#39;97&#39;</span>
+
+<span class="sd">  Returns</span>
+
+<span class="sd">  -------</span>
+
+<span class="sd">  rv : str or None</span>
+
+<span class="sd">    the downloaded filepath or None if it cannot be determined (due to glob wildcards matching multiple files)</span>
+
+<span class="sd">  TODO</span>
+
+<span class="sd">  ----</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="bp">None</span>
+
+  <span class="n">url</span> <span class="o">=</span> <span class="bp">None</span>
+
+  <span class="k">if</span> <span class="n">release</span> <span class="o">==</span> <span class="s1">&#39;latest&#39;</span><span class="p">:</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;ftp://ftp.ensembl.org/pub/current_tsv/homo_sapiens/Homo_sapiens.GRCh38.*.refseq.tsv.gz&#39;</span>
+
+  <span class="k">else</span><span class="p">:</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;ftp://ftp.ensembl.org/pub/release-{}/tsv/homo_sapiens/Homo_sapiens.GRCh38.{}.refseq.tsv.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">release</span><span class="p">)</span>
+
+  <span class="n">bn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+  <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">bn</span><span class="p">)</span>
+
+  <span class="n">glob_rv</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">glob_rv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+    <span class="n">rv</span> <span class="o">=</span> <span class="n">glob_rv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+  <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;wget&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">]</span>
+
+  <span class="n">sp</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">outdir</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">rv</span>
+
+<span class="k">def</span> <span class="nf">parse_mapping_tsv</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">key_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">value_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">  Parse a TSV file like the file at</span>
+
+<span class="sd">    ftp://ftp.ensembl.org/pub/release-94/tsv/homo_sapiens/Homo_sapiens.GRCh38.94.refseq.tsv.gz</span>
+
+<span class="sd">  into a mapping</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+
+    <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+  <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fh</span><span class="p">:</span>
+
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">delim</span><span class="p">)</span>
+
+    <span class="c1"># some values for key_index may be missing, skip those entries in the file</span>
+
+    <span class="k">if</span> <span class="n">key_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+
+      <span class="k">continue</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="n">key_index</span><span class="p">]</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value_index</span><span class="p">):</span>
+
+      <span class="n">value</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="n">value_index</span><span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+      <span class="c1"># TODO warn?</span>
+
+      <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+
+      <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rv</span><span class="p">:</span>
+
+        <span class="n">rv</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+      <span class="n">rv</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">rv</span>
+
+<span class="k">def</span> <span class="nf">map_hgnc_to_ensps</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">  Return map from HGNC symbol to many ENSPs</span>
+
+<span class="sd">  Parameters</span>
+
+<span class="sd">  ----------</span>
+
+<span class="sd">  fh : file-like</span>
+
+<span class="sd">    database file from dl_ensembl_map: 4 column TSV of HGNC, ENSG, ENST, ENSP</span>
+
+<span class="sd">  Returns</span>
+
+<span class="sd">  -------</span>
+
+<span class="sd">  rv : dict</span>
+
+<span class="sd">    mapping of HGNC symbol to a set of ENSPs</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="k">return</span> <span class="n">parse_mapping_tsv</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">key_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">value_index</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">filter_one_to_many</span><span class="p">(</span><span class="n">hgnc_to_ensps_map</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">  Return a map from HGNC symbol to one ENSP. The one is chosen to be the first ENSP in G.</span>
+
+<span class="sd">  ENSPs are examined in sorted order.</span>
+
+<span class="sd">  Parameters</span>
+
+<span class="sd">  ----------</span>
+
+<span class="sd">  hgnc_to_ensps_map : dict</span>
+
+<span class="sd">    return value of map_hgnc_to_ensps</span>
+
+<span class="sd">  copy_map : dict</span>
+
+<span class="sd">    map hgnc to the number of ENSP in the map that also appear in G</span>
+
+<span class="sd">  G : nx.Graph</span>
+
+<span class="sd">    protein-protein interaction network such as STRING</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="n">copy_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">for</span> <span class="n">hgnc</span><span class="p">,</span> <span class="n">ensps</span> <span class="ow">in</span> <span class="n">hgnc_to_ensps_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+    <span class="n">ensps</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ensps</span><span class="p">)</span>
+
+    <span class="n">any_ensp_in_G</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="k">for</span> <span class="n">ensp</span> <span class="ow">in</span> <span class="n">ensps</span><span class="p">:</span>
+
+      <span class="k">if</span> <span class="n">ensp</span> <span class="ow">in</span> <span class="n">G</span><span class="p">:</span>
+
+        <span class="n">any_ensp_in_G</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">if</span> <span class="n">hgnc</span> <span class="ow">in</span> <span class="n">rv</span><span class="p">:</span>
+
+          <span class="c1"># then this is the second ENSP in G</span>
+
+          <span class="k">if</span> <span class="n">hgnc</span> <span class="ow">in</span> <span class="n">copy_map</span><span class="p">:</span>
+
+            <span class="n">copy_map</span><span class="p">[</span><span class="n">hgnc</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+          <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">copy_map</span><span class="p">[</span><span class="n">hgnc</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+          <span class="n">rv</span><span class="p">[</span><span class="n">hgnc</span><span class="p">]</span> <span class="o">=</span> <span class="n">ensp</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">any_ensp_in_G</span><span class="p">:</span>
+
+      <span class="c1"># then use the first ensp in sorted order</span>
+
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ensps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="n">rv</span><span class="p">[</span><span class="n">hgnc</span><span class="p">]</span> <span class="o">=</span> <span class="n">ensps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+  <span class="k">return</span> <span class="n">rv</span><span class="p">,</span> <span class="n">copy_map</span>
+
+<span class="k">def</span> <span class="nf">map_ensp_to_hgnc</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fh</span><span class="p">:</span>
+
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+    <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">hgnc_symbol</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">ensp_id</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">):</span>
+
+      <span class="n">ensp_id</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">ensp_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+
+      <span class="k">if</span> <span class="n">ensp_id</span> <span class="ow">in</span> <span class="n">rv</span><span class="p">:</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Encountered ENSP id {} more than once</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ensp_id</span><span class="p">))</span>
+
+      <span class="n">rv</span><span class="p">[</span><span class="n">ensp_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">hgnc_symbol</span>
+
+  <span class="k">return</span> <span class="n">rv</span>
+
+<span class="k">def</span> <span class="nf">apply_map</span><span class="p">(</span><span class="n">word_map</span><span class="p">,</span> <span class="n">gene_list_fh</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">  Read words (one per line) from gene_list_fh and apply word_map.</span>
+
+<span class="sd">  Return mapped words as a set.</span>
+
+<span class="sd">  Parameters</span>
+
+<span class="sd">  ----------</span>
+
+<span class="sd">  word_map : dict</span>
+
+<span class="sd">    mapping of HGNC symbol to set of ENSPs</span>
+
+<span class="sd">  gene_list_fh : file-like</span>
+
+<span class="sd">    newline delimited file of HGNC symbols</span>
+
+<span class="sd">  Returns</span>
+
+<span class="sd">  -------</span>
+
+<span class="sd">  rv : list</span>
+
+<span class="sd">    sorted list of mapped ENSP identifiers</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+  <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">gene_list_fh</span><span class="p">:</span>
+
+    <span class="n">hgnc_symbol</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+    <span class="n">ensp_ids</span> <span class="o">=</span> <span class="n">word_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hgnc_symbol</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ensp_ids</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+
+      <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Unrecognized HGNC symbol: {}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hgnc_symbol</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+      <span class="n">rv</span> <span class="o">=</span> <span class="n">rv</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">ensp_ids</span><span class="p">)</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">rv</span>
+
+<span class="k">def</span> <span class="nf">apply_mapping</span><span class="p">(</span><span class="n">word_map</span><span class="p">,</span> <span class="n">io_pairs</span><span class="p">):</span>
+
+  <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">  For infile, outfile pairs in &lt;io_pairs&gt;, read words separated by PCRE non-word-character</span>
+
+<span class="sd">  regexp &#39;\W&#39;, apply &lt;word_map&gt;, and write mapped words to outfile. Note many words in infile</span>
+
+<span class="sd">  do not need to appear in the &lt;word_map&gt; and will be left unmapped.</span>
+
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">sep_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;\W&#39;</span><span class="p">)</span>
+
+  <span class="n">word</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+  <span class="k">for</span> <span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span> <span class="ow">in</span> <span class="n">io_pairs</span><span class="p">:</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ifh</span><span class="p">:</span>
+
+      <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ofh</span><span class="p">:</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">ifh</span><span class="p">:</span>
+
+          <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+
+            <span class="n">match_data</span> <span class="o">=</span> <span class="n">sep_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">match_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span>
+
+              <span class="c1"># then process word</span>
+
+              <span class="n">ensp</span> <span class="o">=</span> <span class="n">word_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+              <span class="k">if</span> <span class="n">ensp</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+
+                <span class="n">ofh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">word</span> <span class="o">+</span> <span class="n">match_data</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+              <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">ofh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">ensp</span> <span class="o">+</span> <span class="n">match_data</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+              <span class="n">word</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+              <span class="n">word</span> <span class="o">+=</span> <span class="n">char</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="functions">Functions</h2>
+<h3 id="apply_map">apply_map</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">apply_map</span><span class="p">(</span>
+    <span class="n">word_map</span><span class="p">,</span>
+    <span class="n">gene_list_fh</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Read words (one per line) from gene_list_fh and apply word_map.
+Return mapped words as a set.</p>
+<h2 id="parameters">Parameters</h2>
+<p>word_map : dict
+  mapping of HGNC symbol to set of ENSPs</p>
+<p>gene_list_fh : file-like
+  newline delimited file of HGNC symbols</p>
+<h2 id="returns">Returns</h2>
+<p>rv : list
+  sorted list of mapped ENSP identifiers</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">apply_map</span><span class="p">(</span><span class="n">word_map</span><span class="p">,</span> <span class="n">gene_list_fh</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Read words (one per line) from gene_list_fh and apply word_map.</span>
+
+<span class="ss">  Return mapped words as a set.</span>
+
+<span class="ss">  Parameters</span>
+
+<span class="ss">  ----------</span>
+
+<span class="ss">  word_map : dict</span>
+
+<span class="ss">    mapping of HGNC symbol to set of ENSPs</span>
+
+<span class="ss">  gene_list_fh : file-like</span>
+
+<span class="ss">    newline delimited file of HGNC symbols</span>
+
+<span class="ss">  Returns</span>
+
+<span class="ss">  -------</span>
+
+<span class="ss">  rv : list</span>
+
+<span class="ss">    sorted list of mapped ENSP identifiers</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="k">set</span><span class="p">()</span>
+
+  <span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="n">gene_list_fh</span><span class="p">:</span>
+
+    <span class="n">hgnc_symbol</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+    <span class="n">ensp_ids</span> <span class="o">=</span> <span class="n">word_map</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">hgnc_symbol</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ensp_ids</span> <span class="k">is</span> <span class="k">None</span><span class="p">:</span>
+
+      <span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="ss">&quot;Unrecognized HGNC symbol: {}\n&quot;</span><span class="p">.</span><span class="n">format</span><span class="p">(</span><span class="n">hgnc_symbol</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+      <span class="n">rv</span> <span class="o">=</span> <span class="n">rv</span><span class="p">.</span><span class="k">union</span><span class="p">(</span><span class="n">ensp_ids</span><span class="p">)</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="n">sorted</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">rv</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="apply_mapping">apply_mapping</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">apply_mapping</span><span class="p">(</span>
+    <span class="n">word_map</span><span class="p">,</span>
+    <span class="n">io_pairs</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>For infile, outfile pairs in <io_pairs>, read words separated by PCRE non-word-character 
+regexp '\W', apply <word_map>, and write mapped words to outfile. Note many words in infile
+do not need to appear in the <word_map> and will be left unmapped.</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">apply_mapping</span><span class="p">(</span><span class="n">word_map</span><span class="p">,</span> <span class="n">io_pairs</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  For infile, outfile pairs in &lt;io_pairs&gt;, read words separated by PCRE non-word-character</span>
+
+<span class="ss">  regexp &#39;\W&#39;, apply &lt;word_map&gt;, and write mapped words to outfile. Note many words in infile</span>
+
+<span class="ss">  do not need to appear in the &lt;word_map&gt; and will be left unmapped.</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="n">sep_re</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;\W&#39;</span><span class="p">)</span>
+
+  <span class="n">word</span> <span class="o">=</span> <span class="ss">&quot;&quot;</span>
+
+  <span class="k">for</span> <span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span> <span class="k">in</span> <span class="n">io_pairs</span><span class="p">:</span>
+
+    <span class="k">with</span> <span class="k">open</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="ss">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ifh</span><span class="p">:</span>
+
+      <span class="k">with</span> <span class="k">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="ss">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ofh</span><span class="p">:</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="k">in</span> <span class="n">ifh</span><span class="p">:</span>
+
+          <span class="k">for</span> <span class="nb">char</span> <span class="k">in</span> <span class="n">line</span><span class="p">:</span>
+
+            <span class="n">match_data</span> <span class="o">=</span> <span class="n">sep_re</span><span class="p">.</span><span class="k">match</span><span class="p">(</span><span class="nb">char</span><span class="p">)</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">match_data</span> <span class="k">is</span> <span class="k">not</span> <span class="k">None</span><span class="p">):</span>
+
+              <span class="o">#</span> <span class="k">then</span> <span class="n">process</span> <span class="n">word</span>
+
+              <span class="n">ensp</span> <span class="o">=</span> <span class="n">word_map</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+              <span class="k">if</span> <span class="n">ensp</span> <span class="k">is</span> <span class="k">None</span><span class="p">:</span>
+
+                <span class="n">ofh</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="n">word</span> <span class="o">+</span> <span class="n">match_data</span><span class="p">.</span><span class="k">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+              <span class="k">else</span><span class="p">:</span>
+
+                <span class="n">ofh</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="n">ensp</span> <span class="o">+</span> <span class="n">match_data</span><span class="p">.</span><span class="k">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+              <span class="n">word</span> <span class="o">=</span> <span class="ss">&quot;&quot;</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+              <span class="n">word</span> <span class="o">+=</span> <span class="nb">char</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="download_mapping_tsv">download_mapping_tsv</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">download_mapping_tsv</span><span class="p">(</span>
+    <span class="n">outdir</span><span class="p">,</span>
+    <span class="n">release</span><span class="o">=</span><span class="s1">&#39;latest&#39;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Download an Ensembl identifier mapping file (HGNC &lt;-&gt; ENSP)</p>
+<h2 id="parameters_1">Parameters</h2>
+<p>outdir: str
+  Directory to place downloaded file in; file will be named as it is on EBI's FTP server</p>
+<p>release: int or str
+  either 'latest' or a specific release number such as '97'</p>
+<h2 id="returns_1">Returns</h2>
+<p>rv : str or None
+  the downloaded filepath or None if it cannot be determined (due to glob wildcards matching multiple files)</p>
+<h2 id="todo">TODO</h2>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="nf">download_mapping_tsv</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="s">&#39;latest&#39;</span><span class="p">)</span><span class="o">:</span>
+
+  <span class="s">&quot;&quot;&quot;</span>
+
+<span class="s">  Download an Ensembl identifier mapping file (HGNC &lt;-&gt; ENSP)</span>
+
+<span class="s">  Parameters</span>
+
+<span class="s">  ----------</span>
+
+<span class="s">  outdir: str</span>
+
+<span class="s">    Directory to place downloaded file in; file will be named as it is on EBI&#39;s FTP server</span>
+
+<span class="s">  release: int or str</span>
+
+<span class="s">    either &#39;latest&#39; or a specific release number such as &#39;97&#39;</span>
+
+<span class="s">  Returns</span>
+
+<span class="s">  -------</span>
+
+<span class="s">  rv : str or None</span>
+
+<span class="s">    the downloaded filepath or None if it cannot be determined (due to glob wildcards matching multiple files)</span>
+
+<span class="s">  TODO</span>
+
+<span class="s">  ----</span>
+
+<span class="s">  &quot;&quot;&quot;</span>
+
+  <span class="n">rv</span> <span class="o">=</span> <span class="n">None</span>
+
+  <span class="n">url</span> <span class="o">=</span> <span class="n">None</span>
+
+  <span class="n">if</span> <span class="n">release</span> <span class="o">==</span> <span class="s">&#39;latest&#39;</span><span class="o">:</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;ftp://ftp.ensembl.org/pub/current_tsv/homo_sapiens/Homo_sapiens.GRCh38.*.refseq.tsv.gz&#39;</span>
+
+  <span class="n">else</span><span class="o">:</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;ftp://ftp.ensembl.org/pub/release-{}/tsv/homo_sapiens/Homo_sapiens.GRCh38.{}.refseq.tsv.gz&#39;</span><span class="nf">.format</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">release</span><span class="p">)</span>
+
+  <span class="n">bn</span> <span class="o">=</span> <span class="nf">os.path.basename</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+  <span class="n">fpath</span> <span class="o">=</span> <span class="nf">os.path.join</span><span class="p">(</span><span class="n">outdir</span><span class="p">,</span> <span class="n">bn</span><span class="p">)</span>
+
+  <span class="n">glob_rv</span> <span class="o">=</span> <span class="nf">glob.glob</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+
+  <span class="n">if</span> <span class="nf">len</span><span class="p">(</span><span class="n">glob_rv</span><span class="p">)</span> <span class="o">==</span> <span class="m">1</span><span class="o">:</span>
+
+    <span class="n">rv</span> <span class="o">=</span> <span class="n">glob_rv</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+
+  <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;wget&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">]</span>
+
+  <span class="nf">sp.check_call</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">outdir</span><span class="p">)</span>
+
+  <span class="n">return</span> <span class="n">rv</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="filter_one_to_many">filter_one_to_many</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">filter_one_to_many</span><span class="p">(</span>
+    <span class="n">hgnc_to_ensps_map</span><span class="p">,</span>
+    <span class="n">G</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Return a map from HGNC symbol to one ENSP. The one is chosen to be the first ENSP in G.
+ENSPs are examined in sorted order.</p>
+<h2 id="parameters_2">Parameters</h2>
+<p>hgnc_to_ensps_map : dict
+  return value of map_hgnc_to_ensps</p>
+<p>copy_map : dict
+  map hgnc to the number of ENSP in the map that also appear in G</p>
+<p>G : nx.Graph
+  protein-protein interaction network such as STRING</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">filter_one_to_many</span><span class="p">(</span><span class="n">hgnc_to_ensps_map</span><span class="p">,</span><span class="w"> </span><span class="n">G</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Return a map from HGNC symbol to one ENSP. The one is chosen to be the first ENSP in G.</span>
+
+<span class="ss">  ENSPs are examined in sorted order.</span>
+
+<span class="ss">  Parameters</span>
+
+<span class="ss">  ----------</span>
+
+<span class="ss">  hgnc_to_ensps_map : dict</span>
+
+<span class="ss">    return value of map_hgnc_to_ensps</span>
+
+<span class="ss">  copy_map : dict</span>
+
+<span class="ss">    map hgnc to the number of ENSP in the map that also appear in G</span>
+
+<span class="ss">  G : nx.Graph</span>
+
+<span class="ss">    protein-protein interaction network such as STRING</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">rv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">copy_map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">hgnc</span><span class="p">,</span><span class="w"> </span><span class="n">ensps</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">hgnc_to_ensps_map</span><span class="p">.</span><span class="n">items</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ensps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sorted</span><span class="p">(</span><span class="n">ensps</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">any_ensp_in_G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">ensp</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">ensps</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">ensp</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">G</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">any_ensp_in_G</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">True</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">hgnc</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">rv</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">          </span><span class="err">#</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">second</span><span class="w"> </span><span class="n">ENSP</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">G</span><span class="w"></span>
+
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="n">hgnc</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">copy_map</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">copy_map</span><span class="o">[</span><span class="n">hgnc</span><span class="o">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">          </span><span class="k">else</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">copy_map</span><span class="o">[</span><span class="n">hgnc</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">else</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">          </span><span class="n">rv</span><span class="o">[</span><span class="n">hgnc</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ensp</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nl">any_ensp_in_G</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">first</span><span class="w"> </span><span class="n">ensp</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">sorted</span><span class="w"> </span><span class="k">order</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">ensps</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">rv</span><span class="o">[</span><span class="n">hgnc</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ensps</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">rv</span><span class="p">,</span><span class="w"> </span><span class="n">copy_map</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="map_ensp_to_hgnc">map_ensp_to_hgnc</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">map_ensp_to_hgnc</span><span class="p">(</span>
+    <span class="n">fh</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">map_ensp_to_hgnc</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">rv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">fh</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">line</span><span class="p">.</span><span class="n">rstrip</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">words</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;\t&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">hgnc_symbol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">words</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">ensp_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">ensp_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">words</span><span class="o">[</span><span class="n">3</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">ensp_id</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="n">ensp_id</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">rv</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">sys</span><span class="p">.</span><span class="n">stderr</span><span class="p">.</span><span class="k">write</span><span class="p">(</span><span class="ss">&quot;Encountered ENSP id {} more than once\n&quot;</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">ensp_id</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">rv</span><span class="o">[</span><span class="n">ensp_id</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hgnc_symbol</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">rv</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="map_hgnc_to_ensps">map_hgnc_to_ensps</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">map_hgnc_to_ensps</span><span class="p">(</span>
+    <span class="n">fh</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Return map from HGNC symbol to many ENSPs</p>
+<h2 id="parameters_3">Parameters</h2>
+<p>fh : file-like 
+  database file from dl_ensembl_map: 4 column TSV of HGNC, ENSG, ENST, ENSP</p>
+<h2 id="returns_2">Returns</h2>
+<p>rv : dict
+  mapping of HGNC symbol to a set of ENSPs</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">map_hgnc_to_ensps</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
+
+  <span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Return map from HGNC symbol to many ENSPs</span>
+
+<span class="ss">  Parameters</span>
+
+<span class="ss">  ----------</span>
+
+<span class="ss">  fh : file-like</span>
+
+<span class="ss">    database file from dl_ensembl_map: 4 column TSV of HGNC, ENSG, ENST, ENSP</span>
+
+<span class="ss">  Returns</span>
+
+<span class="ss">  -------</span>
+
+<span class="ss">  rv : dict</span>
+
+<span class="ss">    mapping of HGNC symbol to a set of ENSPs</span>
+
+<span class="ss">  &quot;&quot;&quot;</span>
+
+  <span class="k">return</span> <span class="n">parse_mapping_tsv</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">key_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">value_index</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h3 id="parse_mapping_tsv">parse_mapping_tsv</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">parse_mapping_tsv</span><span class="p">(</span>
+    <span class="n">fh</span><span class="p">,</span>
+    <span class="n">key_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">value_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<p>Parse a TSV file like the file at 
+  ftp://ftp.ensembl.org/pub/release-94/tsv/homo_sapiens/Homo_sapiens.GRCh38.94.refseq.tsv.gz
+into a mapping </p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">parse_mapping_tsv</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span><span class="w"> </span><span class="n">key_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">value_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">delim</span><span class="o">=</span><span class="s1">&#39;\t&#39;</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="ss">&quot;&quot;&quot;</span>
+
+<span class="ss">  Parse a TSV file like the file at</span>
+
+<span class="ss">    ftp://ftp.ensembl.org/pub/release-94/tsv/homo_sapiens/Homo_sapiens.GRCh38.94.refseq.tsv.gz</span>
+
+<span class="ss">  into a mapping</span>
+
+<span class="ss">  &quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">rv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">type</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nf">str</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">fh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">open</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">fh</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">line</span><span class="p">.</span><span class="n">rstrip</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">words</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">line</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="n">delim</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="ow">some</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">key_index</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">missing</span><span class="p">,</span><span class="w"> </span><span class="n">skip</span><span class="w"> </span><span class="n">those</span><span class="w"> </span><span class="n">entries</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">file</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">key_index</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">continue</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">words</span><span class="o">[</span><span class="n">key_index</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">value_index</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">words</span><span class="o">[</span><span class="n">value_index</span><span class="o">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">else</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="err">#</span><span class="w"> </span><span class="n">TODO</span><span class="w"> </span><span class="n">warn</span><span class="vm">?</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">pass</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">None</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nl">rv</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">rv</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">set</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">rv</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="p">.</span><span class="k">add</span><span class="p">(</span><span class="k">value</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">rv</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../ampl/" title="Ampl" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Ampl
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../image_processing/" title="Image Processing" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Image Processing
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Powered by
+        <a href="http://timothycrosley.github.io/portray">portray.</a>
+        You too can
+        <a href="http://timothycrosley.github.io/portray">
+          portray</a>
+        your Python project well using automatic documentation.
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.1",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>

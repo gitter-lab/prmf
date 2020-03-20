@@ -1,0 +1,680 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>Prmf Args - prmf</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.adb8469c.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#4caf50">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="green" data-md-color-accent="lightgreen">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#module-prmfprmf_args" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../../.." title="prmf" aria-label="prmf" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              prmf
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Prmf Args
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../../.." title="prmf" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    prmf
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/gitter-lab/prmf/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    prmf
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2-1" type="checkbox" id="nav-2-1" checked>
+    
+    <label class="md-nav__link" for="nav-2-1">
+      Prmf
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-2-1">
+        Prmf
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ampl/" title="Ampl" class="md-nav__link">
+      Ampl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ensembl/" title="Ensembl" class="md-nav__link">
+      Ensembl
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../image_processing/" title="Image Processing" class="md-nav__link">
+      Image Processing
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="Index" class="md-nav__link">
+      Index
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../intersect/" title="Intersect" class="md-nav__link">
+      Intersect
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../plot/" title="Plot" class="md-nav__link">
+      Plot
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Prmf Args
+      </label>
+    
+    <a href="./" title="Prmf Args" class="md-nav__link md-nav__link--active">
+      Prmf Args
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add_prmf_arguments" class="md-nav__link">
+    add_prmf_arguments
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../script_utils/" title="Script Utils" class="md-nav__link">
+      Script Utils
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../string_db/" title="String Db" class="md-nav__link">
+      String Db
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add_prmf_arguments" class="md-nav__link">
+    add_prmf_arguments
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/gitter-lab/prmf/edit/master/reference/prmf/prmf_args.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="module-prmfprmf_args">Module prmf.prmf_args</h1>
+<p>Functions used in nmf_pathway.py that are shared by other scripts</p>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Functions used in nmf_pathway.py that are shared by other scripts</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="c1"># TODO move these back to prmf_runner.py, use __init__.py and packaging to reference them in other locations</span>
+
+<span class="k">def</span> <span class="nf">add_prmf_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--data&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;n_obs x n_features matrix&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--manifolds&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;graphml files to use as manifold. Node identifiers must appear in nodelist.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--manifolds-file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;A file containing newline-delimited filepaths which are used as graphml files as in &lt;manifolds&gt;&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--manifolds-init&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;If provided, use this list of manifolds to initialize PRMF. If given as a flag or the number of arguments is less than --k-latent, add randomly chosen manifolds to the initialization until we have --k-latent manifolds. If exactly --k-latent files are given, use those to initialize PRMF. If greater than --k-latent files are given, select a sample of size --k-latent from them.&#39;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--node-attribute&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Relabel nodes in manifolds/graphs so that their node identifiers come from this node attribute. If None, node identifiers are left as is&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--outdir&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Directory containing results&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--nodelist&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Association of node identifier to matrix indexes. If not provided, will be inferred from the header in &lt;--data&gt; and will fail if there is no header.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--k-latent&quot;</span><span class="p">,</span> <span class="s2">&quot;-k&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of latent factors&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tolerence&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--seed&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gamma&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Tradeoff between reconstruction error and manifold regularization term; Default = 1.0&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--delta&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Regularization parameter for penalty for ignoring manifold; Default = 1.0&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tradeoff&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If set, use the previous iterations objective function components to automatically update gamma and delta for the next iteration. Must be in [0,1]. Higher values place higher importance on the manifold regularization term over the reconstruction term. To disable automatic updating of gamma and delta, set tradeoff to -1. Default = -1.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--high-dimensional&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If True, ensure that &lt;data&gt; is of shape m x n with m &lt; n ; otherwise ensure that X is m x n with m &gt; n. Default = True.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--no-normalize&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If flag is provided, don&#39;t quantile normalize the data&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--delimiter&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Field delimiter in &lt;--data&gt;&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--m-samples&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If provided, only use the first &lt;--m-samples&gt; rows in &lt;--data&gt;; useful for observing script behavior on a smaller dataset&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--cross-validation&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+<h2 id="functions">Functions</h2>
+<h3 id="add_prmf_arguments">add_prmf_arguments</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">add_prmf_arguments</span><span class="p">(</span>
+    <span class="n">parser</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">add_prmf_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--data&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="n">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;n_obs x n_features matrix&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--manifolds&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;graphml files to use as manifold. Node identifiers must appear in nodelist.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--manifolds-file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;A file containing newline-delimited filepaths which are used as graphml files as in &lt;manifolds&gt;&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--manifolds-init&quot;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;If provided, use this list of manifolds to initialize PRMF. If given as a flag or the number of arguments is less than --k-latent, add randomly chosen manifolds to the initialization until we have --k-latent manifolds. If exactly --k-latent files are given, use those to initialize PRMF. If greater than --k-latent files are given, select a sample of size --k-latent from them.&#39;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--node-attribute&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;Relabel nodes in manifolds/graphs so that their node identifiers come from this node attribute. If None, node identifiers are left as is&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--outdir&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="n">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;Directory containing results&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--nodelist&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="n">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;Association of node identifier to matrix indexes. If not provided, will be inferred from the header in &lt;--data&gt; and will fail if there is no header.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--k-latent&quot;</span><span class="p">,</span> <span class="ss">&quot;-k&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;Number of latent factors&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--tolerence&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--seed&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--gamma&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;Tradeoff between reconstruction error and manifold regularization term; Default = 1.0&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--delta&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;Regularization parameter for penalty for ignoring manifold; Default = 1.0&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--tradeoff&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If set, use the previous iterations objective function components to automatically update gamma and delta for the next iteration. Must be in [0,1]. Higher values place higher importance on the manifold regularization term over the reconstruction term. To disable automatic updating of gamma and delta, set tradeoff to -1. Default = -1.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--high-dimensional&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="k">True</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="n">bool</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If True, ensure that &lt;data&gt; is of shape m x n with m &lt; n ; otherwise ensure that X is m x n with m &gt; n. Default = True.&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--no-normalize&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If flag is provided, don&#39;t quantile normalize the data&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--delimiter&quot;</span><span class="p">,</span> <span class="k">default</span><span class="o">=</span><span class="ss">&quot;,&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;Field delimiter in &lt;--data&gt;&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--m-samples&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If provided, only use the first &lt;--m-samples&gt; rows in &lt;--data&gt;; useful for observing script behavior on a smaller dataset&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--cross-validation&quot;</span><span class="p">,</span> <span class="ss">&quot;-c&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+
+</details>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../plot/" title="Plot" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Plot
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../script_utils/" title="Script Utils" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Script Utils
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Powered by
+        <a href="http://timothycrosley.github.io/portray">portray.</a>
+        You too can
+        <a href="http://timothycrosley.github.io/portray">
+          portray</a>
+        your Python project well using automatic documentation.
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.1",url:{base:"../../.."}})</script>
+      
+    
+  </body>
+</html>
