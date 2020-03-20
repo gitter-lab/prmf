@@ -1,5 +1,5 @@
-# prmf
-Pathway-Regularized Matrix Factorization
+# Pathway-Regularized Matrix Factorization (PRMF)
+[![Build Status](https://travis-ci.com/gitter-lab/prmf.svg?branch=master)](https://travis-ci.com/gitter-lab/prmf)
 
 ![Graphical abstract of Pathway-Regularized Matrix Factorization](doc/abstract.png)
 
@@ -7,14 +7,14 @@ Pathway-Regularized Matrix Factorization
 
 ## Dependencies
 - Python (3.7.0)
--- numpy
--- scipy
--- matplotlib
--- sklearn
--- networkx
+  - numpy
+  - scipy
+  - matplotlib
+  - sklearn
+  - networkx
 - R (3.5.1)
--- KEGGREST
--- KEGGgraph
--- graph
--- igraph
--- argparse
+  - KEGGREST
+  - KEGGgraph
+  - graph
+  - igraph
+  - argparse
