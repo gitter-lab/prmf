@@ -547,6 +547,8 @@
   <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--m-samples&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If provided, only use the first &lt;--m-samples&gt; rows in &lt;--data&gt;; useful for observing script behavior on a smaller dataset&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
   <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--cross-validation&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If flag is provided, report more information during each iteration&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -596,6 +598,8 @@
   <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--m-samples&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If provided, only use the first &lt;--m-samples&gt; rows in &lt;--data&gt;; useful for observing script behavior on a smaller dataset&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
   <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--cross-validation&quot;</span><span class="p">,</span> <span class="ss">&quot;-c&quot;</span><span class="p">,</span> <span class="k">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If provided, use the --cross-validation value as a fraction of the samples to hold out and measure model performance with&quot;</span><span class="p">)</span>
+
+  <span class="n">parser</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="ss">&quot;--verbose&quot;</span><span class="p">,</span> <span class="ss">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="ss">&quot;If flag is provided, report more information during each iteration&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 

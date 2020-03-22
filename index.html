@@ -249,8 +249,64 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pathway-data-installation" class="md-nav__link">
+    Pathway Data Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recount2-example" class="md-nav__link">
+    recount2 Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running" class="md-nav__link">
+    Running
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graph-format" class="md-nav__link">
+    Graph Format
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matrix-data-format" class="md-nav__link">
+    Matrix Data Format
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    Tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dependencies" class="md-nav__link">
     Dependencies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-dependencies" class="md-nav__link">
+    Installation Dependencies
   </a>
   
 </li>
@@ -443,8 +499,64 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pathway-data-installation" class="md-nav__link">
+    Pathway Data Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recount2-example" class="md-nav__link">
+    recount2 Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running" class="md-nav__link">
+    Running
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graph-format" class="md-nav__link">
+    Graph Format
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matrix-data-format" class="md-nav__link">
+    Matrix Data Format
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    Tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dependencies" class="md-nav__link">
     Dependencies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-dependencies" class="md-nav__link">
+    Installation Dependencies
   </a>
   
 </li>
@@ -472,14 +584,101 @@
 <p><a href="https://travis-ci.com/gitter-lab/prmf"><img alt="Build Status" src="https://travis-ci.com/gitter-lab/prmf.svg?branch=master" /></a></p>
 <p><img alt="Graphical abstract of Pathway-Regularized Matrix Factorization" src="doc/abstract.png" /></p>
 <p><a href="https://figshare.com/articles/Pathway-Regularized_Matrix_Factorization_Slides/6845648">Slides from ISMB2018</a></p>
+<h2 id="installation">Installation</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">git clone https://github.com/gitter-lab/prmf.git</span>
+<span class="err">cd prmf</span>
+<span class="err">pip install -r requirements.txt</span>
+<span class="err">python setup.py install</span>
+</code></pre></div>
+
+
+<h2 id="pathway-data-installation">Pathway Data Installation</h2>
+<p>A script to download pathways from KEGG and transform them to the expected graph format is <code>script/download_pathways.sh</code>.
+This script runs <code>R</code> and has separate (installation) dependencies from the core PRMF package.
+Its usage is below.</p>
+<div class="codehilite"><pre><span></span><code><span class="o">#</span> <span class="n">install</span> <span class="n">the</span> <span class="n">installation</span> <span class="n">dependencies</span>
+<span class="n">Rscript</span> <span class="n">script</span><span class="o">/</span><span class="n">install_pathway_dependencies</span><span class="p">.</span><span class="n">R</span>
+
+<span class="o">#</span> <span class="k">from</span> <span class="n">the</span> <span class="n">prmf</span> <span class="n">root</span> <span class="n">directory</span>
+<span class="n">mkdir</span> <span class="n">pathways</span>
+<span class="n">script</span><span class="o">/</span><span class="n">download_pathways</span><span class="p">.</span><span class="n">sh</span> <span class="n">pathways</span>
+</code></pre></div>
+
+
+<h2 id="recount2-example">recount2 Example</h2>
+<p>Follow these steps if you would like to run PRMF on recount2.
+Skip to the next section if you would like to run PRMF on your own data.
+TODO</p>
+<h2 id="running">Running</h2>
+<p>With the software and necessary data installed, you can now run PRMF.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">export OUTDIR=prmf_out</span>
+<span class="err">prmf_runner.py -k 10 --data ~/data/recount2_PLIER_data/recount_rpkm.tsv --normalize --delimiter &#39;\t&#39; --manifolds pathways/kegg_ensg/*.graphml --outdir $OUTDIR &gt; $OUTDIR/prmf.out 2&gt; $OUTDIR/prmf.err</span>
+<span class="err">echo &quot;Exit Status: $?&quot; &gt;&gt; $OUTDIR/prmf.out</span>
+</code></pre></div>
+
+
+<h2 id="graph-format">Graph Format</h2>
+<p>The pathways used in PRMF are assumed to be undirected graphs in the .graphml file format where the node attribute.
+A sample is given below.</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;graphml</span> <span class="na">xmlns=</span><span class="s">&quot;http://graphml.graphdrawing.org/xmlns&quot;</span>
+         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://graphml.graphdrawing.org/xmlns</span>
+<span class="s">         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd&quot;</span><span class="nt">&gt;</span>
+<span class="c">&lt;!-- Created by igraph --&gt;</span>
+  <span class="nt">&lt;key</span> <span class="na">id=</span><span class="s">&quot;v_name&quot;</span> <span class="na">for=</span><span class="s">&quot;node&quot;</span> <span class="na">attr.name=</span><span class="s">&quot;name&quot;</span> <span class="na">attr.type=</span><span class="s">&quot;string&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;key</span> <span class="na">id=</span><span class="s">&quot;e_weight&quot;</span> <span class="na">for=</span><span class="s">&quot;edge&quot;</span> <span class="na">attr.name=</span><span class="s">&quot;weight&quot;</span> <span class="na">attr.type=</span><span class="s">&quot;double&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;graph</span> <span class="na">id=</span><span class="s">&quot;G&quot;</span> <span class="na">edgedefault=</span><span class="s">&quot;directed&quot;</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- Node data sample --&gt;</span>
+    <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">&quot;n0&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;data</span> <span class="na">key=</span><span class="s">&quot;v_name&quot;</span><span class="nt">&gt;</span>ENSG00000141837<span class="nt">&lt;/data&gt;</span>
+    <span class="nt">&lt;/node&gt;</span>
+    <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">&quot;n1&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;data</span> <span class="na">key=</span><span class="s">&quot;v_name&quot;</span><span class="nt">&gt;</span>ENSG00000148408<span class="nt">&lt;/data&gt;</span>
+    <span class="nt">&lt;/node&gt;</span>
+    ...
+
+    <span class="c">&lt;!-- Edge data sample --&gt;</span>
+    <span class="nt">&lt;edge</span> <span class="na">source=</span><span class="s">&quot;n2&quot;</span> <span class="na">target=</span><span class="s">&quot;n13&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;data</span> <span class="na">key=</span><span class="s">&quot;e_weight&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/data&gt;</span>
+    <span class="nt">&lt;/edge&gt;</span>
+    <span class="nt">&lt;edge</span> <span class="na">source=</span><span class="s">&quot;n2&quot;</span> <span class="na">target=</span><span class="s">&quot;n12&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;data</span> <span class="na">key=</span><span class="s">&quot;e_weight&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/data&gt;</span>
+    <span class="nt">&lt;/edge&gt;</span>
+    ...
+</code></pre></div>
+
+
+<h2 id="matrix-data-format">Matrix Data Format</h2>
+<p>PRMF expects CSV-like data which describes gene expression measurements for a set of samples.
+A generated dataset which illustrates this is available in the test directory at test/script/PRMF/test_cv/data_header.tsv.
+Samples can also be named.
+The gene names must correspond to node names as described in the Graph Format section.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">ENSP0   ENSP1   ENSP2   ENSP3   ...</span>
+<span class="err">sample1 198.45537672404348  130.95172604578474  94.30322859309669   120.43851578854357  ...</span>
+<span class="err">sample2 170.9483727406653   103.88265492990088  88.86178431789227   116.51811746441824  ...</span>
+<span class="err">...</span>
+</code></pre></div>
+
+
+<h2 id="tests">Tests</h2>
+<div class="codehilite"><pre><span></span><code><span class="err"># from the prmf root directory</span>
+<span class="err">python test/run_tests.py</span>
+</code></pre></div>
+
+
 <h2 id="dependencies">Dependencies</h2>
 <ul>
-<li>Python (3.7.0)</li>
-<li>numpy</li>
-<li>scipy</li>
-<li>matplotlib</li>
-<li>sklearn</li>
-<li>networkx</li>
+<li>Python (3.7.0)
+-- numpy
+-- scipy
+-- matplotlib
+-- sklearn
+-- networkx</li>
+</ul>
+<h2 id="installation-dependencies">Installation Dependencies</h2>
+<ul>
 <li>R (3.5.1)</li>
 <li>KEGGREST</li>
 <li>KEGGgraph</li>
