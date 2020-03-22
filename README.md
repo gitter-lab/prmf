@@ -92,11 +92,11 @@ python test/run_tests.py
 
 ## Dependencies
 - Python (3.7.0)
--- numpy
--- scipy
--- matplotlib
--- sklearn
--- networkx
+  - numpy
+  - scipy
+  - matplotlib
+  - sklearn
+  - networkx
 
 ## Installation Dependencies
 - R (3.5.1)
