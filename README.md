@@ -19,7 +19,7 @@ This script runs ```R``` and has separate (installation) dependencies from the c
 Its usage is below.
 ```
 # install the installation dependencies
-Rscript script/install_pathway_dependencies.R
+Rscript script/install_pathway_dependencies.R # TODO
 
 # from the prmf root directory
 mkdir pathways
