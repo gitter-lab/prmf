@@ -371,7 +371,7 @@ def nmf_manifold_vec_obj(X, U, V, k_to_L, k_to_feat_inds, gamma=1, delta=1):
   }
   return obj_data
 
-def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=False, norm_X=None, tradeoff=0.5):
+def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=False, norm_X=None):
   """
   Perform <n_steps> update steps with a fixed Laplacian matrix for each latent factor
 
@@ -450,7 +450,7 @@ def nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_s
 
   return U, V, obj_data
 
-def nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=False, norm_X=None, tradeoff=0.5):
+def nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=10, gamma=1.0, delta=1.0, i=0, verbose=False, norm_X=None):
   """
   See nmf_manifold_vec_update ; this uses the normalized Laplacian instead
   """
@@ -737,7 +737,7 @@ def nmf_pathway(X, Gs, gamma=1.0, delta=1.0, tradeoff=None, k_latent=6, tol=1e-3
         print(k, lapl_ind)
       print('--------------------------------------------')
     if tradeoff is None:
-      U, V, obj_data = nmf_manifold_vec_update_normal(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta, verbose=verbose)
+      U, V, obj_data = nmf_manifold_vec_update(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, gamma=gamma, delta=delta, verbose=verbose)
     else:
       U, V, obj_data, gamma, delta = nmf_manifold_vec_update_tradeoff(X, U, V, k_to_W, k_to_D, k_to_L, k_to_feat_inds, n_steps=modulus, i=i, norm_X=norm_X, tradeoff=tradeoff, gamma=gamma, delta=delta, verbose=verbose)
     i += modulus
@@ -940,9 +940,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   if has_row_names:
     index_col = 0
   X = pd.read_csv(args.data, sep=args.delimiter, header=header, nrows=nrows, index_col=index_col)
-  samples = None
-  if has_row_names:
-    samples = list(X.index)
+  samples = list(X.index)
   
   # transpose data if desired
   m, n = X.shape
@@ -1066,7 +1064,7 @@ Cai 2008. Non-negative Matrix Factorization on Manifold
   # }} - --manifolds-init
 
   # TODO other arguments
-  U, V, obj_data = nmf_pathway(X, Gs, nodelist=nodelist, gamma=args.gamma, tradeoff=tradeoff, k_latent=args.k_latent, U_init=U_init, V_init=V_init)
+  U, V, obj_data = nmf_pathway(X, Gs, nodelist=nodelist, gamma=args.gamma, tradeoff=tradeoff, k_latent=args.k_latent, U_init=U_init, V_init=V_init, verbose=args.verbose)
   U = pd.DataFrame(U, index=samples, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
   V = pd.DataFrame(V, index=nodelist, columns=list(map(lambda x: "LV{}".format(x), range(args.k_latent))))
   U.to_csv(U_fp, sep=",", index=has_row_names, quoting=csv.QUOTE_NONNUMERIC)
