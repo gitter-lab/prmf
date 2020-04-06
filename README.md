@@ -27,9 +27,38 @@ script/download_pathways.sh pathways
 ```
 
 ## recount2 Example
-Follow these steps if you would like to run PRMF on recount2.
+Follow these steps if you would like to run PRMF to learn patterns from recount2 and apply those patterns to a rare disease dataset such as Neurofibromatosis.
 Skip to the next section if you would like to run PRMF on your own data.
-TODO
+
+0. Install R dependencies and download a recent harmonized dataset from the NF data portal at https://www.synapse.org/#!Synapse:syn18137070 and put the file 2019-02-01-bioBank_glioma_cNF_pnftidiedData.csv.gz in the PRMF directory. Decompress the file.
+```
+script/prep_instance.R
+# visit the above URL in your browser or use the synapse client below
+synapse get syn18137070
+gunzip 2019-02-01-bioBank_glioma_cNF_pnftidiedData.csv.gz
+```
+
+1. Download the recount2 data archive, unzip the archive, and make the files available in ~/data/recount2_PLIER_data by running prep_recount.sh
+```
+script/prep_recount.sh
+```
+
+2. Transform the data with some light pre-processing for PRMF
+```
+script/recount_rds_to_tsv.R
+```
+
+3. Run PRMF on the transformed data to discover the latent patterns hidden in the data.
+```
+export OUTDIR=~/data/prmf-results ; script/prmf.py -k 10 --data ~/data/recount2_PLIER_data/recount_rpkm.tsv --manifolds pathways/kegg_ensg/*.graphml --outdir $OUTDIR > $OUTDIR/prmf.out 2> $OUTDIR/prmf.err ; echo "Exit Status: $?" >> $OUTDIR/prmf.out
+```
+
+4. PRMF decomposes the sample x gene data into a sample x latent matrix and a gene x latent matrix. These matrices and the decomposition is denoted ```X = U V^T``` and PRMF produces files U.csv and V.csv in the output directory. We next apply the gene x latent matrix in a transfer learning context: we use the latent gene patterns to quantify latent variable activity in NF.
+```
+transfer_learning.R -y 2019-02-01-bioBank_glioma_cNF_pnftidiedData.csv -z $OUTDIR/V.csv --outdir $OUTDIR
+```
+
+5. TODO kolmogorov_smirnov.R
 
 ## Running
 With the software and necessary data installed, you can now run PRMF.
